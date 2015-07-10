@@ -1,3 +1,10 @@
+#Authentication - only temporary - delete when ready
+AuthUserFile "/home4/cicnavi/.htpasswds/.htpasswd"
+AuthName "Restricted Area"
+AuthType Basic
+require valid-user
+
+#Laravel
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -13,4 +20,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# HostGator - Use PHP55 as default
+AddHandler application/x-httpd-php55 .php
+<IfModule mod_suphp.c>
+    suPHP_ConfigPath /opt/php55/lib
 </IfModule>

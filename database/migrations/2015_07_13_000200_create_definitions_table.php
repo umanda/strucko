@@ -16,6 +16,14 @@ class CreateDefinitionsTable extends Migration
             $table->increments('id');
             $table->text('definition');
             $table->timestamps();
+            
+            $table->integer('synonym_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->integer('definition_status_id')->unsigned();
+            
+            $table->foreign('synonym_id')->references('id')->on('synonyms');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('definition_status_id')->references('id')->on('definition_statuses');
         });
     }
 

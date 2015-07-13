@@ -13,6 +13,8 @@ class TermsController extends Controller
 {
     public function index()
     {
-        return Term::all();
+        $terms = Term::all();
+        
+        return view('terms.index', compact('terms'));
     }
 }

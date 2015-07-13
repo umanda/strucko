@@ -38,8 +38,9 @@ class CreateTermsTable extends Migration
             $table->foreign('part_of_speech_id')->references('id')->on('part_of_speeches');
             $table->foreign('scientific_branch_id')->references('id')->on('scientific_branches');
             
-            // Unique constraints
-            $table->unique(['term']);
+            // Unique constraints - one term per language, part of speech and 
+            // category (scientific branch). 
+            $table->unique(['term', 'language_id', 'part_of_speech_id', 'scientific_branch_id'], 'terms_unique');
         });
     }
 

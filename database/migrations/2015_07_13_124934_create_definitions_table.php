@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTermStatusesTable extends Migration
+class CreateDefinitionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,9 @@ class CreateTermStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('term_statuses', function (Blueprint $table) {
+        Schema::create('definitions', function (Blueprint $table) {
             $table->increments('id');
-            // Name of the status
-            $table->string('term_status');
-            // Rank of the status (or order)
-            $table->integer('rank');
-            // Is the status active
-            $table->boolean('active')->default(1);
+            $table->text('definition');
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ class CreateTermStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('term_statuses');
+        Schema::drop('definitions');
     }
 }

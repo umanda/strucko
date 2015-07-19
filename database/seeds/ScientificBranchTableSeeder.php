@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
 
-// use DB;
-
-class UserTableSeeder extends Seeder
+class ScientificBranchTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +11,6 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 50)->create();
+        factory(App\ScientificBranch::class, 5)->create();
     }
 }

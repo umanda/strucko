@@ -8,8 +8,6 @@ class Term extends Model
 {
     protected $fillable = [
         'term',
-        'abbreviation',
-        'slug',
-        'slug_unique',
+        'abbreviation',        
     ];
 }

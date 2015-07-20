@@ -15,4 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('terms', 'TermsController@index');
+// Terms
+get('terms', 'TermsController@index');
+get('terms/create', 'TermsController@create');
+get('terms/{slugUnique}', 'TermsController@show');
+

@@ -32,9 +32,9 @@ $factory->define(App\Synonym::class, function($faker) {
 $factory->define(App\Language::class, function($faker) {
     return [
         'id' => $faker->unique()->languageCode,
-        'part2b' => 'part2b',
-        'part2t' => 'part2t',
-        'part1' => 'part1',
+        'part2b' => 'p2b',
+        'part2t' => 'p2t',
+        'part1' => 'p1',
         'scope' => $faker->randomElement(['I', 'M', 'S']),
         'type' => $faker->randomElement(['A', 'C', 'E', 'H', 'L', 'S']),
         'ref_name' => $faker->word,

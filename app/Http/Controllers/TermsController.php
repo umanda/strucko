@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Term;
 use App\PartOfSpeech;
+use App\ScientificBranch;
+use App\Language;
 
 class TermsController extends Controller
 {
@@ -21,7 +23,13 @@ class TermsController extends Controller
     public function create()
     {
         $partOfSpeeches = PartOfSpeech::all();
-        return view('terms.create', compact('partOfSpeeches'));
+        $scientificBranches = ScientificBranch::all();
+        $languages = Language::all();
+        return view('terms.create', compact(
+                'partOfSpeeches', 
+                'scientificBranches',
+                'languages'
+                ));
     }
 
     public function show($slugUnique)

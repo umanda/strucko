@@ -15,10 +15,28 @@
     </div>
     
     <div class="form-group">
+        <label for="language">Language:</label>
+        <select id="language" name="language" required="required" class="form-control">
+            @foreach ($languages as $language)
+            <option value="{{ $language->id }}">{{ $language->ref_name }}</option>
+            @endforeach
+        </select>
+    </div>
+    
+    <div class="form-group">
         <label for="part-of-speech">Part of Speech:</label>
-        <select class="form-control">
+        <select id="part-of-speech" name="part-of-speech" required="required" class="form-control" >
             @foreach ($partOfSpeeches as $partOfSpeech)
             <option value="{{ $partOfSpeech->id }}">{{ $partOfSpeech->part_of_speech }}</option>
+            @endforeach
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="scientific-branch">Scientific Branch (category):</label>
+        <select id="scientific-branch" name="scientific-branch" required="required" class="form-control">
+            @foreach ($scientificBranches as $scientificBranch)
+            <option value="{{ $scientificBranch->id }}">{{ $scientificBranch->scientific_branch }}</option>
             @endforeach
         </select>
     </div>

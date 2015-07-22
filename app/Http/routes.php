@@ -19,4 +19,5 @@ Route::get('/', function () {
 get('terms', 'TermsController@index');
 get('terms/create', 'TermsController@create');
 get('terms/{slugUnique}', 'TermsController@show');
+post('terms', 'TermsController@store');
 

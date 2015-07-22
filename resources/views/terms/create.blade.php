@@ -5,7 +5,7 @@
 @section('title', 'Suggest a new term')
 
 @section('content')
-<form method="POST" action="{{ action('TermsController@create') }}">
+<form method="POST" action="{{ action('TermsController@store') }}">
     {!! csrf_field() !!}
     
     <div class="form-group">
@@ -45,6 +45,11 @@
         <label for="abbreviation">Abbreviation (optional):</label>
         <input type="text" id="abbreviation" name="abbreviation" maxlength="255" 
                placeholder="Abbreviation" class="form-control">
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" id="submit" name="submit" value="Submit"
+               class="btn btn-primary form-control">
     </div>
 </form>
     

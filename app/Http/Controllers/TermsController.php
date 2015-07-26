@@ -71,7 +71,11 @@ class TermsController extends Controller
         $input['slug_unique'] = $input['slug_unique'] . "-"
                 . str_limit($language->id . $partOfSpeech->id . $scientificBranch->id, 55);
         
-        return $input;
+        // TODO: Get the user who is suggesting the Term.
+        
+        // Persist the new Term and return to /terms
+        Term::create($input);
+        return redirect('terms');
     }
 
 }

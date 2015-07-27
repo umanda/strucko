@@ -11,7 +11,8 @@
     <div class="form-group">
         <label for="term">Term:</label>
         <input type="text" id="term" name="term" maxlength="255" required="required"
-               placeholder="Term" class="form-control">
+               placeholder="Term" class="form-control"
+               value="{{ old('term') }}">
     </div>
     
     <div class="form-group">
@@ -44,13 +45,16 @@
     <div class="form-group">
         <label for="abbreviation">Abbreviation (optional):</label>
         <input type="text" id="abbreviation" name="abbreviation" maxlength="255" 
-               placeholder="Abbreviation" class="form-control">
+               placeholder="Abbreviation" class="form-control"
+               value="{{ old('abbreviation') }}">
     </div>
     
     <div class="form-group">
         <input type="submit" id="submit" name="submit" value="Submit"
                class="btn btn-primary form-control">
     </div>
+    
+    
 </form>
     
     

@@ -24,6 +24,7 @@ class TermsController extends Controller
         return view('terms.index', compact('terms'));
     }
     
+    // TODO: List only active partofspeech, branches and languages.
     public function create()
     {
         $partOfSpeeches = PartOfSpeech::all();

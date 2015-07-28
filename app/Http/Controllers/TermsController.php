@@ -19,7 +19,7 @@ class TermsController extends Controller
     public function index()
     {
         // Get the latest terms.
-        $terms = Term::latest()->get();
+        $terms = Term::latest()->approved()->get();
 
         return view('terms.index', compact('terms'));
     }

@@ -1,14 +1,16 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Login form for the Strucko - The Expert Dictionary')
+@section('meta-description', 'Password reset form')
 
-@section('title', 'Login form')
+@section('title', 'Password reset form')
 
 @section('content')
-<form method="POST" action="{{ action('Auth\AuthController@postLogin') }}">
+<form method="POST" action="{{ action('Auth\PasswordController@postReset') }}">
 
     {!! csrf_field() !!}
-
+    
+    <input type="hidden" name="token" value="{{ $token }}">
+    
     <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" maxlength="255" required="required"
@@ -21,18 +23,16 @@
         <input type="password" id="password" name="password" required="required"
                placeholder="Password" class="form-control">
     </div>
-
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" name="remember"> Remember Me
-        </label>
+    
+    <div class="form-group">
+        <label for="password_confirmation">Password:</label>
+        <input type="password" id="password_confirmation" name="password_confirmation" 
+               required="required" placeholder="Password confirmation" class="form-control">
     </div>
 
     <div class="form-group">
         <button type="submit" id="submit" name="submit" 
-                class="btn btn-primary">Login</button>
-                
-        <a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
+                class="btn btn-primary">Reset password</button>
     </div>
 
 </form>

@@ -22,6 +22,13 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    
+    /**
+     * Redirect a user to this specific URI after login.
+     * 
+     * @var string
+     */
+    public $redirectPath = '/';
 
     /**
      * Create a new authentication controller instance.

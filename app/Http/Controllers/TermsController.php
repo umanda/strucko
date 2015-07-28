@@ -11,13 +11,15 @@ use App\ScientificBranch;
 use App\Language;
 use App\Synonym;
 use Request;
+use Auth;
 
 class TermsController extends Controller
 {
 
     public function index()
     {
-        $terms = Term::all();
+        // Get the latest terms.
+        $terms = Term::latest()->get();
 
         return view('terms.index', compact('terms'));
     }
@@ -59,9 +61,9 @@ class TermsController extends Controller
         $slug = str_limit(str_slug($input['term']), $limit = 100 );
         $input['slug'] = $slug;
         // Get the strings for language, partOfSpeech and category, for SEO.
-        $language = Language::where('id', $input['language'])->firstOrFail();
-        $partOfSpeech = PartOfSpeech::where('id', $input['part-of-speech'])->firstOrFail();
-        $scientificBranch = ScientificBranch::where('id', $input['scientific-branch'])->firstOrFail();
+        $language = Language::where('id', $input['language_id'])->firstOrFail();
+        $partOfSpeech = PartOfSpeech::where('id', $input['part_of_speech_id'])->firstOrFail();
+        $scientificBranch = ScientificBranch::where('id', $input['scientific_branch_id'])->firstOrFail();
         $input['slug_unique'] = $slug
                 . "-" . $language->ref_name
                 . "-" . $partOfSpeech->part_of_speech
@@ -71,7 +73,12 @@ class TermsController extends Controller
         $input['slug_unique'] = $input['slug_unique'] . "-"
                 . str_limit($language->id . $partOfSpeech->id . $scientificBranch->id, 55);
         
-        // TODO: Get the user who is suggesting the Term.
+        // Get the user who is suggesting the Term.
+        $user = Auth::user();
+        $input['user_id'] = $user->id;
+        
+        // TODO: Consider setting the mysql default term_status_ID instead of this 
+        $input['term_status_id'] = 1;
         
         // Persist the new Term and return to /terms
         Term::create($input);

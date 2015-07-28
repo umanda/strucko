@@ -25,7 +25,18 @@ class Term extends Model
     ];
     
     // TODO: implement the scopeApproved
-    public function scopeApproved($query) {
+    public function scopeApproved($query)
+    {
         $query->where('term_status_id', 3);
+    }
+    
+    /**
+     * Term is owned by user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

@@ -12,10 +12,15 @@ use App\Language;
 use App\Synonym;
 use Request;
 use Auth;
+use App\Http\Requests\CreateTermRequest;
 
 class TermsController extends Controller
 {
-
+    /**
+     * List the terms.
+     * 
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         // Get the latest terms.
@@ -24,6 +29,7 @@ class TermsController extends Controller
         return view('terms.index', compact('terms'));
     }
     
+    // TODO: List only active partofspeech, branches and languages.
     public function create()
     {
         $partOfSpeeches = PartOfSpeech::all();
@@ -48,10 +54,10 @@ class TermsController extends Controller
      * 
      * @return type
      */
-    public function store()
+    public function store(CreateTermRequest $request)
     {
         // Get input from the request
-        $input = Request::all();
+        $input = $request->all(); // $input = Request::all();
         
         // Prepare new synonym and append synonym_id to the input
         $synonym = Synonym::create();
@@ -74,8 +80,9 @@ class TermsController extends Controller
                 . str_limit($language->id . $partOfSpeech->id . $scientificBranch->id, 55);
         
         // Get the user who is suggesting the Term.
-        $user = Auth::user();
-        $input['user_id'] = $user->id;
+//        $user = Auth::user();
+//        $input['user_id'] = $user->id;
+        $input['user_id'] = Auth::id();
         
         // TODO: Consider setting the mysql default term_status_ID instead of this 
         $input['term_status_id'] = 1;
@@ -83,6 +90,15 @@ class TermsController extends Controller
         // Persist the new Term and return to /terms
         Term::create($input);
         return redirect('terms');
+    }
+    
+    public function edit($slugUnique) {
+        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        return view('terms.edit', compact('term'));
+    }
+    
+    public function update($slugUnique, Request $request) {
+        
     }
 
 }

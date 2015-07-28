@@ -19,6 +19,12 @@ Route::get('/', function () {
 get('terms', 'TermsController@index');
 get('terms/create', 'TermsController@create');
 get('terms/{slugUnique}', 'TermsController@show');
+get('terms/{slugUnique}/edit', [
+    'as' => 'terms.edit', 'uses' => 'TermsController@edit'
+    ]);
+patch('terms/{slugUnique}', [
+    'as' => 'terms.update', 'uses' => 'TermsController@update'
+    ]);
 post('terms', 'TermsController@store');
 
 // Pages...

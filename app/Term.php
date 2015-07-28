@@ -14,6 +14,7 @@ class Term extends Model
         'synonym_id',
         'user_id',
         'language_id',
+        'term_status_id',
         'part_of_speech_id',
         'scientific_branch_id'
     ];

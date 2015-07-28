@@ -21,6 +21,12 @@ get('terms/create', 'TermsController@create');
 get('terms/{slugUnique}', 'TermsController@show');
 post('terms', 'TermsController@store');
 
+// Pages...
+// TODO: implement /home route for users.
+get('home', function () {
+   return view('pages.home'); 
+});
+
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');

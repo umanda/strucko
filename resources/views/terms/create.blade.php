@@ -16,8 +16,8 @@
     </div>
     
     <div class="form-group">
-        <label for="language">Language:</label>
-        <select id="language" name="language" required="required" class="form-control">
+        <label for="language_id">Language:</label>
+        <select id="language_id" name="language_id" required="required" class="form-control">
             @foreach ($languages as $language)
             <option value="{{ $language->id }}">{{ $language->ref_name }}</option>
             @endforeach
@@ -25,8 +25,8 @@
     </div>
     
     <div class="form-group">
-        <label for="part-of-speech">Part of Speech:</label>
-        <select id="part-of-speech" name="part-of-speech" required="required" class="form-control" >
+        <label for="part_of_speech_id">Part of Speech:</label>
+        <select id="part_of_speech_id" name="part_of_speech_id" required="required" class="form-control" >
             @foreach ($partOfSpeeches as $partOfSpeech)
             <option value="{{ $partOfSpeech->id }}">{{ $partOfSpeech->part_of_speech }}</option>
             @endforeach
@@ -34,8 +34,8 @@
     </div>
     
     <div class="form-group">
-        <label for="scientific-branch">Scientific Branch (category):</label>
-        <select id="scientific-branch" name="scientific-branch" required="required" class="form-control">
+        <label for="scientific_branch_id">Scientific Branch (category):</label>
+        <select id="scientific_branch_id" name="scientific_branch_id" required="required" class="form-control">
             @foreach ($scientificBranches as $scientificBranch)
             <option value="{{ $scientificBranch->id }}">{{ $scientificBranch->scientific_branch }}</option>
             @endforeach

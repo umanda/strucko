@@ -19,7 +19,9 @@
             <div class="row">
                 @yield('content')
             </div>
-            
+            <div class="row">
+                @include('errors.list')
+            </div>
         </div> <!-- /container -->
         
         <div class="row">

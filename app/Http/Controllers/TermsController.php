@@ -10,8 +10,9 @@ use App\PartOfSpeech;
 use App\ScientificBranch;
 use App\Language;
 use App\Synonym;
-use Request;
+// use Request;
 use Auth;
+use App\Http\Requests\CreateTermRequest;
 
 class TermsController extends Controller
 {
@@ -49,10 +50,10 @@ class TermsController extends Controller
      * 
      * @return type
      */
-    public function store()
+    public function store(CreateTermRequest $request)
     {
         // Get input from the request
-        $input = Request::all();
+        $input = $request->all(); // $input = Request::all();
         
         // Prepare new synonym and append synonym_id to the input
         $synonym = Synonym::create();

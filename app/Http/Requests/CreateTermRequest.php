@@ -20,7 +20,7 @@ class CreateTermRequest extends Request
 
     /**
      * Get the validation rules that apply to the request.
-     * TODO: check validation rules
+     * TODO: check validation rules: language should be 3 chars
      * 
      * @return array
      */
@@ -28,7 +28,7 @@ class CreateTermRequest extends Request
     {
         return [
             'term' => 'required|min:2|max:255',
-            'language_id' => 'required|integer|min:1',
+            'language_id' => 'required|alpha|min:1|max:3',
             'part_of_speech_id' => 'required|integer|min:1',
             'scientific_branch_id' => 'required|integer|min:1',
             

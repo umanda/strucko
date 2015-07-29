@@ -10,7 +10,7 @@ use App\PartOfSpeech;
 use App\ScientificBranch;
 use App\Language;
 use App\Synonym;
-// use Request;
+use Request;
 use Auth;
 use App\Http\Requests\CreateTermRequest;
 
@@ -85,6 +85,15 @@ class TermsController extends Controller
         // Persist the new Term and return to /terms
         Term::create($input);
         return redirect('terms');
+    }
+    
+    public function edit($slugUnique) {
+        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        return view('terms.edit', compact('term'));
+    }
+    
+    public function update($slugUnique, Request $request) {
+        
     }
 
 }

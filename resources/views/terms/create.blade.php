@@ -5,6 +5,9 @@
 @section('title', 'Suggest a new term')
 
 @section('content')
+
+<h2>Suggest a new term</h2>
+
 <form method="POST" action="{{ action('TermsController@store') }}">
     {!! csrf_field() !!}
     
@@ -50,8 +53,8 @@
     </div>
     
     <div class="form-group">
-        <input type="submit" id="submit" name="submit" value="Submit"
-               class="btn btn-primary form-control">
+        <input type="submit" id="submit" name="submit" value="Suggest term"
+               class="btn btn-primary">
     </div>
     
     

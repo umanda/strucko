@@ -16,7 +16,11 @@ use App\Http\Requests\CreateTermRequest;
 
 class TermsController extends Controller
 {
-
+    /**
+     * List the terms.
+     * 
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         // Get the latest terms.
@@ -76,8 +80,9 @@ class TermsController extends Controller
                 . str_limit($language->id . $partOfSpeech->id . $scientificBranch->id, 55);
         
         // Get the user who is suggesting the Term.
-        $user = Auth::user();
-        $input['user_id'] = $user->id;
+//        $user = Auth::user();
+//        $input['user_id'] = $user->id;
+        $input['user_id'] = Auth::id();
         
         // TODO: Consider setting the mysql default term_status_ID instead of this 
         $input['term_status_id'] = 1;

@@ -14,7 +14,6 @@ class CreateTermRequest extends Request
      */
     public function authorize()
     {
-        
         return Auth::check();
     }
 

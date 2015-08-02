@@ -6,13 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="@yield('meta-description')">
         <meta name="author" content="Marko Ivančić">
+        
         <title>Strucko - @yield('title')</title>
         
         <link rel="stylesheet" href="/css/app.css">
         
     </head>
     <body>
+        @include('layouts.navbar')
         <div class="container">
+            
             <div class="row">
                 <h1>Strucko - The Expert Dictionary</h1>
             </div>

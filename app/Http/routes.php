@@ -30,7 +30,7 @@ post('terms', 'TermsController@store');
 // Pages...
 // TODO: implement /home route for users.
 get('home', function () {
-   return view('pages.home'); 
+   return view('pages.home');
 });
 
 // Authentication routes...

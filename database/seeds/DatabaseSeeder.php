@@ -16,8 +16,7 @@ class DatabaseSeeder extends Seeder
         'scientific_fields',
         'scientific_areas',
         'part_of_speeches',
-        'term_statuses',
-        'definition_statuses',
+        'statuses',
         'definitions',
         'languages',
         'synonyms',
@@ -45,11 +44,10 @@ class DatabaseSeeder extends Seeder
         $this->call(SynonymTableSeeder::class);
         $this->call(LanguageTableSeeder::class);
         $this->call(PartOfSpeechTableSeeder::class);
-        $this->call(TermStatusTableSeeder::class);
+        $this->call(StatusTableSeeder::class);
         $this->call(ScientificAreaTableSeeder::class);
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
-        $this->call(DefinitionStatusTableSeeder::class);
         $this->call(DefinitionTableSeeder::class);
         $this->call(TermTableSeeder::class);
         

@@ -14,6 +14,14 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
+        // Create fake users.
         factory(App\User::class, 50)->create();
+        
+        // Also create demo user.
+        User::create([
+            'name' => 'Demo User',
+            'email' => 'demo@example.com',
+            'password' => bcrypt('demo')
+        ]);
     }
 }

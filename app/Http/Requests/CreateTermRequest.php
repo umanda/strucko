@@ -14,6 +14,7 @@ class CreateTermRequest extends Request
      */
     public function authorize()
     {
+        // User has to be loged in.
         return Auth::check();
     }
 

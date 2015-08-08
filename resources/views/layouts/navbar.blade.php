@@ -11,9 +11,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="{{ action('TermsController@index', ['lang' => 'en']) }}">Terms</a></li>
-                <li><a href="#about">About</a></li>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="{{ action('TermsController@index') }}">Terms</a></li>
+                <li><a href="/terms/create">Create</a></li>
+                <li><a href="{{ action('TermsController@suggestions') }}">Suggestions</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -34,7 +35,7 @@
                     <li><a href="/auth/logout">Log out</a></li>
                 @else
                     <li><a href="/auth/login">Log in</a></li>
-                    <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="/auth/register">Register <span class="sr-only">(current)</span></a></li>
                 @endif
                 
             </ul>

@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="@yield('meta-description')">
-        <meta name="author" content="Marko Ivančić">
+        <meta name="author" content="">
         
         <title>Strucko - @yield('title')</title>
         
@@ -15,9 +15,11 @@
     <body>
         @include('layouts.navbar')
         <div class="container">
-            
             <div class="row">
                 <h1>Strucko - The Expert Dictionary</h1>
+            </div>
+            <div class="row">
+               @include('shared.alert')
             </div>
             <div class="row">
                 @yield('content')
@@ -33,5 +35,8 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script>
+            $('div.alert').not('.alert-warning').delay(3000).slideUp(300);
+        </script>
     </body>
 </html>

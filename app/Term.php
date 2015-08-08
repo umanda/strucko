@@ -8,7 +8,7 @@ class Term extends Model
 {
     /**
      * Attributes that are allowed to be inserted for the Term model.
-     * slug, slug_unique, synonym_id, user_id are defined in the store() method.
+     * Slug, slug_unique, synonym_id, user_id are defined in the store() method.
      *
      * @var array
      */
@@ -20,16 +20,21 @@ class Term extends Model
         'synonym_id',
         'user_id',
         'language_id',
-        'term_status_id',
         'part_of_speech_id',
         'scientific_branch_id'
     ];
 
-    // TODO: implement the scopeApproved using ranks, if possible.
     public function scopeApproved($query)
     {
-        $query->where('term_status_id', 3);
+        $query->where('status_id', 1000);
     }
+    
+    public function scopeSuggested($query)
+    {
+        $query->where('status_id', 500);
+    }
+    
+    
 
     /**
      * Term is owned by user.
@@ -56,9 +61,9 @@ class Term extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function termStatus()
+    public function status()
     {
-        return $this->belongsTo('App\TermStatus');
+        return $this->belongsTo('App\Status');
     }
 
     /**

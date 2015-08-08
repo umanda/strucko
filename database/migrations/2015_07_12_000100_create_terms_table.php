@@ -26,7 +26,7 @@ class CreateTermsTable extends Migration
             $table->integer('synonym_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->char('language_id', 3);
-            $table->integer('term_status_id')->unsigned();
+            $table->integer('status_id')->unsigned()->default(500);
             $table->integer('part_of_speech_id')->unsigned();
             $table->integer('scientific_branch_id')->unsigned();
             
@@ -34,7 +34,7 @@ class CreateTermsTable extends Migration
             $table->foreign('synonym_id')->references('id')->on('synonyms');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('language_id')->references('id')->on('languages');
-            $table->foreign('term_status_id')->references('id')->on('term_statuses');
+            $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('part_of_speech_id')->references('id')->on('part_of_speeches');
             $table->foreign('scientific_branch_id')->references('id')->on('scientific_branches');
             

@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScientificBranch extends Model
 {
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+    
+    public function scopeWithout($query, $itemToRemove)
+    {
+        $query->where('id', '<>', $itemToRemove);
+    }
+    
     /**
      * Scientific branch belongs to scientific field.
      *

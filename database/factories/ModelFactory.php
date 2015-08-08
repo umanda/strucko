@@ -43,11 +43,11 @@ $factory->define(App\Language::class, function($faker) {
     ];
 });
 
-// TermStatus
-$factory->define(App\TermStatus::class, function($faker) {
+// Status
+$factory->define(App\Status::class, function($faker) {
     return [
-        'term_status' => $faker->unique()->numerify('Status #'),
-        'rank' => $faker->unique()->randomNumber($nbDigits = 1),
+        'id' => $faker->unique()->randomDigitNotNull,
+        'status' => $faker->unique()->numerify('Status #'),
     ];
 });
 
@@ -87,14 +87,6 @@ $factory->define(App\ScientificBranch::class, function($faker) {
     ];
 });
 
-// DefinitionStatus
-$factory->define(App\DefinitionStatus::class, function($faker) {
-    return [
-        'definition_status' => $faker->unique()->numerify('Status #'),
-        'rank' => $faker->unique()->randomNumber($nbDigits = 1),
-    ];
-});
-
 // Definition
 $factory->define(App\Definition::class, function($faker) {
     return [
@@ -107,8 +99,8 @@ $factory->define(App\Definition::class, function($faker) {
             ->randomElement(App\User::all()
             ->lists('id')
             ->toArray()),
-        'definition_status_id' => $faker
-            ->randomElement(App\DefinitionStatus::all()
+        'status_id' => $faker
+            ->randomElement(App\Status::all()
             ->lists('id')
             ->toArray()),
     ];
@@ -133,8 +125,8 @@ $factory->define(App\Term::class, function($faker) {
             ->randomElement(App\Language::all()
             ->lists('id')
             ->toArray()),
-        'term_status_id' => $faker
-            ->randomElement(App\TermStatus::all()
+        'status_id' => $faker
+            ->randomElement(App\Status::all()
             ->lists('id')
             ->toArray()),
         'part_of_speech_id' => $faker

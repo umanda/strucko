@@ -25,4 +25,8 @@ class Status extends Model
     {
         return $this->hasMany('App\Term');
     }
+    
+    public function scopeActive($query) {
+        return $query->where('active', 1);
+    }
 }

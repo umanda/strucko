@@ -21,7 +21,7 @@ class Term extends Model
         'user_id',
         'language_id',
         'part_of_speech_id',
-        'scientific_branch_id'
+        'scientific_field_id'
     ];
 
     public function scopeApproved($query)
@@ -33,8 +33,6 @@ class Term extends Model
     {
         $query->where('status_id', 500);
     }
-    
-    
 
     /**
      * Term is owned by user.
@@ -81,9 +79,9 @@ class Term extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function scientificBranch()
+    public function scientificField()
     {
-        return $this->belongsTo('App\ScientificBranch');
+        return $this->belongsTo('App\ScientificField');
     }
 
     /**

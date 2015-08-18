@@ -10,6 +10,7 @@ class Definition extends Model
         'definition',
         'synonym_id',
         'user_id',
+        'source',
     ];
     /**
      * Definition belongs to synonym.

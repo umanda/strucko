@@ -7,10 +7,12 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Term;
 use App\PartOfSpeech;
-use App\ScientificBranch;
+use App\ScientificField;
 use App\Language;
 use App\Synonym;
-use App\Definition;
+use App\ScientificArea;
+use App\Status;
+// use App\Definition;
 // use Request;
 use Auth;
 use App\Http\Requests\CreateTermRequest;
@@ -40,7 +42,7 @@ class TermsController extends Controller
         return view('terms.index', compact('terms'));
     }
     /**
-     * Show suggested terms - logged in usrs only. 
+     * Show suggested terms - logged in users only. 
      * 
      * @return type
      */
@@ -53,29 +55,26 @@ class TermsController extends Controller
     
     /**
      * Show the create view.
-     * 
-     * TODO: List only active partofspeech, branches and languages.
-     * 
+     *  
      * @return type
      */
     public function create()
     {
         // Prepare data for the form.
-        $partOfSpeeches = PartOfSpeech::active()->get();
-        $scientificBranches = ScientificBranch::active()->get();
-        $languages = Language::active()->get();
+        $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
+        $scientificFields = $this->prepareFields();
+        $languages = Language::active()->orderBy('ref_name')->get();
         
         return view('terms.create', compact(
             'partOfSpeeches',
-            'scientificBranches',
+            'scientificFields',
             'languages'
         ));
     }
     
     /**
      * Show the term.
-     * This method uses route model binding, just to have that example. 
-     * TODO Implement the show single term view.
+     * This method uses route model binding, just to have that example.
      * 
      * @param Term $term
      * @param ShowTermRequest $request
@@ -90,8 +89,8 @@ class TermsController extends Controller
     }
 
     /**
-     * TODO: Rewrite the unique slug to include the language, part of speech and category name
-     * in the correct language. Consider changing the slug_unique logic to
+     * TODO Make sure that only active language, part of speech and category can be set.
+     * TODO Consider changing the slug_unique logic to
      * take into account the posibility to change category...
      * Consider making this a transaction.
      * 
@@ -139,7 +138,7 @@ class TermsController extends Controller
 //        Session::flash('alert_class', 'alert alert-success');
         
         // Redirect with alerts in session.
-        return redirect('terms')->with([
+        return redirect('terms/' . $input['slug_unique'])->with([
             'alert' => 'Term suggested...',
             'alert_class' => 'alert alert-success'
         ]);
@@ -156,20 +155,25 @@ class TermsController extends Controller
     {
         // Get the term with relationships.
         $term = Term::where('slug_unique', $slugUnique)
-                ->with('language', 'status', 'scientificBranch', 'partOfSpeech', 'synonym.definitions')
+                ->with('language', 'status', 'scientificField', 'partOfSpeech', 'synonym.definitions')
                 ->firstOrFail();
         
         // Prepare data for the form withouth the ones already in the term instance.
         $partOfSpeeches = PartOfSpeech::active()->without($term->part_of_speech_id)->get();
-        $scientificBranches = ScientificBranch::active()->without($term->scientific_branch_id)->get();
-        // Left filterLanguages() method for example, could use scope without() instead.
-        $languages = $this->filterLanguages($term->language_id);
+        $scientificFields = $this->prepareFields();
+        // Left filterLanguages() method for example. Using the Form::select for Languages.
+        // $languages = $this->filterLanguages($term->language_id);
+        $languages = Language::active()->orderBy('ref_name')->get();
+        $statuses = Status::active()->orderBy('id')->lists('status', 'id');
         
-        return view('terms.edit', compact('term', 'partOfSpeeches', 'scientificBranches', 'languages'));
+        return view('terms.edit', 
+                compact('term', 'partOfSpeeches', 'scientificFields', 'languages', 'statuses'));
     }
 
     /**
      * Update the term.
+     * TODO Create the update request for validation or use existing one (create?).
+     * TODO Make sure that only administrator can make this request.
      * 
      * @param type $slugUnique
      * @param Request $request
@@ -208,12 +212,27 @@ class TermsController extends Controller
         
         return redirect(action('TermsController@show', ['slugUnique' => $input['slug_unique']]))
                 ->with([
-                    'alert' => 'Term edited...',
+                    'alert' => 'Term updated...',
                     'alert_class' => 'alert alert-success'
                 ]);
     }
     
-    /**
+    // TODO Set the appropriate request, validaiton and ensure admins. 
+    public function updateStatus(Request $request, $slugUnique) {
+        
+        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        
+        $term->status_id = $request->input('status_id');
+        
+        $term->save();
+        
+        return back()->with([
+                    'alert' => 'Term updated...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+
+        /**
      * Check if the term already exists in the database for the choosen language,
      * part of speech and category.
      *
@@ -226,7 +245,7 @@ class TermsController extends Controller
         $term = Term::where('term', $input['term'])
                 ->where('language_id', $input['language_id'])
                 ->where('part_of_speech_id', $input['part_of_speech_id'])
-                ->where('scientific_branch_id', $input['scientific_branch_id'])
+                ->where('scientific_field_id', $input['scientific_field_id'])
                 ->first();
                 
         // If the term term doesn't exist, we can go on.
@@ -255,25 +274,31 @@ class TermsController extends Controller
      * @return array
      */
     protected function prepareSlugs($input) {
-        $slug = str_limit(str_slug($input['term']), 100);
-        $input['slug'] = $slug;
         // Get the strings for language, partOfSpeech and category, for SEO.
         $language = Language::where('id', $input['language_id'])->firstOrFail();
         $partOfSpeech = PartOfSpeech::where('id', $input['part_of_speech_id'])->firstOrFail();
-        $scientificBranch = ScientificBranch::where('id', $input['scientific_branch_id'])->firstOrFail();
-        $input['slug_unique'] = $slug
-                . "-" . $language->ref_name
-                . "-" . $partOfSpeech->part_of_speech
-                . "-" . $scientificBranch->scientific_branch;
+        $scientificField = ScientificField::where('id', $input['scientific_field_id'])->firstOrFail();
+        
+        // Prepare 'slug' attribute.
+        $slug = str_limit(str_slug($input['term']), 100);
+        $input['slug'] = $slug;
+        
+        // Prepare 'slug_unique' attribute.
+        $input['slug_unique'] = $slug . "-" . str_slug(
+                $language->ref_name . "-"
+                . $partOfSpeech->part_of_speech. "-"
+                . $scientificField->scientific_field
+                );
         // Limit the length of the slug_unique and append the IDs
         $input['slug_unique'] = str_limit($input['slug_unique'], 200);
         $input['slug_unique'] = $input['slug_unique'] . "-"
-                . str_limit($language->id . $partOfSpeech->id . $scientificBranch->id, 55);
+                . str_limit($language->id . $partOfSpeech->id . $scientificField->id, 55);
+        
         return $input;
     }
     
     /**
-     * Get and filter trough all scientific branches and return the ones without the
+     * Get and filter trough all languages and return the ones without the
      * one asked to be removed.
      * 
      * @param integer $itemToRemove
@@ -281,6 +306,7 @@ class TermsController extends Controller
      */
     protected function filterLanguages($itemToRemove) {
         return Language::active()
+                ->orderBy('ref_name')
                 ->get()
                 ->reject(function($item) use ($itemToRemove) {
                     return $item->id == $itemToRemove;
@@ -295,5 +321,29 @@ class TermsController extends Controller
         Session::flash('alert', 'This term already exists for the '
                     . 'selected language, part of speech, and category...');
         session()->flash('alert_class', 'alert alert-warning');
+    }
+    
+    protected function prepareFields() {
+        $fields = [];
+        
+        // Get areas including their fileds.
+        $areas = ScientificArea::active()
+                ->with(['scientificFields' => function ($query) {
+                    $query->where('active', 1)->orderBy('scientific_field');
+                }])
+                ->orderBy('scientific_area')
+                ->get();
+        
+        // Populate an array with areas as keys, and fields as sub arrays.
+        foreach ($areas as $area) {
+            $fields[$area->scientific_area] = array();
+            
+            foreach ($area->scientificFields->all() as $field) {
+                
+                $fields[$area->scientific_area][$field->id] = $field->scientific_field;
+            }
+        }
+        
+        return $fields;
     }
 }

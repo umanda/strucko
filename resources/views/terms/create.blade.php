@@ -9,6 +9,7 @@
 <h2>Suggest a new term</h2>
 
 <form method="POST" action="{{ action('TermsController@store') }}">
+    
     @include('terms.form')
     
     <div class="form-group">

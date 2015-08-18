@@ -15,6 +15,8 @@ class CreateScientificFieldsTable extends Migration
         Schema::create('scientific_fields', function (Blueprint $table) {
             $table->increments('id');
             $table->string('scientific_field');
+            $table->char('mark', 2);
+            $table->text('description')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
             
@@ -22,7 +24,10 @@ class CreateScientificFieldsTable extends Migration
             $table->integer('scientific_area_id')->unsigned();
             
             // Foreign keys constraints
-            $table->foreign('scientific_area_id')->references('id')->on('scientific_areas');
+            $table->foreign('scientific_area_id')
+                    ->references('id')
+                    ->on('scientific_areas')
+                    ->onDelete('cascade');;
         });
     }
 

@@ -9,14 +9,11 @@
 
 <div class="form-group">
     <label for="language_id">Language:</label>
-    <select id="language_id" name="language_id" required="required" class="form-control">
-        @if (isset($term))
-        <option value="{{ $term->language->id }}" selected="selected">{{ $term->language->ref_name }}</option>
-        @endif
-        @foreach ($languages as $language)
-        <option value="{{ $language->id }}">{{ $language->ref_name }}</option>
-        @endforeach
-    </select>
+
+    {!! Form::select('language_id', $languages->lists('ref_name', 'id'),
+            isset($term) ? $term->language_id : old('language_id'), 
+            ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
+
 </div>
 
 <div class="form-group">
@@ -32,15 +29,11 @@
 </div>
 
 <div class="form-group">
-    <label for="scientific_branch_id">Scientific Branch (category):</label>
-    <select id="scientific_branch_id" name="scientific_branch_id" required="required" class="form-control">
-        @if (isset($term))
-        <option value="{{ $term->scientificBranch->id }}" selected="selected">{{ $term->scientificBranch->scientific_branch }}</option>
-        @endif
-        @foreach ($scientificBranches as $scientificBranch)
-        <option value="{{ $scientificBranch->id }}">{{ $scientificBranch->scientific_branch }}</option>
-        @endforeach
-    </select>
+    <label for="scientific_field_id">Scientific field (category):</label>
+    {!! Form::select('scientific_field_id', $scientificFields,
+            isset($term) ? $term->scientific_field_id : old('scientific_field_id'), 
+            ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
+    
 </div>
 
 <div class="form-group">
@@ -58,6 +51,7 @@
 </div>
 
 @if(isset($term))
+
 <div class="form-group">
     <label for="existing_definitions">Existing definitions:</label>
     <ul id="existing_definitions" name="existing_definitions">
@@ -67,4 +61,7 @@
         @endforeach
     </ul>
 </div>
+
+
+
 @endif

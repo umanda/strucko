@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->bind('terms', function($slugUnique)
         {
             return \App\Term::where('slug_unique', $slugUnique)
-                    ->with('synonym.definitions', 'synonym.translations','user', 'language', 'status', 'scientificBranch', 'partOfSpeech')
+                    ->with('synonym.definitions', 'synonym.translations', 'user', 'language', 'status', 'scientificField', 'partOfSpeech')
                     ->firstOrFail();
         });
 

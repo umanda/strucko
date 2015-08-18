@@ -15,6 +15,7 @@ class CreateDefinitionsTable extends Migration
         Schema::create('definitions', function (Blueprint $table) {
             $table->increments('id');
             $table->text('definition');
+            $table->text('source')->nullable();
             $table->timestamps();
             
             $table->integer('synonym_id')->unsigned();

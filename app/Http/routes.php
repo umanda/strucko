@@ -25,7 +25,11 @@ get('terms/{slugUnique}/edit', [
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);
+patch('terms/{slugUnique}/status', [
+    'as' => 'terms.updateStatus', 'uses' => 'TermsController@updateStatus'
+    ]);
 post('terms', 'TermsController@store');
+
 
 // Sugesstions
 get('suggestions', 'TermsController@suggestions');
@@ -52,3 +56,9 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 // Password reset routes...
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
+
+// Group these routes and supplement appropriate middleware.
+Route::resource('scientific-areas', 'ScientificAreasController');
+Route::resource('scientific-areas.scientific-fields', 'ScientificFieldsController');
+
+Route::resource('definitions', 'DefinitionsController');

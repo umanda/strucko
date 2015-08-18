@@ -6,9 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class DefinitionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -35,9 +41,17 @@ class DefinitionsController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Requests\CreateDefinitionRequest $request)
     {
-        //
+        // Save the definition using relationship with user.
+        Auth::user()->definitions()->create($request->all());
+        
+        // Return back with alerts in session.
+        return back()->with([
+            'alert' => 'Term suggested...',
+            'alert_class' => 'alert alert-success'
+        ]);
+        
     }
 
     /**

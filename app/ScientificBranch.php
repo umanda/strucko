@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScientificBranch extends Model
 {
+    protected $fillable = [
+        'scientific_branch',
+        'scientific_field_id',
+        'mark',
+        'description',
+        'active'
+    ];
+    
     public function scopeActive($query)
     {
         return $query->where('active', 1);
@@ -24,15 +32,5 @@ class ScientificBranch extends Model
     public function scientificField()
     {
         return $this->belongsTo('App\ScientificField');
-    }
-
-    /**
-     * Scientific branch may have many terms.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function terms()
-    {
-        return $this->hasMany('App\Term');
     }
 }

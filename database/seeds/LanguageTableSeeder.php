@@ -20,13 +20,10 @@ class LanguageTableSeeder extends Seeder
         $csv = Reader::createFromPath('database/seeds/data/iso-639-3_20150505.tab');
         // Set delimiter to tab.
         $csv->setDelimiter('	');
-        // Skip the first row, usually the header.
-        // $csv->setOffset(1);
+        // $data is the iterator. Skip the first row, usually the header.
         $data = $csv->setOffset(1)->query();
-        // var_dump($data);
+        
         foreach ($data as $index => $row) {
-//            if ($index == 0)
-//                continue;
             Language::create([
                 'id' => $row[0],
                 'part2b' => $row[1] ?: null,
@@ -37,9 +34,10 @@ class LanguageTableSeeder extends Seeder
                 'ref_name' => $row[6],
                 'comment' => $row[7] ?: null,
             ]);
-//            var_dump($row);
-//            break;
         }
+        
+        // Optionally: set languages that have 'part1' as active.
+        Language::whereNotNull('part1')->update(['active' => 1]);
         
     }
 }

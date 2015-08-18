@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         'languages',
         'synonyms',
         'users',
+        'roles',
     ];
     
     /**
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
         
         // Run the seeds.
+        $this->call(RoleTableSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(SynonymTableSeeder::class);
         $this->call(LanguageTableSeeder::class);

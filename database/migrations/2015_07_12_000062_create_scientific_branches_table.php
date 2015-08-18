@@ -15,12 +15,17 @@ class CreateScientificBranchesTable extends Migration
         Schema::create('scientific_branches', function (Blueprint $table) {
             $table->increments('id');
             $table->string('scientific_branch');
+            $table->char('mark', 2);
+            $table->text('description')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
             
             $table->integer('scientific_field_id')->unsigned();
             
-            $table->foreign('scientific_field_id')->references('id')->on('scientific_fields');
+            $table->foreign('scientific_field_id')
+                    ->references('id')
+                    ->on('scientific_fields')
+                    ->onDelete('cascade');
         });
     }
 

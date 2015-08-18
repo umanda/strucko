@@ -42,4 +42,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\Term');
     }
+    
+    /**
+     * A user may have many definitions.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function definitions()
+    {
+        return $this->hasMany('App\Definition');
+    }
 }

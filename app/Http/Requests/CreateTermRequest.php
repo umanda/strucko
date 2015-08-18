@@ -30,7 +30,7 @@ class CreateTermRequest extends Request
             'term' => 'required|min:2|max:255',
             'language_id' => 'required|alpha|min:1|max:3',
             'part_of_speech_id' => 'required|integer|min:1',
-            'scientific_branch_id' => 'required|integer|min:1',
+            'scientific_field_id' => 'required|integer|min:1',
             
         ];
     }

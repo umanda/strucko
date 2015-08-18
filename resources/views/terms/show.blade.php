@@ -10,7 +10,7 @@
 
 <p> 
     {{ $term->language->ref_name }}, 
-    {{ $term->scientificBranch->scientific_branch }}, 
+    {{ $term->scientificField->scientific_field }}, 
     {{ $term->partOfSpeech->part_of_speech }},
     {{ $term->status->status }}
 </p>
@@ -41,6 +41,13 @@
 @endforeach
 </ul>
 
+@if (Auth::check())
+
 <a class="btn btn-default" href="{{ action('TermsController@edit', ['slug_unique' =>
                 $term->slug_unique]) }}">Edit</a>
+
+@include('terms.suggestions')
+
+@endif
+
 @endsection

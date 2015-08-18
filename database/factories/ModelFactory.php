@@ -11,6 +11,15 @@
 |
 */
 
+
+// Roles
+$factory->define(App\Status::class, function($faker) {
+    return [
+        'id' => $faker->unique()->randomDigitNotNull,
+        'role' => $faker->unique()->numerify('Role #'),
+    ];
+});
+
 // User
 $factory->define(App\User::class, function ($faker) {
     return [
@@ -106,7 +115,7 @@ $factory->define(App\Definition::class, function($faker) {
     ];
 });
 
-// Model
+// Term
 $factory->define(App\Term::class, function($faker) {
     return [
         'term' => $faker->word,
@@ -133,8 +142,8 @@ $factory->define(App\Term::class, function($faker) {
             ->randomElement(App\PartOfSpeech::all()
             ->lists('id')
             ->toArray()),
-        'scientific_branch_id' => $faker
-            ->randomElement(App\ScientificBranch::all()
+        'scientific_field_id' => $faker
+            ->randomElement(App\ScientificField::all()
             ->lists('id')
             ->toArray()),
         

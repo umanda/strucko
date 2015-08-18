@@ -15,6 +15,8 @@ class CreateScientificAreasTable extends Migration
         Schema::create('scientific_areas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('scientific_area');
+            $table->char('mark', 2);
+            $table->text('description')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
         });

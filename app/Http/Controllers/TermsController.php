@@ -15,7 +15,7 @@ use App\Status;
 // use App\Definition;
 // use Request;
 use Auth;
-use App\Http\Requests\CreateTermRequest;
+use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
 use Session;
 
@@ -23,7 +23,10 @@ class TermsController extends Controller
 {
     public function __construct()
     {
+        // User has to be authenticated, except for specified methods.
         $this->middleware('auth', ['except' => ['index', 'show']]);
+        // Check if user has Administrator role for specified methods.
+        $this->middleware('role:1000', ['only' => ['edit', 'update']]);
     }
 
     /**
@@ -96,7 +99,7 @@ class TermsController extends Controller
      * 
      * @return type
      */
-    public function store(CreateTermRequest $request)
+    public function store(EditTermRequest $request)
     {
         // Get input from the request and prepare slugs.
         // $input = Request::all();
@@ -172,13 +175,13 @@ class TermsController extends Controller
 
     /**
      * Update the term.
-     * TODO Create the update request for validation or use existing one (create?).
+     * TODO Create the update request for validation or use existing one (store?).
      * TODO Make sure that only administrator can make this request.
      * 
      * @param type $slugUnique
      * @param Request $request
      */
-    public function update($slugUnique, Request $request)
+    public function update($slugUnique, EditTermRequest $request)
     {
         // Get the term to be updated.
         $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
@@ -227,7 +230,7 @@ class TermsController extends Controller
         $term->save();
         
         return back()->with([
-                    'alert' => 'Term updated...',
+                    'alert' => 'Status updated...',
                     'alert_class' => 'alert alert-success'
                 ]);
     }

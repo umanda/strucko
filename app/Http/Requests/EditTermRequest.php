@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Auth;
 
-class CreateTermRequest extends Request
+class EditTermRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

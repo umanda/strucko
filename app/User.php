@@ -52,4 +52,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\Definition');
     }
+    
+    /**
+     * A user has a role.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
 }

@@ -10,6 +10,13 @@ use App\ScientificArea;
 
 class ScientificAreasController extends Controller
 {
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+        // Check if user has Administrator role for specified methods.
+        $this->middleware('role:1000', ['only' => ['edit', 'update']]);
+    }
     /**
      * Display a listing of the resource.
      *

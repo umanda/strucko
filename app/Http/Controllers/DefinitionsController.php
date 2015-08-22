@@ -48,7 +48,7 @@ class DefinitionsController extends Controller
         
         // Return back with alerts in session.
         return back()->with([
-            'alert' => 'Term suggested...',
+            'alert' => 'Definition suggested...',
             'alert_class' => 'alert alert-success'
         ]);
         

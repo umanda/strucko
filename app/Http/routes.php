@@ -57,8 +57,11 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
-// Group these routes and supplement appropriate middleware.
+// Areas and fields
+// TODO Group these routes and apply the same middleware.
 Route::resource('scientific-areas', 'ScientificAreasController');
 Route::resource('scientific-areas.scientific-fields', 'ScientificFieldsController');
 
 Route::resource('definitions', 'DefinitionsController');
+
+Route::resource('languages', 'LanguagesController');

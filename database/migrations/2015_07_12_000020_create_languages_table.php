@@ -34,6 +34,9 @@ class CreateLanguagesTable extends Migration
             $table->boolean('active')->default(0);
             $table->timestamps();
             
+            // Locale option to use with the language. See setlocale() in php manual.
+            $table->string('locale')->nullable();
+            
             // Indexes
             $table->primary('id');
         });

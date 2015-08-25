@@ -15,8 +15,10 @@
     @include('areas.fields.form')
     
 
-<button type="submit" class="btn btn-primary">Save</button>
-
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-default" href="{{ url('scientific-areas', [$field->scientific_area_id]) }}">
+        Cancel
+    </a>  
 </form>
-    
+  
 @endsection

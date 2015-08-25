@@ -66,7 +66,7 @@ class TermsController extends Controller
         // Prepare data for the form.
         $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
         $scientificFields = $this->prepareFields();
-        $languages = Language::active()->orderBy('ref_name')->get();
+        $languages = Language::active()->living()->individual()->orderBy('ref_name')->get();
         
         return view('terms.create', compact(
             'partOfSpeeches',
@@ -166,7 +166,7 @@ class TermsController extends Controller
         $scientificFields = $this->prepareFields();
         // Left filterLanguages() method for example. Using the Form::select for Languages.
         // $languages = $this->filterLanguages($term->language_id);
-        $languages = Language::active()->orderBy('ref_name')->get();
+        $languages = Language::active()->living()->individual()->orderBy('ref_name')->get();
         $statuses = Status::active()->orderBy('id')->lists('status', 'id');
         
         return view('terms.edit', 

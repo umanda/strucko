@@ -12,12 +12,13 @@
     
     @include('areas.fields.form')
     
-    <div class="form-group">
-        <input type="submit" id="submit" name="submit" value="Create field"
-               class="btn btn-primary">
-    </div>
+
+    <input type="submit" id="submit" name="submit" value="Create field"
+        class="btn btn-primary">
     
-    
+    <a class="btn btn-default" href="{{ url('scientific-areas', [$currentArea]) }}">
+        Cancel
+    </a>
 </form>
     
     

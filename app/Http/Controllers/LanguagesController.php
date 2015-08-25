@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\ScientificArea;
+use App\Language;
 
-class ScientificAreasController extends Controller
+class LanguagesController extends Controller
 {
     public function __construct()
     {
@@ -25,11 +25,13 @@ class ScientificAreasController extends Controller
      */
     public function index()
     {
-        // Get areas and scientific fields.
-        $areas = ScientificArea::orderBy('mark')->get();
-        //$areas = $areas->sortBy('mark');
+        $languages = Language::active()
+                ->living()
+                ->individual()
+                ->orderBy('ref_name')
+                ->paginate(25);
         
-        return view('areas.index', compact('areas'));
+        return view('languages.index', compact('languages'));
     }
 
     /**
@@ -39,7 +41,7 @@ class ScientificAreasController extends Controller
      */
     public function create()
     {
-        return view('areas.create');
+        //
     }
 
     /**
@@ -50,16 +52,7 @@ class ScientificAreasController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        // Checkboxes:
-        $request->has('active') ? $input['active'] = 1 : $input['active'] = 0;
-        
-        $area = ScientificArea::create($input);
-        return redirect(action('ScientificAreasController@show', $area->id))
-            ->with([
-                    'alert' => 'Area created...',
-                    'alert_class' => 'alert alert-success'
-                ]);
+        //
     }
 
     /**
@@ -70,8 +63,9 @@ class ScientificAreasController extends Controller
      */
     public function show($id)
     {
-        $area = ScientificArea::findOrFail($id);
-        return view('areas.show', compact('area'));
+        $language = Language::findOrFail($id);
+        
+        return view('languages.show', compact('language'));
     }
 
     /**
@@ -82,8 +76,9 @@ class ScientificAreasController extends Controller
      */
     public function edit($id)
     {
-        $area = ScientificArea::findOrFail($id);
-        return view('areas.edit', compact('area'));
+        $language = Language::findOrFail($id);
+        
+        return view('languages.edit', compact('language'));
     }
 
     /**
@@ -93,16 +88,17 @@ class ScientificAreasController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\EditLanguageRequest $request, $id)
     {
         $input = $request->all();
         // Checkboxes:
         $request->has('active') ? $input['active'] = 1 : $input['active'] = 0;
         
-        ScientificArea::find($id)->update($input);
-        return redirect(action('ScientificAreasController@show', $id))
-            ->with([
-                    'alert' => 'Area edited...',
+        Language::findOrFail($id)->update($input);
+        
+        return redirect(url('languages', $input['id']))
+                ->with([
+                    'alert' => 'Language edited...',
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -115,11 +111,6 @@ class ScientificAreasController extends Controller
      */
     public function destroy($id)
     {
-        ScientificArea::destroy($id);
-        return redirect(action('ScientificAreasController@index'))
-                ->with([
-                    'alert' => 'Area deleted...',
-                    'alert_class' => 'alert alert-success'
-                ]);
+        //
     }
 }

@@ -5,16 +5,26 @@
 @section('title', $field->scientific_field . ' - description')
 
 @section('content')
+<div class="col-md-8">
+    <a class="btn btn-default" 
+       href="{{ action('ScientificAreasController@show', $field->scientific_area_id)}}">
+        Back to {{ $field->scientificArea->scientific_area }}
+    </a>
+    <h2>{{ $field->scientific_field }}</h2>
+    <h3>Area: {{ $field->scientificArea->scientific_area }}</h3>
+    <h3>Mark: {{ $field->mark }}</h3>
+    <h3>Active: {{ $field->active ? 'Yes' : 'No' }} </h3>
+    <h3>Description:</h3>
+    <p>{{ $field->description ?: 'No description yet...' }}</p>
 
-<h3>{{ $field->scientific_field }}</h3>
-
-<h4>Mark: {{ $field->mark }}</h4>
-<h4>Active: {{ $field->active ? 'Yes' : 'No' }} </h4>
-<h4>Description:</h4>
-<p>{{ $field->description ?: 'No description yet...' }}</p>
-
-<a class="btn btn-default" href="{{ action('ScientificFieldsController@edit', [$field->scientific_area_id, $field->id]) }}">Edit</a>
-<a class="btn btn-default" href="{{ action('ScientificBranchesController@index', 
-            [$field->scientific_area_id, $field->id])}}">Show branches</a>
-<a class="btn btn-default" href="{{ action('ScientificFieldsController@index', [$field->scientific_area_id])}}">Back to all fields</a>
+    @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
+    <form method="POST" action="{{ action('ScientificFieldsController@destroy', [$field->scientific_area_id, $field->id]) }}">
+        {!! csrf_field() !!}
+        <input type="hidden" name="_method" value="DELETE">
+        <a class="btn btn-default" href="{{ action('ScientificFieldsController@edit', [$field->scientific_area_id, $field->id]) }}">Edit field</a>
+        <button type="submit" class="btn btn-danger">Delete field</button>
+    </form>
+    @endif
+    
+</div>
 @endsection

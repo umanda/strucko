@@ -7,13 +7,13 @@
            value="{{ isset($area) ? $area->scientific_area : old('scientific_area') }}">
 </div>
 <div class="form-group">
-    <label for="term">Mark:</label>
+    <label for="mark">Mark:</label>
     <input type="text" id="mark" name="mark" maxlength="2" required="required"
            placeholder="Mark" class="form-control"
            value="{{ isset($area) ? $area->mark : old('mark') }}">
 </div>
 <div class="form-group">
-    <label for="term">Description:</label>
+    <label for="description">Description:</label>
     <textarea id="description" name="description" placeholder="Description"
               rows="3" class="form-control">{{ isset($area) ? $area->description : old('description') }}</textarea>
 </div>

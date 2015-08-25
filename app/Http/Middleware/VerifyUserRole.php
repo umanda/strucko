@@ -7,7 +7,8 @@ use Closure;
 class VerifyUserRole
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request. Check if the role of the current user is less
+     * than the required role, which is set as middleware argument.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

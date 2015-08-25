@@ -8,6 +8,7 @@ class Language extends Model
 {
     protected $fillable = [
         'id',
+        'locale',
         'part2b',
         'part2t',
         'part1',
@@ -17,11 +18,38 @@ class Language extends Model
         'comment',
     ];
     
-    public function scopeActive($query)
+    /**
+     * Scope for languages which are available to choose from on Strucko.
+     * 
+     * @param type $query
+     * @return type
+     */
+    public function scopeActive ($query)
     {
         return $query->where('active', 1);
     }
     
+    /**
+     * Scope for living languages.
+     * 
+     * @param type $query
+     * @return type
+     */
+    public function scopeLiving ($query)
+    {
+        return $query->where('type', 'L');
+    }
+    
+    public function scopeIndividual ($query)
+    {
+        return $query->where('scope', 'I');
+    }
+    
+    /**
+     * 
+     * @param type $query
+     * @param type $itemToRemove
+     */
     public function scopeWithout($query, $itemToRemove)
     {
         $query->where('id', '<>', $itemToRemove);

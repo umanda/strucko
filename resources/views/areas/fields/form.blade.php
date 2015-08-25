@@ -14,12 +14,19 @@
 <div class="form-group">
     <label for="scientific_area_id">Scientific area:</label>
     <select id="scientific_area_id" name="scientific_area_id" required="required" class="form-control">
-        @if (isset($field))
-        <option value="{{ $field->scientific_area_id }}" selected="selected">{{ $field->scientificArea->scientific_area }}</option>
+        @if (Request::is('*/create') && isset($currentArea))
+            <option value="{{ $currentArea->id }}" selected="selected">{{ $currentArea->scientific_area }}</option>
+        @elseif (isset($field))
+            <option value="{{ $field->scientific_area_id }}" selected="selected">{{ $field->scientificArea->scientific_area }}</option>
+        
+            @foreach ($areas as $area)
+            <option value="{{ $area->id }}">{{ $area->scientific_area }}</option>
+            @endforeach
+        @else
+            @foreach ($areas as $area)
+            <option value="{{ $area->id }}">{{ $area->scientific_area }}</option>
+            @endforeach
         @endif
-        @foreach ($areas as $area)
-        <option value="{{ $area->id }}">{{ $area->scientific_area }}</option>
-        @endforeach
     </select>
 </div>
 <div class="form-group">
@@ -35,6 +42,4 @@
             @endif
             > Active?
     </label>
-</div>
-
 </div>

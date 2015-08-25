@@ -11,11 +11,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
                 <li><a href="{{ action('TermsController@index') }}">Terms</a></li>
                 <li><a href="/terms/create">Create</a></li>
                 <li><a href="{{ action('TermsController@suggestions') }}">Suggestions</a></li>
-                <li><a href="/scientific-areas/">Areas</a></li>
+                <li><a href="/scientific-areas/">Areas and Fields</a></li>
+                <li><a href="/languages">Languages</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>

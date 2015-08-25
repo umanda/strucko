@@ -11,6 +11,14 @@ use App\ScientificArea;
 
 class ScientificFieldsController extends Controller
 {
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+        // Check if user has Administrator role, except for specified methods.
+        $this->middleware('role:1000', ['except' => ['index', 'show']]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -18,11 +26,11 @@ class ScientificFieldsController extends Controller
      */
     public function index($areaId)
     {
-        $fields = ScientificField::where('scientific_area_id', $areaId)
-                ->with('scientificArea')
-                ->orderBy('mark')
-                ->get();
-        return view('areas.fields.index', compact('fields'));
+//        $fields = ScientificField::where('scientific_area_id', $areaId)
+//                ->with('scientificArea')
+//                ->orderBy('mark')
+//                ->get();
+//        return view('areas.fields.index', compact('fields'));
     }
 
     /**
@@ -30,9 +38,11 @@ class ScientificFieldsController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create($areaId)
     {
-        return view('areas.fields.create');
+        $areas = ScientificArea::orderBy('mark')->get();
+        $currentArea = ScientificArea::findOrFail($areaId);
+        return view('areas.fields.create', compact('areas', 'currentArea'));
     }
 
     /**
@@ -48,7 +58,7 @@ class ScientificFieldsController extends Controller
         $request->has('active') ? $input['active'] = 1 : $input['active'] = 0;
         
         $field = ScientificField::create($input);
-        return redirect(action('ScientificFieldsController@show', $field->id))
+        return redirect(action('ScientificAreasController@show', $field->scientific_area_id))
             ->with([
                     'alert' => 'Field created...',
                     'alert_class' => 'alert alert-success'
@@ -101,11 +111,11 @@ class ScientificFieldsController extends Controller
         
         ScientificField::findOrFail($fieldId)->update($input);
         
-        return redirect(action('ScientificFieldsController@show', [$areaId, $fieldId]))
+        return redirect(action('ScientificAreasController@show', $input['scientific_area_id']))
             ->with([
                     'alert' => 'Field edited...',
                     'alert_class' => 'alert alert-success'
-                ]);;
+                ]);
     }
 
     /**
@@ -114,8 +124,13 @@ class ScientificFieldsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($scientific_area_id, $scientific_field_id)
     {
-        //
+        ScientificField::destroy($scientific_field_id);
+        return redirect(action('ScientificAreasController@show', $scientific_area_id))
+                ->with([
+                    'alert' => 'Field deleted...',
+                    'alert_class' => 'alert alert-success'
+                ]);
     }
 }

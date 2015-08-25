@@ -15,6 +15,7 @@
     <div class="form-group">
         <input type="submit" id="submit" name="submit" value="Suggest area"
                class="btn btn-primary">
+        <a class="btn btn-default" href="/scientific-areas">Cancel</a>
     </div>
     
     

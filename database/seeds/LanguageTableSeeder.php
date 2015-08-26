@@ -17,11 +17,19 @@ class LanguageTableSeeder extends Seeder
         // factory(App\Language::class, 5)->create();
         
         // ISO 639-3 Code Tables Set Download: http://www-01.sil.org/iso639-3/download.asp
-        $csv = Reader::createFromPath('database/seeds/data/iso-639-3_20150505.tab');
+        // $csv = Reader::createFromPath('database/seeds/data/iso-639-3_20150505.tab');
+        
+        // New CSV file with locale attribute.
+        $csv = Reader::createFromPath('database/seeds/data/languages.csv');
+        
         // Set delimiter to tab.
-        $csv->setDelimiter('	');
+        // $csv->setDelimiter('	');
+        
+        // Set delimiter to ;
+        $csv->setDelimiter(';');
+        
         // $data is the iterator. Skip the first row, usually the header.
-        $data = $csv->setOffset(1)->query();
+        $data = $csv->setOffset(1)->setLimit(7865)->query();
         
         foreach ($data as $index => $row) {
             Language::create([
@@ -33,11 +41,12 @@ class LanguageTableSeeder extends Seeder
                 'type' => $row[5],
                 'ref_name' => $row[6],
                 'comment' => $row[7] ?: null,
+                'locale' => $row[11] ?: null,
             ]);
         }
         
         // Optionally: set languages that have 'part1' as active.
-        Language::whereNotNull('part1')->update(['active' => 1]);
+        Language::whereNotNull('locale')->update(['active' => 1]);
         
     }
 }

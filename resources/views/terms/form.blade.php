@@ -43,12 +43,6 @@
            value="{{ isset($term) ? $term->abbreviation : old('abbreviation') }}">
 </div>
 
-<div class="form-group">
-    <label for="definition">Definition (optional):</label>
-    <textarea id="definition" name="definition" placeholder="Definition"
-              rows="3" class="form-control">{{ old('definition') }}</textarea>
-
-</div>
 
 @if(isset($term))
 
@@ -61,7 +55,5 @@
         @endforeach
     </ul>
 </div>
-
-
 
 @endif

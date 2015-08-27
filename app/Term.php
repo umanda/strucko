@@ -17,6 +17,7 @@ class Term extends Model
         'abbreviation',
         'slug',
         'slug_unique',
+        'menu_letter',
         'synonym_id',
         'user_id',
         'language_id',

@@ -22,7 +22,7 @@ class CreateDefinitionsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('status_id')->unsigned()->default(500);
             
-            $table->foreign('synonym_id')->references('id')->on('synonyms');
+            $table->foreign('synonym_id')->references('id')->on('synonyms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
         });

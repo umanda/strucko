@@ -122,6 +122,7 @@ $factory->define(App\Term::class, function($faker) {
         'abbreviation' => $faker->optional()->regexify('[A-Z]{2,4}'),
         'slug' => $faker->slug,
         'slug_unique' => $faker->slug,
+        'menu_letter' => $faker->randomLetter,
         'synonym_id' => $faker
             ->randomElement(App\Synonym::all()
             ->lists('id')
@@ -131,7 +132,7 @@ $factory->define(App\Term::class, function($faker) {
             ->lists('id')
             ->toArray()),
         'language_id' => $faker
-            ->randomElement(App\Language::all()
+            ->randomElement(App\Language::active()
             ->lists('id')
             ->toArray()),
         'status_id' => $faker

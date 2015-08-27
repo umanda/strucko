@@ -20,6 +20,7 @@ class CreateTermsTable extends Migration
             $table->string('abbreviation', 30)->nullable();
             $table->string('slug');
             $table->string('slug_unique');
+            $table->string('menu_letter', 30);
             $table->timestamps();
             
             // Attributes - foreign keys

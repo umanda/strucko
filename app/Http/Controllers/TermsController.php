@@ -66,7 +66,7 @@ class TermsController extends Controller
         // Prepare data for the form.
         $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
         $scientificFields = $this->prepareFields();
-        $languages = Language::active()->living()->individual()->orderBy('ref_name')->get();
+        $languages = Language::active()->orderBy('ref_name')->get();
         
         return view('terms.create', compact(
             'partOfSpeeches',
@@ -92,10 +92,8 @@ class TermsController extends Controller
     }
 
     /**
-     * TODO Make sure that only active language, part of speech and category can be set.
-     * TODO Consider changing the slug_unique logic to
-     * take into account the posibility to change category...
-     * Consider making this a transaction.
+     * TODO Make sure that only active language, part of speech and category can be set (implement guarding - trough request?).
+     * TODO Consider making this a transaction.
      * 
      * @return type
      */
@@ -119,19 +117,10 @@ class TermsController extends Controller
         $input['synonym_id'] = $synonym->id;
         
         // Get the user who is suggesting the Term.
-//        $user = Auth::user();
-//        $input['user_id'] = $user->id;
         $input['user_id'] = Auth::id();
         
-        // If definition is not empty, create it for the synonym.
-        if ($request->has('definition')) {
-            // Definition::create();
-            $synonym->definitions()->create([
-                'definition' => $input['definition'], 
-                'synonym_id' => $input['synonym_id'],
-                'user_id' => $input['user_id'],
-            ]);
-        }
+        // Prepare menu_letter for the term and add to input.
+        $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
 
         // Persist the new Term
         Term::create($input);
@@ -166,7 +155,7 @@ class TermsController extends Controller
         $scientificFields = $this->prepareFields();
         // Left filterLanguages() method for example. Using the Form::select for Languages.
         // $languages = $this->filterLanguages($term->language_id);
-        $languages = Language::active()->living()->individual()->orderBy('ref_name')->get();
+        $languages = Language::active()->orderBy('ref_name')->get();
         $statuses = Status::active()->orderBy('id')->lists('status', 'id');
         
         return view('terms.edit', 
@@ -200,15 +189,8 @@ class TermsController extends Controller
             return back()->withInput();
         }
         
-        // If definition is not empty, create it for the synonym.
-        if ($request->has('definition')) {
-            //dd($term->synonym->definitions);
-            $term->synonym->definitions()->create([
-                'definition' => $input['definition'], 
-                //'synonym_id' => $input['synonym_id'],
-                'user_id' => Auth::id(),
-            ]);
-        }
+        // Prepare new menu_letter for the term and add to input.
+        $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
         
         // Update the term.
         $term->update($input);
@@ -235,7 +217,7 @@ class TermsController extends Controller
                 ]);
     }
 
-        /**
+     /**
      * Check if the term already exists in the database for the choosen language,
      * part of speech and category.
      *
@@ -348,5 +330,23 @@ class TermsController extends Controller
         }
         
         return $fields;
+    }
+    
+    protected function prepareMenuLetter ($term, $languageId) {
+        // Get locale for the language and then set locale.
+        $locale = Language::where('id', $languageId)->value('locale');
+        setlocale(LC_CTYPE, $locale);
+        
+        // Get the first letter of the term
+        $letter = substr($term, 0, 1);
+        
+        // If the letter is alpha, return letter
+        if (ctype_alpha($letter)) {
+            return mb_strtoupper($letter);
+        }
+        
+        // The letter is not alpha, so return default non_alpha string.
+        return 'non_alpha';
+        
     }
 }

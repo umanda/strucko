@@ -12,7 +12,8 @@
     {{ $term->language->ref_name }}, 
     {{ $term->scientificField->scientific_field }}, 
     {{ $term->partOfSpeech->part_of_speech }},
-    {{ $term->status->status }}
+    {{ $term->status->status }}, 
+    {{ $term->menu_letter }}
 </p>
 <h4>Abbreviation:</h4>
 <p>{{ $term->abbreviation }}</p>

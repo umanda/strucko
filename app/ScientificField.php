@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+// TODO Add slugs to fields.
+
 class ScientificField extends Model
 {
     protected $fillable = [

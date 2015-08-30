@@ -18,9 +18,17 @@ use Auth;
 use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
 use Session;
+use App\Repositories\FilterRepository;
 
 class TermsController extends Controller
 {
+    /**
+     * Filters used to get specific terms.
+     * 
+     * @var type 
+     */
+    protected $filters;
+    
     public function __construct()
     {
         // User has to be authenticated, except for specified methods.
@@ -34,17 +42,53 @@ class TermsController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(FilterRepository $filters)
     {
+        $this->filters = $filters->all();
+        
         // TODO Implement filtering
         // null !== \Input::get('filter') ? dd('true') : dd('false');
         
-        // Get the latest terms.
-        $terms = Term::latest()->approved()->get();
-
-        return view('terms.index', compact('terms'));
+        // Check appropriate query parameters and variables.
+        if (isset($this->filters['language_id']) 
+                && isset($this->filters['scientific_field_id'])) {
+            
+            $menuLetters = Term::approved()
+                ->where('language_id', $this->filters['language_id'])
+                ->where('scientific_field_id', $this->filters['scientific_field_id'])
+                ->groupBy('menu_letter')
+                ->orderBy('menu_letter')
+                ->lists('menu_letter');
+            
+            $language_id = $this->filters['language_id'];
+            $scientific_field_id = $this->filters['scientific_field_id'];
+            
+            // Check if the menu_letter is set. If so, get terms with that letter.
+            if (isset($this->filters['menu_letter'])) {
+                // We can now get terms.
+                $terms = Term::latest()
+                    ->approved()
+                    ->where($this->filters)
+                    ->get();
+            }
+            
+            // Check if the search is set. If so, try to find terms.
+            if (isset($this->filters['search'])) {
+                // We can now get terms.
+                $terms = Term::latest()
+                    ->approved()
+                    ->where('term', 'like', '%'. $this->filters['search'] . '%')
+                    ->get();
+            }
+        }
+        
+        return view('terms.index', compact('terms', 'menuLetters', 'language_id', 'scientific_field_id'));
     }
+    
     /**
+     * TODO Create another view for suggested terms (because of FilterRepository).
+     * TODO Consider creating Filter repository and view composer, like for approved terms.
+     * 
      * Show suggested terms - logged in users only. 
      * 
      * @return type
@@ -345,8 +389,8 @@ class TermsController extends Controller
             return mb_strtoupper($letter);
         }
         
-        // The letter is not alpha, so return default non_alpha string.
-        return 'non_alpha';
+        // The letter is not alpha, so return default string.
+        return '0';
         
     }
 }

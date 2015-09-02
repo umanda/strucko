@@ -82,7 +82,17 @@ class TermsController extends Controller
             }
         }
         
-        return view('terms.index', compact('terms', 'menuLetters', 'language_id', 'scientific_field_id'));
+        // Prepare languages and fields for filtering
+        $languages = Language::active()->orderBy('ref_name')->get();
+        $scientificFields = $this->prepareFields();
+        
+        return view('terms.index',
+                compact('terms',
+                        'menuLetters',
+                        'language_id',
+                        'scientific_field_id',
+                        'languages',
+                        'scientificFields'));
     }
     
     /**

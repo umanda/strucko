@@ -7,15 +7,20 @@
 @section('content')
     
     @include('layouts.filter')
-    @if(isset($menuLetters))
+    
+    @if(isset($menuLetters) && ! ($menuLetters->isEmpty()))
         @include('layouts.menu')
         @include('layouts.search')
+    @else
+        <br>
+        <p>Sorry, no terms available for selected language and field...</p>
     @endif
     
     @if(isset($terms))
         @foreach($terms as $term)
             <h2><a href="{{ action('TermsController@show', ['slug_unique' =>
-                    $term->slug_unique]) }}">{{ $term->term }}</a></h2>
+                    $term->slug_unique]) }}">{{ $term->term }}</a>
+            </h2>
             <p>Abbreviation: {{ $term->abbreviation }}</p>
             <p>Slug: {{ $term->slug }}</p>
             <p>Slug Unique: {{ $term->slug_unique }}</p>

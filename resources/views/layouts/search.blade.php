@@ -5,7 +5,8 @@
                 <input type="hidden" name="language_id" value="{{ $filters['language_id'] }}">
                 <input type="hidden" name="scientific_field_id" value="{{ $filters['scientific_field_id'] }}">
 
-                <input type="text" class="form-control" name="search" id="search" placeholder="Or search...">
+                <input type="text" class="form-control" name="search" id="search" placeholder="Or search..."
+                       value="{{ isset($filters['search']) ? $filters['search'] : old('search') }}">
 
                 <button type="submit" class="btn btn-default">Search</button>
             </div>

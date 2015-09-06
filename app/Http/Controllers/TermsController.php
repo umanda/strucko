@@ -44,47 +44,50 @@ class TermsController extends Controller
      */
     public function index(FilterRepository $filters)
     {
-        $this->filters = $filters->all();
-        
-        // TODO Implement filtering
-        // null !== \Input::get('filter') ? dd('true') : dd('false');
+        $this->filters = $filters;
+        $activeFilters = $this->filters->all();
         
         // Check appropriate query parameters and variables.
-        if (isset($this->filters['language_id']) 
-                && isset($this->filters['scientific_field_id'])) {
+        if ($this->filters->isSetLanguageAndField()) {
             
             $menuLetters = Term::approved()
-                ->where('language_id', $this->filters['language_id'])
-                ->where('scientific_field_id', $this->filters['scientific_field_id'])
+                ->whereHas('synonym', function ($query) use ($activeFilters) {
+                    $query->where('language_id', $activeFilters['language_id'])
+                          ->where('scientific_field_id', $activeFilters['scientific_field_id']);
+                })
                 ->groupBy('menu_letter')
                 ->orderBy('menu_letter')
                 ->lists('menu_letter');
             
-            $language_id = $this->filters['language_id'];
-            $scientific_field_id = $this->filters['scientific_field_id'];
+            $language_id = $activeFilters['language_id'];
+            $scientific_field_id = $activeFilters['scientific_field_id'];
             
             // Check if the menu_letter is set. If so, get terms with that letter.
-            if (isset($this->filters['menu_letter'])) {
-                // We can now get terms.
-                $terms = Term::latest()
-                    ->approved()
-                    ->where($this->filters)
+            if ($this->filters->isSetMenuLetter()) {
+                $terms = Term::approved()
+                    ->latest()
+                    ->whereHas('synonym', function ($query) use ($activeFilters) {
+                        $query->where($activeFilters);
+                    })
                     ->get();
             }
             
             // Check if the search is set. If so, try to find terms.
-            if (isset($this->filters['search'])) {
-                // We can now get terms.
+            if ($this->filters->isSetSearch()) {
                 $terms = Term::latest()
                     ->approved()
-                    ->where('term', 'like', '%'. $this->filters['search'] . '%')
+                    ->where('term', 'like', '%'. $activeFilters['search'] . '%')
+                    ->whereHas('synonym', function ($query) use ($activeFilters) {
+                        $query->where('language_id', $activeFilters['language_id'])
+                              ->where('scientific_field_id', $activeFilters['scientific_field_id']);
+                    })
                     ->get();
             }
         }
         
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
-        $scientificFields = $this->prepareFields();
+        $scientificFields = $this->prepareScientificFields();
         
         return view('terms.index',
                 compact('terms',
@@ -119,7 +122,7 @@ class TermsController extends Controller
     {
         // Prepare data for the form.
         $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
-        $scientificFields = $this->prepareFields();
+        $scientificFields = $this->prepareScientificFields();
         $languages = Language::active()->orderBy('ref_name')->get();
         
         return view('terms.create', compact(
@@ -127,6 +130,39 @@ class TermsController extends Controller
             'scientificFields',
             'languages'
         ));
+    }
+    
+     /**
+     * TODO Make sure that only active language, part of speech and category can be set (implement guarding - trough request?).
+     * TODO Consider making this a transaction.
+     * 
+     * @return type
+     */
+    public function store(EditTermRequest $request)
+    {
+        // Get input from the request and prepare slugs.
+        // $input = Request::all();
+        $input = $this->prepareInputValues($request->all());
+        // Get the user suggesting the term
+        $input['user_id'] = Auth::id();
+
+        // Make sure that the term doesn't already exist (check unique constraint).
+        if ($this->termExists($input)) {
+            // Flash messages that the term exists.
+            $this->flashTermExists();
+            return back()->withInput();
+        }
+        // Prepare new synonym
+        $synonym = Synonym::create($input);
+        
+        // Persist the new Term using the relationship
+        $synonym->terms()->create($input);
+        
+        // Redirect with alerts in session.
+        return redirect('terms/' . $input['slug_unique'])->with([
+            'alert' => 'Term suggested...',
+            'alert_class' => 'alert alert-success'
+        ]);
     }
     
     /**
@@ -139,74 +175,32 @@ class TermsController extends Controller
      */
     public function show(Term $term, ShowTermRequest $request)
     {
-        // return $term;
         //$term = Term::where('slug_unique', $slugUnique)->firstOrFail();
-
-        return view('terms.show', compact('term'));
-    }
-
-    /**
-     * TODO Make sure that only active language, part of speech and category can be set (implement guarding - trough request?).
-     * TODO Consider making this a transaction.
-     * 
-     * @return type
-     */
-    public function store(EditTermRequest $request)
-    {
-        // Get input from the request and prepare slugs.
-        // $input = Request::all();
-        $input = $this->prepareSlugs($request->all());
-
-        // Make sure that the term doesn't already exist (check unique constraint).
-        // TODO: Unique constraint - try to check using custom validation.
-        if ($this->termExists($input)) {
-            // Flash messages that the term exists.
-            $this->flashTermExists();
-            
-            return back()->withInput();
-        }
-
-        // Prepare new synonym and append synonym_id to the input
-        $synonym = Synonym::create();
-        $input['synonym_id'] = $synonym->id;
+        // Get languages for translation options
+        $languages = Language::active()
+                ->without($term->synonym->language_id)
+                ->orderBy('ref_name')
+                ->get();
         
-        // Get the user who is suggesting the Term.
-        $input['user_id'] = Auth::id();
-        
-        // Prepare menu_letter for the term and add to input.
-        $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
-
-        // Persist the new Term
-        Term::create($input);
-        
-        // Set alerts to session.
-//        Session::flash('alert', 'Term suggested...');
-//        Session::flash('alert_class', 'alert alert-success');
-        
-        // Redirect with alerts in session.
-        return redirect('terms/' . $input['slug_unique'])->with([
-            'alert' => 'Term suggested...',
-            'alert_class' => 'alert alert-success'
-        ]);
+        return view('terms.show', compact('term', 'languages'));
     }
 
     /**
      * Show the view to edit the term.
-     * TODO Only administrators can edit terms - implement with middleware.
-     * * 
-     * @param Term $term
+     * 
+     * @param string $slugUnique The unique slug used to identify term.
      * @return type
      */
     public function edit($slugUnique)
     {
         // Get the term with relationships.
         $term = Term::where('slug_unique', $slugUnique)
-                ->with('language', 'status', 'scientificField', 'partOfSpeech', 'synonym.definitions')
+                ->with('status', 'synonym.language', 'synonym.scientificField', 'synonym.partOfSpeech', 'synonym.definitions')
                 ->firstOrFail();
         
         // Prepare data for the form withouth the ones already in the term instance.
-        $partOfSpeeches = PartOfSpeech::active()->without($term->part_of_speech_id)->get();
-        $scientificFields = $this->prepareFields();
+        $partOfSpeeches = PartOfSpeech::active()->without($term->synonym->part_of_speech_id)->get();
+        $scientificFields = $this->prepareScientificFields();
         // Left filterLanguages() method for example. Using the Form::select for Languages.
         // $languages = $this->filterLanguages($term->language_id);
         $languages = Language::active()->orderBy('ref_name')->get();
@@ -218,19 +212,22 @@ class TermsController extends Controller
 
     /**
      * Update the term.
-     * TODO Create the update request for validation or use existing one (store?).
-     * TODO Make sure that only administrator can make this request.
      * 
-     * @param type $slugUnique
-     * @param Request $request
+     * @param string $slugUnique Unique slug used to identify term.
+     * @param EditTermRequest $request
      */
     public function update($slugUnique, EditTermRequest $request)
     {
-        // Get the term to be updated.
-        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        // Get the term to be updated, and synonym.
+        $term = Term::where('slug_unique', $slugUnique)->with('synonym')->firstOrFail();
+//        $synonym = Synonym::whereHas('terms', function ($query) use ($slugUnique) { 
+//            $query->where('slug_unique', $slugUnique);
+//        })->with('terms')->firstOrFail();
         
-        // Prepare new slugs from the new input.
-        $input = $this->prepareSlugs($request->all());
+        // Prepare new input values, without user_id
+        $input = $this->prepareInputValues($request->all());
+        // Make sure that the user_id stays the same
+        $input['user_id'] = $term->user_id;
         
         // Make sure that the term doesn't already exist (check unique constraint).
         // We will send the ID of the term we are updating so that we can check
@@ -239,15 +236,12 @@ class TermsController extends Controller
         if ($this->termExists($input, $term->id)) {
             // Flash messages that the term exists.
             $this->flashTermExists();
-            
             return back()->withInput();
         }
-        
-        // Prepare new menu_letter for the term and add to input.
-        $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
-        
-        // Update the term.
+                
+        // Update the term and synonym.
         $term->update($input);
+        $term->synonym()->update($input);
         
         return redirect(action('TermsController@show', ['slugUnique' => $input['slug_unique']]))
                 ->with([
@@ -256,8 +250,14 @@ class TermsController extends Controller
                 ]);
     }
     
-    // TODO Set the appropriate request, validaiton and ensure admins. 
-    public function updateStatus(Request $request, $slugUnique) {
+    /**
+     * Update the status of the Term.
+     * 
+     * @param \App\Http\Requests\EditStatusRequest $request
+     * @param string $slugUnique Unique slug for Term
+     * @return type Return to the previous page
+     */
+    public function updateStatus(Requests\EditStatusRequest $request, $slugUnique) {
         
         $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
         
@@ -270,21 +270,89 @@ class TermsController extends Controller
                     'alert_class' => 'alert alert-success'
                 ]);
     }
+    
+    /**
+     * Add translation for the current synonym.
+     * 
+     * @param \App\Http\Requests\EditTranslationRequest $request
+     * @param type $slugUnique
+     * @return type
+     */
+    public function addTranslation(Requests\EditTranslationRequest $request, $slugUnique)
+    {
+        // Get all input from the request. Also prepare input values in case we need to create a new term.
+        $input = $this->prepareInputValues($request->all());
+        // Get the user suggesting the translation
+        $input['user_id'] = Auth::id();
+        
+        // Get the term to be used to add translation trough synonym relationship.
+        $term = Term::where('slug_unique', $slugUnique)->with('synonym', 'synonym.translations')->firstOrFail();
+        
+        // Make sure that languages are not the same
+        if ($term->synonym->language_id == $input['language_id']) {
+            return back()->with([
+                    'alert' => 'Translated term can not be in the same language',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+        }
+        
+        // Check if the translation term already exist
+        if ($this->termExists($input)) {
+            // We will get the existing term and use its synonym_id as translation_id
+            $translationId = Term::where('term', $input['term'])
+                ->whereHas('synonym', function ($query) use ($input) {
+                        $query->where('language_id', $input['language_id'])
+                              ->where('part_of_speech_id', $input['part_of_speech_id'])
+                              ->where('scientific_field_id', $input['scientific_field_id']);
+                    })
+                ->value('synonym_id');
+            
+            // Check if the translation for synonyms already exists
+            if ($term->synonym->translations->contains($translationId)) {
+                return back()->withInput()->with([
+                    'alert' => 'This term already exists as translation...',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+            }
+                        
+            // If no, we can add (suggest) a translation
+            $term->synonym->addTranslation($translationId, $input['user_id']);
+            return back()->with([
+                    'alert' => 'Translation suggested for existing term',
+                    'alert_class' => 'alert alert-success'
+                ]);
+        }
+        else {
+            // Prepare new synonym 
+            $translationSynonym = Synonym::create($input);
+            // Persist the new Term
+            $translationSynonym->terms()->create($input);
+            // Ok, we can suggest the translation.
+            $term->synonym->addTranslation($translationSynonym->id, $input['user_id']);
+            return back()->with([
+                    'alert' => 'New term added and translation suggested',
+                    'alert_class' => 'alert alert-success'
+                ]);
+        }
+    }
 
-     /**
+    /**
      * Check if the term already exists in the database for the choosen language,
-     * part of speech and category.
-     *
+     * part of speech and scientific field.
+     * 
      * @param array $input
-     * @return App\Term
+     * @param integer $updatedTermId
+     * @return boolean
      */
     protected function termExists($input, $updatedTermId = 0)
     {
         // Try to get the term.
         $term = Term::where('term', $input['term'])
-                ->where('language_id', $input['language_id'])
-                ->where('part_of_speech_id', $input['part_of_speech_id'])
-                ->where('scientific_field_id', $input['scientific_field_id'])
+                ->whereHas('synonym', function ($query) use ($input) {
+                        $query->where('language_id', $input['language_id'])
+                              ->where('part_of_speech_id', $input['part_of_speech_id'])
+                              ->where('scientific_field_id', $input['scientific_field_id']);
+                    })
                 ->first();
                 
         // If the term term doesn't exist, we can go on.
@@ -303,7 +371,6 @@ class TermsController extends Controller
         
         // The term exists.
         return true;
-        
     }
     
     /**
@@ -362,7 +429,12 @@ class TermsController extends Controller
         session()->flash('alert_class', 'alert alert-warning');
     }
     
-    protected function prepareFields() {
+    /**
+     * Prepare an array of scientific fields to be used in forms, grouped by area.
+     * 
+     * @return array Array of fields grouped by area.
+     */
+    protected function prepareScientificFields() {
         $fields = [];
         
         // Get areas including their fileds.
@@ -387,20 +459,55 @@ class TermsController extends Controller
     }
     
     protected function prepareMenuLetter ($term, $languageId) {
+        
         // Get locale for the language and then set locale.
         $locale = Language::where('id', $languageId)->value('locale');
         setlocale(LC_CTYPE, $locale);
-        
+       
         // Get the first letter of the term
+        // Didn't use mb_substr because I get ?
         $letter = substr($term, 0, 1);
         
         // If the letter is alpha, return letter
         if (ctype_alpha($letter)) {
-            return mb_strtoupper($letter);
+            // Here I use mb_substr because I get real letter.
+            return mb_strtoupper(mb_substr($term, 0, 1));
         }
         
         // The letter is not alpha, so return default string.
         return '0';
         
     }
+
+    /**
+     * Get null if the string from the form input is actually empty. 
+     * If it is not empty, it will return its value.
+     * 
+     * @param string $input Value to check if it is empty or not
+     * @return string|null String if not empty, else null
+     */
+    public function getNullForOptionalInput($input)
+    {
+        return empty(trim($input)) ? null : $input;
+    }
+    
+    /**
+     * Prepare slugs, abbreciation, menu letter for term.
+     * 
+     * @param array $input
+     * @return array
+     */
+    public function prepareInputValues($input)
+    {
+        // Prepare slugs.
+        $input = $this->prepareSlugs($input);
+        // Make sure that abbreviation is null if empty.
+        $input['abbreviation'] = $this->getNullForOptionalInput($input['abbreviation']);
+        // Prepare menu_letter for the term and add to input.
+        $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
+        
+        return $input;
+       
+    }
+
 }

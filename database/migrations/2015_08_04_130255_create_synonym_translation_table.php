@@ -17,7 +17,7 @@ class CreateSynonymTranslationTable extends Migration
             $table->integer('synonym_id')->unsigned()->index();
             $table->integer('translation_id')->unsigned()->index();
             $table->integer('user_id')->unsigned();
-            $table->integer('status_id')->unsigned();
+            $table->integer('status_id')->unsigned()->default(500);
             $table->timestamps();
             
             $table->foreign('synonym_id')->references('id')->on('synonyms')->onDelete('cascade');

@@ -9,9 +9,9 @@
 <h3>{{ $term->term }}</h3>
 
 <p> 
-    {{ $term->language->ref_name }}, 
-    {{ $term->scientificField->scientific_field }}, 
-    {{ $term->partOfSpeech->part_of_speech }},
+    {{ $term->synonym->language->ref_name }}, 
+    {{ $term->synonym->scientificField->scientific_field }}, 
+    {{ $term->synonym->partOfSpeech->part_of_speech }},
     {{ $term->status->status }}, 
     {{ $term->menu_letter }}
 </p>
@@ -28,9 +28,12 @@
 <h4>Translations:</h4>
 <ul>
 @foreach ($term->synonym->translations as $translation)
-    
+        
     @foreach ($translation->terms as $translationTerm)
-        <li>{{ $translationTerm->term }}</li>
+    <li><a href="/terms/{{ $translationTerm->slug_unique }}">
+            {{ $translationTerm->term . ' synonym ' . $translationTerm->synonym_id .  ' status ' . $translation->pivot->status_id }}
+        </a>
+    </li>
     @endforeach
 
 @endforeach
@@ -42,12 +45,16 @@
 @endforeach
 </ul>
 
-@if (Auth::check())
+@if (Auth::check() && ! (Auth::user()->role_id < 1000))
 
-<a class="btn btn-default" href="{{ action('TermsController@edit', ['slug_unique' =>
+    <a class="btn btn-default" href="{{ action('TermsController@edit', ['slug_unique' =>
                 $term->slug_unique]) }}">Edit</a>
+    
+    @include('terms.suggestions')
+                
+@elseif(Auth::check())
 
-@include('terms.suggestions')
+    @include('terms.suggestions')
 
 @endif
 

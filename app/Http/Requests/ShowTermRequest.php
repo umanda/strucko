@@ -17,6 +17,7 @@ class ShowTermRequest extends Request
     {
         // Get the term.
         $term = $this->route('terms');
+        
         // Check if it is approved.
         $isApproved = Term::where('id', $term->id)
                 ->where('status_id', 1000)

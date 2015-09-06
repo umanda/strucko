@@ -22,6 +22,7 @@ get('terms/{terms}', 'TermsController@show');
 get('terms/{slugUnique}/edit', [
     'as' => 'terms.edit', 'uses' => 'TermsController@edit'
     ]);
+post('terms/{slugUnique}/translations', 'TermsController@addTranslation');
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);
@@ -29,6 +30,7 @@ patch('terms/{slugUnique}/status', [
     'as' => 'terms.updateStatus', 'uses' => 'TermsController@updateStatus'
     ]);
 post('terms', 'TermsController@store');
+
 
 
 // Sugesstions

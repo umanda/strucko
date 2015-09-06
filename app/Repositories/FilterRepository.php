@@ -46,6 +46,11 @@ class FilterRepository
         $this->request = $request;
     }
     
+    /**
+     * Return all filters as an array.
+     * 
+     * @return array
+     */
     public function all()
     {
         // Prepare filters from query parameters in request or in session, or
@@ -55,8 +60,38 @@ class FilterRepository
     }
     
     /**
-     * Prepare filters from query parameters in request or in session, or set
-     * defaults.
+     * Check if the language and scientific field is set in query parameter.
+     * 
+     * @return boolean
+     */
+    public function isSetLanguageAndField()
+    {
+        return isset($this->filters['language_id']) 
+                && isset($this->filters['scientific_field_id']);
+    }
+    
+    /**
+     * Check if the menu letter is set as query parameter.
+     * 
+     * @return boolean
+     */
+    public function isSetMenuLetter()
+    {
+        return isset($this->filters['menu_letter']);
+    }
+    
+    /**
+     * Check if the search is set as query parameter.
+     * 
+     * @return boolean
+     */
+    public function isSetSearch()
+    {
+        return isset($this->filters['search']);
+    }
+
+        /**
+     * Prepare filters from query parameters in request. Also put it in session.
      * 
      * @param Request $request
      * @return array

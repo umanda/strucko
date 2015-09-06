@@ -26,22 +26,16 @@ class CreateTermsTable extends Migration
             // Attributes - foreign keys
             $table->integer('synonym_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->char('language_id', 3);
             // Default status will be "Suggested".
             $table->integer('status_id')->unsigned()->default(500);
-            $table->integer('part_of_speech_id')->unsigned();
-            $table->integer('scientific_field_id')->unsigned();
             
             // Foreign keys - constraints
             $table->foreign('synonym_id')->references('id')->on('synonyms');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('language_id')->references('id')->on('languages');
             $table->foreign('status_id')->references('id')->on('statuses');
-            $table->foreign('part_of_speech_id')->references('id')->on('part_of_speeches');
-            $table->foreign('scientific_field_id')->references('id')->on('scientific_fields');
             
             // Unique constraints - one term per language, part of speech and field. 
-            $table->unique(['term', 'language_id', 'part_of_speech_id', 'scientific_field_id'], 'terms_unique');
+            $table->unique(['term', 'synonym_id'], 'terms_unique');
         });
     }
 

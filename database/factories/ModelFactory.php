@@ -33,7 +33,18 @@ $factory->define(App\User::class, function ($faker) {
 // Synonym
 $factory->define(App\Synonym::class, function($faker) {
     return [
-        
+        'language_id' => $faker
+            ->randomElement(App\Language::active()
+            ->lists('id')
+            ->toArray()),
+        'part_of_speech_id' => $faker
+            ->randomElement(App\PartOfSpeech::all()
+            ->lists('id')
+            ->toArray()),
+        'scientific_field_id' => $faker
+            ->randomElement(App\ScientificField::all()
+            ->lists('id')
+            ->toArray()),        
     ];
 });
 
@@ -124,6 +135,7 @@ $factory->define(App\Term::class, function($faker) {
         'slug_unique' => $faker->slug,
         'menu_letter' => $faker->randomLetter,
         'synonym_id' => $faker
+            ->unique()
             ->randomElement(App\Synonym::all()
             ->lists('id')
             ->toArray()),
@@ -131,22 +143,9 @@ $factory->define(App\Term::class, function($faker) {
             ->randomElement(App\User::all()
             ->lists('id')
             ->toArray()),
-        'language_id' => $faker
-            ->randomElement(App\Language::active()
-            ->lists('id')
-            ->toArray()),
         'status_id' => $faker
             ->randomElement(App\Status::all()
             ->lists('id')
-            ->toArray()),
-        'part_of_speech_id' => $faker
-            ->randomElement(App\PartOfSpeech::all()
-            ->lists('id')
-            ->toArray()),
-        'scientific_field_id' => $faker
-            ->randomElement(App\ScientificField::all()
-            ->lists('id')
-            ->toArray()),
-        
+            ->toArray()),        
     ];
 });

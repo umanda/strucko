@@ -7,6 +7,11 @@ use App\Synonym;
 
 class Synonym extends Model
 {
+        protected $fillable = [
+        'language_id',
+        'part_of_speech_id',
+        'scientific_field_id',
+    ];
     /**
      * Synonym may have many terms.
      *
@@ -27,7 +32,35 @@ class Synonym extends Model
         return $this->hasMany('App\Definition');
     }
     
+    /**
+     * Synonym is in a language.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function language()
+    {
+        return $this->belongsTo('App\Language');
+    }
     
+    /**
+     * Synonym belongs to scientific branch.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function scientificField()
+    {
+        return $this->belongsTo('App\ScientificField');
+    }
+    
+    /**
+     * Synonym belongs to part of speech.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partOfSpeech()
+    {
+        return $this->belongsTo('App\PartOfSpeech');
+    }
     
     /**
      * Synonym may have many synonym translations.
@@ -37,7 +70,9 @@ class Synonym extends Model
      */
     public function translations()
     {
-        return $this->belongsToMany(Synonym::class, 'synonym_translation', 'synonym_id', 'translation_id')->withTimestamps();
+        return $this->belongsToMany(Synonym::class, 'synonym_translation', 'synonym_id', 'translation_id')
+                ->withPivot('id', 'status_id', 'user_id')
+                ->withTimestamps();
     }
     
     /**
@@ -47,7 +82,7 @@ class Synonym extends Model
      * @param type $userId
      * @param type $statusId
      */
-    public function addTranslation($translationId, $userId, $statusId = 1)
+    public function addTranslation($translationId, $userId, $statusId = 500)
     {
         // Add translation to this model instance.
         $this->translations()->attach($translationId, ['user_id' => $userId, 'status_id' => $statusId]);

@@ -12,7 +12,7 @@
     <div class="form-group">
         <label for="status_id">Status:</label>
         {!! Form::select('status_id', $statuses,
-        isset($term) ? $term->status_id : old('scientific_field_id'), 
+        isset($term) ? $term->status_id : old('status_id'), 
         ['id' => 'status_id', 'required' => 'required', 'class' => 'form-control']) !!}
 
     </div>

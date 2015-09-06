@@ -21,12 +21,12 @@ class PartOfSpeech extends Model
     }
     
     /**
-     * Part of Speech may have many terms.
+     * Part of Speech may have many synonyms.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function terms()
+    public function synonyms()
     {
-        return $this->hasMany('App\Term');
+        return $this->hasMany('App\Synonym');
     }
 }

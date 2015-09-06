@@ -11,15 +11,17 @@ class DatabaseSeeder extends Seeder
      * @var array 
      */
     protected $toTruncate = [
+        'synonym_translation',
+        'definitions',
         'terms',
+        'synonyms',
         'scientific_branches',
         'scientific_fields',
         'scientific_areas',
         'part_of_speeches',
-        'statuses',
-        'definitions',
         'languages',
-        'synonyms',
+        'password_resets',        
+        'statuses',
         'users',
         'roles',
     ];
@@ -43,15 +45,15 @@ class DatabaseSeeder extends Seeder
         // Run the seeds.
         $this->call(RoleTableSeeder::class);
         $this->call(UserTableSeeder::class);
-        $this->call(SynonymTableSeeder::class);
+        $this->call(StatusTableSeeder::class);
         $this->call(LanguageTableSeeder::class);
         $this->call(PartOfSpeechTableSeeder::class);
-        $this->call(StatusTableSeeder::class);
         $this->call(ScientificAreaTableSeeder::class);
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
-        $this->call(DefinitionTableSeeder::class);
+        $this->call(SynonymTableSeeder::class);        
         $this->call(TermTableSeeder::class);
+        $this->call(DefinitionTableSeeder::class);
         
         Model::reguard();
     }

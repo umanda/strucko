@@ -11,9 +11,12 @@
     @if(isset($menuLetters) && ! ($menuLetters->isEmpty()))
         @include('layouts.menu')
         @include('layouts.search')
-    @else
+    @elseif (isset($filters['language_id']) && isset($filters['scientific_field_id']))
         <br>
         <p>Sorry, no terms available for selected language and field...</p>
+    @else
+        <br>
+        <p>Please select language and field...</p> 
     @endif
     
     @if(isset($terms))

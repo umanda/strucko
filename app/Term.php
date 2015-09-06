@@ -20,9 +20,6 @@ class Term extends Model
         'menu_letter',
         'synonym_id',
         'user_id',
-        'language_id',
-        'part_of_speech_id',
-        'scientific_field_id'
     ];
 
     public function scopeApproved($query)
@@ -46,16 +43,6 @@ class Term extends Model
     }
 
     /**
-     * Term is in a language.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function language()
-    {
-        return $this->belongsTo('App\Language');
-    }
-
-    /**
      * Term has a status.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -73,25 +60,5 @@ class Term extends Model
     public function synonym()
     {
         return $this->belongsTo('App\Synonym');
-    }
-
-    /**
-     * Term belongs to scientific branch.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function scientificField()
-    {
-        return $this->belongsTo('App\ScientificField');
-    }
-
-    /**
-     * Term belongs to part of speech.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function partOfSpeech()
-    {
-        return $this->belongsTo('App\PartOfSpeech');
     }
 }

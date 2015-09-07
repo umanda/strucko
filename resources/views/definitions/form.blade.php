@@ -18,6 +18,14 @@
         the author of the definition.
     </span>
 </div>
+<div class="form-group">
+    <label hidden="hidden" for="link">Link to source</label>
+    <input type="url" id="link" name="link" placeholder="Link to soruce (if available)"
+           aria-describedby="linkHelp" class="form-control" value="{{ old('link') }}">
+    <span id="linkHelp" class="help-block">
+        If the source is available online, provide the link to the source here.
+    </span>
+</div>
 
 <input type="hidden" id="synonym_id" name="synonym_id" 
        value="{{ isset($term) ? $term->synonym_id : old('synonym_id') }}">

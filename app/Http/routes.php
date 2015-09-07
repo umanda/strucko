@@ -22,7 +22,7 @@ get('terms/{terms}', 'TermsController@show');
 get('terms/{slugUnique}/edit', [
     'as' => 'terms.edit', 'uses' => 'TermsController@edit'
     ]);
-post('terms/{slugUnique}/translations', 'TermsController@addTranslation');
+post('terms/{slugUnique}/translations', 'SynonymsController@addTranslation');
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);

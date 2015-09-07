@@ -11,7 +11,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="{{ action('TermsController@index', Session::has('filters') ? Session::get('filters') : '') }}">Terms</a></li>
+                <li><a href="{{ action('TermsController@index', Session::has('allFilters') ? Session::get('allFilters') : '') }}">Terms</a></li>
                 <li><a href="/terms/create">Create</a></li>
                 <li><a href="{{ action('TermsController@suggestions') }}">Suggestions</a></li>
                 <li><a href="/scientific-areas/">Areas and Fields</a></li>

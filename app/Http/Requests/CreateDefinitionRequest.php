@@ -26,6 +26,7 @@ class CreateDefinitionRequest extends Request
         return [
             'definition' => 'required',
             'synonym_id' => 'required|integer|min:1',
+            'link' => 'url',
         ];
     }
 }

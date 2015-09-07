@@ -21,24 +21,44 @@ class FilterRepository
     protected $request;
     
     /**
-     * Current filters. Will be populated with query parameters from request.
+     * All current filters. Will be populated with query parameters from request.
      * 
      * @var array
      */
-    protected $filters = [];
+    protected $allFilters = [];
+    
+    /**
+     * Current filters that can be used for term filtering. 
+     * Wll be populated with query parameters from request.
+     * 
+     * @var array
+     */
+    protected $termFilters = [];
 
     /**
-     * Names of filters which can be used in queries.
+     * Names of all filters which can be used in queries.
      * 
      * @var array
      */
-    protected $filterKeys = [
+    protected $allFilterKeys = [
         'language_id',
         'scientific_field_id',
         'menu_letter',
         'search',
         'page',
         'translate_to'
+    ];
+    
+    /**
+     * Names of filters which can be used for terms.
+     * 
+     * @var array
+     */
+    protected $termFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'menu_letter',
+        'search',
     ];
     
     public function __construct(Request $request)
@@ -51,12 +71,25 @@ class FilterRepository
      * 
      * @return array
      */
-    public function all()
+    public function allFilters()
     {
         // Prepare filters from query parameters in request or in session, or
         // set defaults.
-        $this->prepareFilters($this->request);
-        return $this->filters;
+        $this->prepareAllFilters($this->request);
+        return $this->allFilters;
+    }
+        
+    /**
+     * Prepare filters which can be used for terms.
+     * 
+     * @return array
+     */
+    public function termFilters()
+    {
+        // Prepare term filters from query parameters in request or in session, or
+        // set defaults.
+        $this->prepareTermFilters($this->request);
+        return $this->termFilters;
     }
     
     /**
@@ -66,8 +99,8 @@ class FilterRepository
      */
     public function isSetLanguageAndField()
     {
-        return isset($this->filters['language_id']) 
-                && isset($this->filters['scientific_field_id']);
+        return isset($this->allFilters['language_id']) 
+                && isset($this->allFilters['scientific_field_id']);
     }
     
     /**
@@ -77,7 +110,7 @@ class FilterRepository
      */
     public function isSetMenuLetter()
     {
-        return isset($this->filters['menu_letter']);
+        return isset($this->allFilters['menu_letter']);
     }
     
     /**
@@ -87,30 +120,44 @@ class FilterRepository
      */
     public function isSetSearch()
     {
-        return isset($this->filters['search']);
+        return isset($this->allFilters['search']);
     }
 
-        /**
+    /**
      * Prepare filters from query parameters in request. Also put it in session.
      * 
      * @param Request $request
      * @return array
      */
-    protected function prepareFilters($request)
+    protected function prepareAllFilters($request)
     {        
         // Set filters from $filterKeys.
-        foreach ($this->filterKeys as $filterKey) {
+        foreach ($this->allFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                
-                $this->filters[$filterKey] = $request->get($filterKey);
-                
+                $this->allFilters[$filterKey] = $request->get($filterKey);
             }
-            
         }
         
         // Also put the values in the session.
-        $request->session()->put('filters', $this->filters);
+        $request->session()->put('allFilters', $this->allFilters);
         
+    }
+    
+    /**
+     * Prepare filters which can be used to search for terms.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function prepareTermFilters ($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->termFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->termFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
     }
 }

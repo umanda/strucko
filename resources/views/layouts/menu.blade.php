@@ -2,20 +2,20 @@
     <div class="col-md-12">
         <nav>
             <ul class="nav nav-pills">
-                @foreach ($menuLetters as $menu_letter)
+                @foreach ($menuLetters as $menuLetter)
                 <li role="presentation" 
-                    class="@if (isset($filters['menu_letter']))
-                    @if ($menu_letter == $filters['menu_letter'])
+                    class="@if (isset($allFilters['menu_letter']))
+                    @if ($menuLetter == $allFilters['menu_letter'])
                     {{ 'active' }}
                     @endif
                     @endif">
                     <a href="{{ action('TermsController@index',[
-                    'language_id' => $language_id, 
-                    'scientific_field_id' => $scientific_field_id, 
-                    'menu_letter' => $menu_letter
+                    'language_id' => $languageId, 
+                    'scientific_field_id' => $scientificFieldId, 
+                    'menu_letter' => $menuLetter
                     ]) 
                        }}">
-                        {{ $menu_letter }}
+                        {{ $menuLetter }}
                     </a>
                 </li>
                 @endforeach

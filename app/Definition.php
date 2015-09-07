@@ -9,8 +9,8 @@ class Definition extends Model
     protected $fillable = [
         'definition',
         'synonym_id',
-        'user_id',
         'source',
+        'link'
     ];
     /**
      * Definition belongs to synonym.

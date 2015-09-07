@@ -21,6 +21,6 @@ class FilterComposer
     
     public function compose(View $view)
     {
-        $view->with('filters', $this->filters->all());
+        $view->with('allFilters', $this->filters->allFilters());
     }
 }

@@ -16,6 +16,7 @@ class CreateDefinitionsTable extends Migration
             $table->increments('id');
             $table->text('definition');
             $table->text('source')->nullable();
+            $table->text('link')->nullable();
             $table->timestamps();
             
             $table->integer('synonym_id')->unsigned();

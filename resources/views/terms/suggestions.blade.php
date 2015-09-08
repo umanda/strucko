@@ -44,9 +44,9 @@
         </div>
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
             <div class="panel-body">
-                <form method="POST" action="{{ action('SynonymsController@suggestSynonym', [$term->slug_unique]) }}">
+                <form method="POST" action="{{ action('SynonymsController@suggestMergeSynonym', [$term->slug_unique]) }}">
                     @include('terms.synonyms.form')
-                    <button type="submit" class="btn btn-default">Suggest translation</button>
+                    <button type="submit" class="btn btn-default">Suggest synonym</button>
                 </form>
             </div>
         </div>

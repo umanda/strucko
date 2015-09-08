@@ -23,6 +23,7 @@ get('terms/{slugUnique}/edit', [
     'as' => 'terms.edit', 'uses' => 'TermsController@edit'
     ]);
 post('terms/{slugUnique}/translations', 'SynonymsController@addTranslation');
+post('terms/{slugUnique}/synonyms', 'SynonymsController@suggestMergeSynonym');
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);

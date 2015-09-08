@@ -78,4 +78,10 @@ class SynonymsController extends Controller
                 ]);
         }
     }
+    
+    public function suggestMergeSynonym()
+    {
+        // Check if the synonyms exists. 
+        // Tu sam stao.
+    }
 }

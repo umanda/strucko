@@ -32,10 +32,9 @@ patch('terms/{slugUnique}/status', [
     ]);
 post('terms', 'TermsController@store');
 
-
-
 // Sugesstions
-get('suggestions', 'TermsController@suggestions');
+get('suggestions', 'SuggestionsController@index');
+get('suggestions/terms', 'SuggestionsController@terms');
 
 // Pages...
 // TODO: implement /home route for users.

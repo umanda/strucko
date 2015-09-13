@@ -13,7 +13,7 @@ use App\Status;
 use Auth;
 use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
-use App\Repositories\FilterRepository;
+use App\Repositories\TermsFilterRepository;
 
 use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
 
@@ -41,13 +41,12 @@ class TermsController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(FilterRepository $filters)
+    public function index(TermsFilterRepository $filters)
     {
-        $this->filters = $filters;
-        
-        $allFilters = $this->filters->allFilters();
-        
-        $termFilters = $this->filters->termFilters();
+        $this->filters = $filters;        
+        $allFilters = $this->filters->allFilters();        
+        $termFilters = $this->filters->termFilters();        
+        $menuLetterFilters = $this->filters->menuLetterFilters();
         
         // Check appropriate query parameters and variables.
         if ($this->filters->isSetLanguageAndField()) {
@@ -86,12 +85,8 @@ class TermsController extends Controller
         $scientificFields = $this->prepareScientificFields();
         
         return view('terms.index',
-                compact('terms',
-                        'menuLetters',
-                        'languageId',
-                        'scientificFieldId',
-                        'languages',
-                        'scientificFields'));
+                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId',
+                        'languages', 'scientificFields', 'menuLetterFilters'));
     }
     
     /**

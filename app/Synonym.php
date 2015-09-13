@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Synonym;
+use App\MergeSuggestion;
 
 class Synonym extends Model
 {
@@ -12,6 +13,7 @@ class Synonym extends Model
         'part_of_speech_id',
         'scientific_field_id',
     ];
+        
     /**
      * Synonym may have many terms.
      *
@@ -73,6 +75,16 @@ class Synonym extends Model
         return $this->belongsToMany(Synonym::class, 'synonym_translation', 'synonym_id', 'translation_id')
                 ->withPivot('id', 'status_id', 'user_id')
                 ->withTimestamps();
+    }
+    
+    /**
+     * Synonym may have many synonym merge suggestions. 
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany BelongsToMany relationship
+     */
+    public function mergeSuggestions()
+    {
+         return $this->hasMany(MergeSuggestion::class);
     }
     
     /**

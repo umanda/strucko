@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -36,7 +38,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * A user may have many terms.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function terms()
     {
@@ -46,7 +48,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * A user may have many definitions.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function definitions()
     {
@@ -56,10 +58,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * A user has a role.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function role()
     {
         return $this->belongsTo('App\Role');
+    }
+    
+    /**
+     * A user may have many synonym merge suggestions.
+     * 
+     * @return HasMany
+     */
+    public function mergeSuggestions()
+    {
+         return $this->hasMany('App\MergeSuggestion');
     }
 }

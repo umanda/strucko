@@ -13,7 +13,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{ action('TermsController@index', Session::has('allFilters') ? Session::get('allFilters') : '') }}">Terms</a></li>
                 <li><a href="/terms/create">Create</a></li>
-                <li><a href="{{ action('TermsController@suggestions') }}">Suggestions</a></li>
+                <li><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
                 <li><a href="/scientific-areas/">Areas and Fields</a></li>
                 <li><a href="/languages">Languages</a></li>
                 <li><a href="#contact">Contact</a></li>

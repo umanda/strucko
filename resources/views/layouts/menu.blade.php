@@ -9,11 +9,7 @@
                     {{ 'active' }}
                     @endif
                     @endif">
-                    <a href="{{ action('TermsController@index',[
-                    'language_id' => $languageId, 
-                    'scientific_field_id' => $scientificFieldId, 
-                    'menu_letter' => $menuLetter
-                    ]) 
+                    <a href="{{ action('TermsController@index', array_merge($menuLetterFilters, ['menu_letter' => $menuLetter])) 
                        }}">
                         {{ $menuLetter }}
                     </a>

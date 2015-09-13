@@ -14,7 +14,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('terms.index', 'App\Http\ViewComposers\FilterComposer');
+        view()->composer('terms.index', 'App\Http\ViewComposers\TermsFilterComposer');
     }
 
     /**

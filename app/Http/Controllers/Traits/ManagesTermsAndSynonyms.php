@@ -204,4 +204,21 @@ trait ManagesTermsAndSynonyms
                 ->orderBy('menu_letter')
                 ->lists('menu_letter');
     }
+    
+    /**
+     * Get the synonym ID of the existing term. Check existance first.
+     * 
+     * @param array $input Form data
+     * @return integer ID of the Synonym
+     */
+    protected function getExistingSynonymId (array $input)
+    {
+       return Term::where('term', $input['term'])
+                ->whereHas('synonym', function ($query) use ($input) {
+                        $query->where('language_id', $input['language_id'])
+                              ->where('part_of_speech_id', $input['part_of_speech_id'])
+                              ->where('scientific_field_id', $input['scientific_field_id']);
+                    })
+                ->value('synonym_id');
+    }
 }

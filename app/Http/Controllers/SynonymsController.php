@@ -14,6 +14,14 @@ class SynonymsController extends Controller
 {
     use ManagesTermsAndSynonyms;
     
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+        // Check if user has Administrator role for specified methods.
+        $this->middleware('role:1000', ['only' => ['edit', 'update']]);
+    }
+    
     /**
      * Add translation for the current synonym.
      * 
@@ -42,13 +50,7 @@ class SynonymsController extends Controller
         // Check if the translation term already exist
         if ($this->termExists($input)) {
             // We will get the existing term and use its synonym_id as translation_id
-            $translationId = Term::where('term', $input['term'])
-                ->whereHas('synonym', function ($query) use ($input) {
-                        $query->where('language_id', $input['language_id'])
-                              ->where('part_of_speech_id', $input['part_of_speech_id'])
-                              ->where('scientific_field_id', $input['scientific_field_id']);
-                    })
-                ->value('synonym_id');
+            $translationId = $this->getExistingSynonymId($input);
             
             // Check if the translation for synonyms already exists
             if ($term->synonym->translations->contains($translationId)) {
@@ -79,9 +81,69 @@ class SynonymsController extends Controller
         }
     }
     
-    public function suggestMergeSynonym()
+    public function suggestMergeSynonym(Requests\EditTermRequest $request, $slugUnique)
     {
-        // Check if the synonyms exists. 
-        // Tu sam stao.
+        // Prepare input values in case that the term doesn't exits.
+        $input = $this->prepareInputValues($request->all());
+        
+        // Get the original term with synonym information.
+        $term = Term::where('slug_unique', $slugUnique)
+                ->with('synonym', 'synonym.translations', 'synonym.mergeSuggestions')->firstOrFail();
+        
+        // TODO Check if the existing term and suggested synonym have the same lang, field, part...
+        // 
+        // Check if the suggested term exists in language, field, part of speech.
+        if ($this->termExists($input)) {
+            $mergeId = $this->getExistingSynonymId($input);
+            
+            // Make sure that the synonyms are not the same
+            if ($term->synonym_id === $mergeId) {
+                return back()->with([
+                    'alert' => 'Those are already synonyms...',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+            }
+            // Check if the suggestion already exist
+            $suggestionExists = $term->synonym->mergeSuggestions()
+                    ->where('synonym_id', $term->synonym_id)
+                    ->where('merge_id', $mergeId)
+                    ->exists();
+            if ($suggestionExists) {
+                return back()->with([
+                    'alert' => 'This suggestion already exists...',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+            }
+            // We can add a synonym merge suggestion
+            Auth::user()->mergeSuggestions()->create([
+                'synonym_id' => $term->synonym_id, 'merge_id' => $mergeId
+            ]);
+            
+            return back()->with([
+                    'alert' => 'Synonym merge suggested for existing term...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+        }
+        else {
+            // Set the user_id
+            $input['user_id'] = Auth::id();
+            // Create new term with the same synonym ID and suggest it
+            $term->synonym->terms()->create($input);
+            return back()->with([
+                    'alert' => 'New synonym suggested...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+        }
+        
+    }
+    
+    public function approveMergeSynonym() {
+        // associate all the terms from the suggested synoynm to the new synonym.
+        // associate all definitions with new synoynm
+        // associate all translations with new synonym
+    }
+    
+    public function rejectMergeSynonym() {
+        // Set status of the suggestion to 'rejected'
     }
 }

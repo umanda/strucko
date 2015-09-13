@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
  *
  * @author mivancic
  */
-class FilterRepository
+class TermsFilterRepository
 {
     /**
      * Current request
@@ -34,6 +34,21 @@ class FilterRepository
      * @var array
      */
     protected $termFilters = [];
+    
+    /**
+     * Current filters that can be used for menu letter links. 
+     * 
+     * @var array
+     */
+    protected $menuLetterFilters = [];
+    
+    /**
+     * Current filters that can be used for term filtering. 
+     * Wll be populated with query parameters from request.
+     * 
+     * @var array
+     */
+    protected $searchFormFilters = [];
 
     /**
      * Names of all filters which can be used in queries.
@@ -59,6 +74,30 @@ class FilterRepository
         'scientific_field_id',
         'menu_letter',
         'search',
+    ];
+    
+    /**
+     * Names of filters which can be used for creating links for menu letters
+     * 
+     * @var array
+     */
+    protected $menuLetterFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'menu_letter',
+        'translate_to',
+    ];
+    
+    /**
+     * Names of filters which can be used for creating links for menu letters
+     * 
+     * @var array
+     */
+    protected $searchFormFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'search',
+        'translate_to',
     ];
     
     public function __construct(Request $request)
@@ -93,6 +132,32 @@ class FilterRepository
     }
     
     /**
+     * Prepare filters for menu letter links.
+     * 
+     * @return array
+     */
+    public function menuLetterFilters()
+    {
+        // Prepare term filters from query parameters in request or in session, or
+        // set defaults.
+        $this->prepareMenuLetterFilters($this->request);
+        return $this->menuLetterFilters;
+    }
+    
+    /**
+     * Prepare filters for menu letter links.
+     * 
+     * @return array
+     */
+    public function searchFormFilters()
+    {
+        // Prepare term filters from query parameters in request or in session, or
+        // set defaults.
+        $this->prepareSearchFormFilters($this->request);
+        return $this->searchFormFilters;
+    }
+    
+    /**
      * Check if the language and scientific field is set in query parameter.
      * 
      * @return boolean
@@ -121,6 +186,16 @@ class FilterRepository
     public function isSetSearch()
     {
         return isset($this->allFilters['search']);
+    }
+    
+    /**
+     * Check if the translate_to is set as query parameter.
+     * 
+     * @return boolean
+     */
+    public function isSetTranslateTo()
+    {
+        return isset($this->allFilters['translate_to']);
     }
 
     /**
@@ -157,6 +232,40 @@ class FilterRepository
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
                 $this->termFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
+    }
+    
+    /**
+     * Prepare filters for menu letter links.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function prepareMenuLetterFilters ($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->menuLetterFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->menuLetterFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
+    }
+    
+    /**
+     * Prepare filters for search form.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function prepareSearchFormFilters ($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->searchFormFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->searchFormFilters[$filterKey] = $request->get($filterKey);
             }
         }
     }

@@ -3,18 +3,18 @@
 namespace App\Http\ViewComposers;
 
 use Illuminate\Contracts\View\View;
-use App\Repositories\FilterRepository;
+use App\Repositories\TermsFilterRepository;
 
 /**
  * Description of FilterComposer
  *
  * @author mivancic
  */
-class FilterComposer
+class TermsFilterComposer
 {
     protected $filters;
     
-    public function __construct(FilterRepository $filters)
+    public function __construct(TermsFilterRepository $filters)
     {
         $this->filters = $filters;
     }

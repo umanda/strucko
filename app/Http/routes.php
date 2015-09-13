@@ -24,6 +24,8 @@ get('terms/{slugUnique}/edit', [
     ]);
 post('terms/{slugUnique}/translations', 'SynonymsController@addTranslation');
 post('terms/{slugUnique}/synonyms', 'SynonymsController@suggestMergeSynonym');
+post('terms/{slugUnique}/votes/up', 'TermVotesController@voteUp');
+post('terms/{slugUnique}/votes/down', 'TermVotesController@voteDown');
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);
@@ -33,9 +35,9 @@ patch('terms/{slugUnique}/status', [
 post('terms', 'TermsController@store');
 
 
-
 // Sugesstions
-get('suggestions', 'TermsController@suggestions');
+get('suggestions', 'SuggestionsController@index');
+get('suggestions/terms', 'SuggestionsController@terms');
 
 // Pages...
 // TODO: implement /home route for users.

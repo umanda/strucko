@@ -1,7 +1,6 @@
 
 {!! csrf_field() !!}
 
-<input type="hidden" name="synonym_id" required="required" id="synonym_id" value="{{ $term->synonym_id }}">
 <input type="hidden" name="scientific_field_id" required="required" id="synonym_id" value="{{ $term->synonym->scientific_field_id }}">
 <input type="hidden" name="part_of_speech_id" required="required" id="part_of_speech_id" value="{{ $term->synonym->part_of_speech_id }}">
 <input type="hidden" name="language_id" required="required" id="language_id" value="{{ $term->synonym->language_id }}">

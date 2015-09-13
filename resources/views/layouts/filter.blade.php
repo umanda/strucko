@@ -14,6 +14,12 @@
                 ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
 
             </div>
+            <div class="form-group">
+                <label for="translate_to">Translate to:</label>
+                {!! Form::select('translate_to', $languages->lists('ref_name', 'id'),
+                isset($allFilters['translate_to']) ? $allFilters['translate_to'] : old('translate_to'), 
+                ['id' => 'translate_to', 'required' => 'required', 'class' => 'form-control']) !!}
+            </div>
             <button type="submit" class="btn btn-default">Go</button>
         </form>
     </div>

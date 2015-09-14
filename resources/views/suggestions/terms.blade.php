@@ -18,11 +18,12 @@
                     </form>
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-md-12">
                     <ul>
                         @foreach ($terms as $term)
-                        <li>{{ $term->term }}</li>
+                        <li>{{ $term->term }} - @include('terms.votes.form_up')</li>
                         @endforeach
                     </ul>
                 </div>

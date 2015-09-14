@@ -61,4 +61,14 @@ class Term extends Model
     {
         return $this->belongsTo('App\Synonym');
     }
+    
+    /**
+     * Term can have many votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\TermVote');
+    }
 }

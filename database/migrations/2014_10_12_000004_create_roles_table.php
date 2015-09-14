@@ -16,6 +16,8 @@ class CreateRolesTable extends Migration
             $table->integer('id')->unsigned()->primary();
             // Name of the status
             $table->string('role');
+            // The weight of the vote for the user role. 
+            $table->smallInteger('vote_weight');
             // Is the status active
             $table->boolean('active')->default(1);
             $table->timestamps();

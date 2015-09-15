@@ -10,6 +10,5 @@
                 {!! Form::select('scientific_field_id', $scientificFields,
                 isset($termFilters['scientific_field_id']) ? $termFilters['scientific_field_id'] : old('scientific_field_id'), 
                 ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
-
             </div>
             <button type="submit" class="btn btn-default">Go</button>

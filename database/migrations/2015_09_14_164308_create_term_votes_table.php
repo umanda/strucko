@@ -19,8 +19,8 @@ class CreateTermVotesTable extends Migration
             $table->tinyInteger('vote');
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
-            $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');;
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
         });
     }
 

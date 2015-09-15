@@ -12,6 +12,7 @@ use App\Repositories\SuggestionsTermsFilterRepository;
 use App\Language;
 use App\ScientificField;
 use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
+use DB;
 
 class SuggestionsController extends Controller
 {
@@ -34,7 +35,11 @@ class SuggestionsController extends Controller
                     ->whereHas('synonym', function ($query) use ($termFilters) {
                         $query->where($termFilters);
                     })
+                    ->with(['votes' => function ($query) {
+                        $query->select(DB::raw('SUM(vote) as vote_sum'));
+                    }])
                     ->get();
+                    //dd($terms);
         return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
     }
 }

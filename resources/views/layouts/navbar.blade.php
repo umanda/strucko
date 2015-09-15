@@ -11,11 +11,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="{{ action('TermsController@index', Session::has('allFilters') ? Session::get('allFilters') : '') }}">Terms</a></li>
-                <li><a href="/terms/create">Create</a></li>
-                <li><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
-                <li><a href="/scientific-areas/">Areas and Fields</a></li>
-                <li><a href="/languages">Languages</a></li>
+                <li class="{{ set_active('terms') }}"><a href="{{ action('TermsController@index', Session::has('allFilters') ? Session::get('allFilters') : '') }}">Terms</a></li>
+                <li class="{{ set_active('terms/create') }}"><a href="/terms/create">Create</a></li>
+                <li class="{{ set_active('suggestions*') }}"><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
+                <li class="{{ set_active('scientific-areas*') }}"><a href="/scientific-areas/">Areas and Fields</a></li>
+                <li class="{{ set_active('languages*') }}"><a href="/languages">Languages</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -35,8 +35,8 @@
                     <li><a href="#">{{ Auth::user()->name }}</a></li>
                     <li><a href="/auth/logout">Log out</a></li>
                 @else
-                    <li><a href="/auth/login">Log in</a></li>
-                    <li class="active"><a href="/auth/register">Register <span class="sr-only">(current)</span></a></li>
+                    <li class="{{ set_active('auth/login') }}"><a href="/auth/login">Log in</a></li>
+                    <li class="{{ set_active('auth/register') }}"><a href="/auth/register">Register <span class="sr-only">(current)</span></a></li>
                 @endif
                 
             </ul>

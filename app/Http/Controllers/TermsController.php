@@ -90,21 +90,6 @@ class TermsController extends Controller
     }
     
     /**
-     * TODO Create another view for suggested terms (because of FilterRepository).
-     * TODO Consider creating Filter repository and view composer, like for approved terms.
-     * 
-     * Show suggested terms - logged in users only. 
-     * 
-     * @return type
-     */
-    public function suggestions()
-    {
-        $terms = Term::latest()->suggested()->get();
-        return view('terms.index', compact('terms'));
-    }
-
-    
-    /**
      * Show the create view.
      *  
      * @return type
@@ -258,6 +243,34 @@ class TermsController extends Controller
         
         return back()->with([
                     'alert' => 'Status updated...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+    
+    public function approveTerm($slugUnique)
+    {
+        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        
+        $term->status_id = 1000;
+        
+        $term->save();
+        
+        return back()->with([
+                    'alert' => 'Term approved...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+    
+    public function rejectTerm($slugUnique)
+    {
+        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        
+        $term->status_id = 250;
+        
+        $term->save();
+        
+        return back()->with([
+                    'alert' => 'Term rejected...',
                     'alert_class' => 'alert alert-success'
                 ]);
     }

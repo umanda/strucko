@@ -24,8 +24,9 @@ get('terms/{slugUnique}/edit', [
     ]);
 post('terms/{slugUnique}/translations', 'SynonymsController@addTranslation');
 post('terms/{slugUnique}/synonyms', 'SynonymsController@suggestMergeSynonym');
-post('terms/{slugUnique}/votes/up', 'TermVotesController@voteUp');
-post('terms/{slugUnique}/votes/down', 'TermVotesController@voteDown');
+post('terms/{slugUnique}/vote/up', 'TermVotesController@voteUp');
+post('terms/{slugUnique}/vote/down', 'TermVotesController@voteDown');
+post('terms/{slugUnique}/status/approve', 'TermsController@approveTerm');
 patch('terms/{slugUnique}', [
     'as' => 'terms.update', 'uses' => 'TermsController@update'
     ]);

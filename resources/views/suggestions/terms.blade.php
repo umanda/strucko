@@ -24,7 +24,13 @@
                     <div class="col-md-12">
                         <ul>
                             @foreach ($terms as $term)
-                            <li>{{ $term->term }} - {{ $term->votes()->sum('vote') }} @include('terms.votes.form_up') @include('terms.votes.form_down') </li>
+                            <li>{{ $term->term }} - {{ $term->votes()->sum('vote') }} 
+                                @include('terms.votes.form_up') 
+                                @include('terms.votes.form_down')
+                            </li>
+                            <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug_unique]) }}">
+                                    @include('suggestions.forms.approve')
+                            </form>
                             @endforeach
                         </ul>
                     </div>

@@ -23,6 +23,8 @@
     <li>{{ $synoynmTerm->term }}</li>
 @endforeach
 </ul>
+<i> Fali merge suggestions </i>
+
 <h4>Sugessted by user:</h4>
 <p>{{ $term->user->name }}</p>
 <h4>Translations:</h4>

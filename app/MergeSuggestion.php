@@ -36,12 +36,22 @@ class MergeSuggestion extends Model
     }
     
     /**
-     * Merge suggestion has a status.
+     * Merge suggestion belongs to synonym.
      * 
      * @return type
      */
     public function synonym()
     {
         return $this->belongsTo('App\Synonym');
+    }
+    
+    /**
+     * Merge suggestion has a merged synonym suggestion.
+     * 
+     * @return type
+     */
+    public function mergedSynonym()
+    {
+        return $this->belongsTo('App\Synonym', 'merge_id');
     }
 }

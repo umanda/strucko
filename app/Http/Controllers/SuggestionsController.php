@@ -35,11 +35,25 @@ class SuggestionsController extends Controller
                     ->whereHas('synonym', function ($query) use ($termFilters) {
                         $query->where($termFilters);
                     })
-                    ->with(['votes' => function ($query) {
-                        $query->select(DB::raw('SUM(vote) as vote_sum'));
-                    }])
+                    ->with('votes')
                     ->get();
                     //dd($terms);
         return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
+    }
+    
+    public function mergeSuggestions(SuggestionsTermsFilterRepository $filters) {
+        $synonymFilters = $filters->allFilters();
+        
+        // Prepare languages and fields for filtering
+        $languages = Language::active()->orderBy('ref_name')->get();
+        $scientificFields = $this->prepareScientificFields();
+        
+        $synonyms = Synonym::whereHas('mergeSuggestions', function ($query) {
+                                $query->where('status_id', 500);
+                            })
+                            ->where($synonymFilters)
+                            ->with('mergeSuggestions','mergeSuggestions.mergedSynonym', 'mergeSuggestions.mergedSynonym.terms', 'terms')
+                            ->get();
+        return view('suggestions.merge_suggestions', compact('synonymFilters', 'languages', 'scientificFields', 'synonyms') );
     }
 }

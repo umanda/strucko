@@ -247,6 +247,12 @@ class TermsController extends Controller
                 ]);
     }
     
+    /**
+     * Set the status of the term to approved.
+     * 
+     * @param string $slugUnique Unique slug of the term
+     * @return \Illuminate\Http\RedirectResponse Go back
+     */
     public function approveTerm($slugUnique)
     {
         $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
@@ -261,6 +267,12 @@ class TermsController extends Controller
                 ]);
     }
     
+    /**
+     * Set the status of the term to rejected.
+     * 
+     * @param string $slugUnique Unique slug of the term
+     * @return \Illuminate\Http\RedirectResponse Go back
+     */
     public function rejectTerm($slugUnique)
     {
         $term = Term::where('slug_unique', $slugUnique)->firstOrFail();

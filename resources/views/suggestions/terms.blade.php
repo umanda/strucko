@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Manage all suggestions')
+@section('meta-description', 'List and vote for new terms')
 
-@section('title', 'Suggestions')
+@section('title', 'New term suggestions')
 
 @section('content')
 <div class="row">
@@ -29,7 +29,10 @@
                                 @include('terms.votes.form_down')
                             </li>
                             <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug_unique]) }}">
-                                    @include('suggestions.forms.approve')
+                                @include('suggestions.forms.approve')
+                            </form>
+                            <form method="POST" action="{{ action('TermsController@rejectTerm', [$term->slug_unique]) }}">
+                                @include('suggestions.forms.reject')
                             </form>
                             @endforeach
                         </ul>

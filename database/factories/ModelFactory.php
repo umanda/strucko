@@ -30,21 +30,10 @@ $factory->define(App\User::class, function ($faker) {
     ];
 });
 
-// Synonym
-$factory->define(App\Synonym::class, function($faker) {
+// Concept
+$factory->define(App\Concept::class, function($faker) {
     return [
-        'language_id' => $faker
-            ->randomElement(App\Language::active()
-            ->lists('id')
-            ->toArray()),
-        'part_of_speech_id' => $faker
-            ->randomElement(App\PartOfSpeech::all()
-            ->lists('id')
-            ->toArray()),
-        'scientific_field_id' => $faker
-            ->randomElement(App\ScientificField::all()
-            ->lists('id')
-            ->toArray()),        
+        
     ];
 });
 
@@ -130,13 +119,11 @@ $factory->define(App\Definition::class, function($faker) {
 $factory->define(App\Term::class, function($faker) {
     return [
         'term' => $faker->word,
-        'abbreviation' => $faker->optional()->regexify('[A-Z]{2,4}'),
         'slug' => $faker->slug,
-        'slug_unique' => $faker->slug,
         'menu_letter' => $faker->randomLetter,
-        'synonym_id' => $faker
+        'concept_id' => $faker
             ->unique()
-            ->randomElement(App\Synonym::all()
+            ->randomElement(App\Concept::all()
             ->lists('id')
             ->toArray()),
         'user_id' => $faker
@@ -146,6 +133,18 @@ $factory->define(App\Term::class, function($faker) {
         'status_id' => $faker
             ->randomElement(App\Status::all()
             ->lists('id')
-            ->toArray()),        
+            ->toArray()),
+        'language_id' => $faker
+            ->randomElement(App\Language::all()
+            ->lists('id')
+            ->toArray()),
+        'part_of_speech_id' => $faker
+            ->randomElement(App\Language::all()
+            ->lists('id')
+            ->toArray()),
+        'scientific_field_id' => $faker
+            ->randomElement(App\Language::all()
+            ->lists('id')
+            ->toArray()),
     ];
 });

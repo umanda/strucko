@@ -14,12 +14,11 @@ class Term extends Model
      */
     protected $fillable = [
         'term',
-        'abbreviation',
         'slug',
-        'slug_unique',
         'menu_letter',
-        'synonym_id',
+        'concept_id',
         'user_id',
+        'votes',
     ];
 
     public function scopeApproved($query)

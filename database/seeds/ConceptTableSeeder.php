@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class SynonymTableSeeder extends Seeder
+class ConceptTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class SynonymTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Synonym::class, 50)->create();
+        factory(App\Concept::class, 50)->create();
     }
 }

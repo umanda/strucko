@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         'synonym_translation',
         'definitions',
         'terms',
-        'synonyms',
+        'concepts',
         'scientific_branches',
         'scientific_fields',
         'scientific_areas',
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ScientificAreaTableSeeder::class);
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
-        $this->call(SynonymTableSeeder::class);        
+        $this->call(ConceptTableSeeder::class);        
         $this->call(TermTableSeeder::class);
         $this->call(DefinitionTableSeeder::class);
         

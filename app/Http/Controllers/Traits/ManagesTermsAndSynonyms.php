@@ -24,11 +24,9 @@ trait ManagesTermsAndSynonyms
     {
         // Try to get the term.
         $term = Term::where('term', $input['term'])
-                ->whereHas('synonym', function ($query) use ($input) {
-                        $query->where('language_id', $input['language_id'])
-                              ->where('part_of_speech_id', $input['part_of_speech_id'])
-                              ->where('scientific_field_id', $input['scientific_field_id']);
-                    })
+                ->where('language_id', $input['language_id'])
+                ->where('part_of_speech_id', $input['part_of_speech_id'])
+                ->where('scientific_field_id', $input['scientific_field_id'])
                 ->first();
                 
         // If the term term doesn't exist, we can go on.
@@ -50,31 +48,28 @@ trait ManagesTermsAndSynonyms
     }
     
     /**
-     * Prepare slug and slug_unique for the given term.
+     * Prepare slug for the given term.
      * 
      * @param array $input
      * @return array
      */
-    protected function prepareSlugs($input) 
+    protected function prepareSlug($input) 
     {
-        // Get the strings for language, partOfSpeech and category, for SEO.
+        // Get the strings for language, partOfSpeech and scientificField, for SEO.
         $language = Language::where('id', $input['language_id'])->firstOrFail();
         $partOfSpeech = PartOfSpeech::where('id', $input['part_of_speech_id'])->firstOrFail();
         $scientificField = ScientificField::where('id', $input['scientific_field_id'])->firstOrFail();
         
         // Prepare 'slug' attribute.
         $slug = str_limit(str_slug($input['term']), 100);
-        $input['slug'] = $slug;
-        
-        // Prepare 'slug_unique' attribute.
-        $input['slug_unique'] = $slug . "-" . str_slug(
-                $language->ref_name . "-"
-                . $partOfSpeech->part_of_speech. "-"
+        $input['slug'] = $slug . '-' . str_slug(
+                $language->ref_name . '-'
+                . $partOfSpeech->part_of_speech . '-'
                 . $scientificField->scientific_field
                 );
         // Limit the length of the slug_unique and append the IDs
-        $input['slug_unique'] = str_limit($input['slug_unique'], 200);
-        $input['slug_unique'] = $input['slug_unique'] . "-"
+        $input['slug'] = str_limit($input['slug'], 200);
+        $input['slug'] = $input['slug'] . '-'
                 . str_limit($language->id . $partOfSpeech->id . $scientificField->id, 55);
         
         return $input;
@@ -177,9 +172,7 @@ trait ManagesTermsAndSynonyms
     protected function prepareInputValues($input)
     {
         // Prepare slugs.
-        $input = $this->prepareSlugs($input);
-        // Make sure that abbreviation is null if empty.
-        $input['abbreviation'] = $this->getNullForOptionalInput($input['abbreviation']);
+        $input = $this->prepareSlug($input);
         // Prepare menu_letter for the term and add to input.
         $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
         
@@ -196,10 +189,8 @@ trait ManagesTermsAndSynonyms
     protected function getMenuLettersForLanguageAndField (array $activeFilters)
     {
         return Term::approved()
-                ->whereHas('synonym', function ($query) use ($activeFilters) {
-                    $query->where('language_id', $activeFilters['language_id'])
-                          ->where('scientific_field_id', $activeFilters['scientific_field_id']);
-                })
+                ->where('language_id', $activeFilters['language_id'])
+                ->where('scientific_field_id', $activeFilters['scientific_field_id'])
                 ->groupBy('menu_letter')
                 ->orderBy('menu_letter')
                 ->lists('menu_letter');

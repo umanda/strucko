@@ -8,7 +8,7 @@ class Term extends Model
 {
     /**
      * Attributes that are allowed to be inserted for the Term model.
-     * Slug, slug_unique, synonym_id, user_id are defined in the store() method.
+     * Slug, user_id are defined in the store() method.
      *
      * @var array
      */
@@ -18,6 +18,9 @@ class Term extends Model
         'menu_letter',
         'concept_id',
         'user_id',
+        'language_id',
+        'part_of_speech_id',
+        'scientific_field_id',
         'votes',
     ];
 
@@ -52,13 +55,13 @@ class Term extends Model
     }
 
     /**
-     * Term belongs to synonym.
+     * Term belongs to Concept.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function synonym()
+    public function concept()
     {
-        return $this->belongsTo('App\Synonym');
+        return $this->belongsTo('App\Concept');
     }
     
     /**
@@ -69,5 +72,35 @@ class Term extends Model
     public function votes()
     {
         return $this->hasMany('App\TermVote');
+    }
+    
+    /**
+     * Terms is in a language.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function language()
+    {
+        return $this->belongsTo('App\Language');
+    }
+    
+    /**
+     * Term belongs to scientific branch.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function scientificField()
+    {
+        return $this->belongsTo('App\ScientificField');
+    }
+    
+    /**
+     * Term belongs to part of speech.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partOfSpeech()
+    {
+        return $this->belongsTo('App\PartOfSpeech');
     }
 }

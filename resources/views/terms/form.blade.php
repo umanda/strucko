@@ -11,7 +11,7 @@
     <label for="language_id">Language:</label>
 
     {!! Form::select('language_id', $languages->lists('ref_name', 'id'),
-            isset($term) ? $term->synonym->language_id : old('language_id'), 
+            isset($term) ? $term->language_id : old('language_id'), 
             ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
 
 </div>
@@ -20,7 +20,7 @@
     <label for="part_of_speech_id">Part of Speech:</label>
     <select id="part_of_speech_id" name="part_of_speech_id" required="required" class="form-control" >
         @if (isset($term))
-        <option value="{{ $term->synonym->partOfSpeech->id }}" selected="selected">{{ $term->synonym->partOfSpeech->part_of_speech }}</option>
+        <option value="{{ $term->partOfSpeech->id }}" selected="selected">{{ $term->partOfSpeech->part_of_speech }}</option>
         @endif
         @foreach ($partOfSpeeches as $partOfSpeech)
         <option value="{{ $partOfSpeech->id }}">{{ $partOfSpeech->part_of_speech }}</option>
@@ -31,25 +31,17 @@
 <div class="form-group">
     <label for="scientific_field_id">Scientific field (category):</label>
     {!! Form::select('scientific_field_id', $scientificFields,
-            isset($term) ? $term->synonym->scientific_field_id : old('scientific_field_id'), 
+            isset($term) ? $term->scientific_field_id : old('scientific_field_id'), 
             ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
     
 </div>
-
-<div class="form-group">
-    <label for="abbreviation">Abbreviation (optional):</label>
-    <input type="text" id="abbreviation" name="abbreviation" maxlength="255" 
-           placeholder="Abbreviation" class="form-control"
-           value="{{ isset($term) ? $term->abbreviation : old('abbreviation') }}">
-</div>
-
 
 @if(isset($term))
 
 <div class="form-group">
     <label for="existing_definitions">Existing definitions:</label>
     <ul id="existing_definitions" name="existing_definitions">
-        @foreach ($term->synonym->definitions as $definition)
+        @foreach ($term->concept->definitions as $definition)
         <li><a href="#" class="btn btn-default">Edit</a> <a href="#" class="btn btn-danger">Delete</a>
             {{ $definition->definition }}</li>
         @endforeach

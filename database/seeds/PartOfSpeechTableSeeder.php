@@ -17,13 +17,13 @@ class PartOfSpeechTableSeeder extends Seeder
         
         // Real data.
         $partOfSpeeches = [
-            ['part_of_speech' => 'noun'],
-            ['part_of_speech' => 'verb'],
-            ['part_of_speech' => 'pronoun'],
-            ['part_of_speech' => 'adverb'],
-            ['part_of_speech' => 'preposition'],
-            ['part_of_speech' => 'conjunction'],
-            ['part_of_speech' => 'interjection'],
+            ['part_of_speech' => 'Noun'],
+            ['part_of_speech' => 'Verb'],
+            ['part_of_speech' => 'Pronoun'],
+            ['part_of_speech' => 'Adverb'],
+            ['part_of_speech' => 'Preposition'],
+            ['part_of_speech' => 'Conjunction'],
+            ['part_of_speech' => 'Interjection'],
         ];
         
         foreach ($partOfSpeeches as $partOfSpeech) {

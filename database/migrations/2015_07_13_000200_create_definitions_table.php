@@ -19,13 +19,15 @@ class CreateDefinitionsTable extends Migration
             $table->text('link')->nullable();
             $table->timestamps();
             
-            $table->integer('synonym_id')->unsigned();
+            $table->integer('concept_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('status_id')->unsigned()->default(500);
+            $table->char('language_id', 3);
             
-            $table->foreign('synonym_id')->references('id')->on('synonyms')->onDelete('cascade');
+            $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('language_id')->references('id')->on('languages');
         });
     }
 

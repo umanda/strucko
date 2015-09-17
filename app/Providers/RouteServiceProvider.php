@@ -24,16 +24,15 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        $router->bind('terms', function($slugUnique)
+        $router->bind('terms', function($slug)
         {
-            return \App\Term::where('slug_unique', $slugUnique)
-                    ->with('synonym.definitions',
-                            'synonym.translations',
+            return \App\Term::where('slug', $slug)
+                    ->with('concept.definitions',
                             'user',
                             'status',
-                            'synonym.language',
-                            'synonym.scientificField',
-                            'synonym.partOfSpeech')
+                            'language',
+                            'scientificField',
+                            'partOfSpeech')
                     ->firstOrFail();
         });
 

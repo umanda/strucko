@@ -12,8 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     protected $toTruncate = [
         'term_votes',
-        'merge_suggestions',
-        'synonym_translation',
         'definitions',
         'terms',
         'concepts',

@@ -16,7 +16,7 @@ class CreateTermVotesTable extends Migration
             $table->increments('id');
             $table->integer('term_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->boolean('positive');
+            $table->boolean('is_positive');
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

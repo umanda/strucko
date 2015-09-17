@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Term;
 use App\PartOfSpeech;
 use App\Language;
-use App\Synonym;
+use App\Concept;
 use App\Status;
 use Auth;
 use App\Http\Requests\EditTermRequest;
@@ -60,22 +60,18 @@ class TermsController extends Controller
             // and other term filters.
             if ($this->filters->isSetMenuLetter()) {
                 $terms = Term::approved()
-                    ->latest()
-                    ->whereHas('synonym', function ($query) use ($termFilters) {
-                        $query->where($termFilters);
-                    })
+                    ->where($termFilters)
+                    ->orderBy('term')
                     ->get();
             }
             
             // Check if the search is set. If so, try to find terms.
             if ($this->filters->isSetSearch()) {
-                $terms = Term::latest()
-                    ->approved()
+                $terms = Term::approved()
                     ->where('term', 'like', '%'. $allFilters['search'] . '%')
-                    ->whereHas('synonym', function ($query) use ($allFilters) {
-                        $query->where('language_id', $allFilters['language_id'])
-                              ->where('scientific_field_id', $allFilters['scientific_field_id']);
-                    })
+                    ->where('language_id', $allFilters['language_id'])
+                    ->where('scientific_field_id', $allFilters['scientific_field_id'])
+                    ->orderBy('term')
                     ->get();
             }
         }
@@ -128,14 +124,15 @@ class TermsController extends Controller
             $this->flashTermExists();
             return back()->withInput();
         }
-        // Prepare new synonym
-        $synonym = Synonym::create($input);
+        
+        // Prepare new concept
+        $concept = Concept::create();
         
         // Persist the new Term using the relationship
-        $synonym->terms()->create($input);
+        $concept->terms()->create($input);
         
         // Redirect with alerts in session.
-        return redirect('terms/' . $input['slug_unique'])->with([
+        return redirect('terms/' . $input['slug'])->with([
             'alert' => 'Term suggested...',
             'alert_class' => 'alert alert-success'
         ]);
@@ -154,7 +151,7 @@ class TermsController extends Controller
         //$term = Term::where('slug_unique', $slugUnique)->firstOrFail();
         // Get languages for translation options
         $languages = Language::active()
-                ->without($term->synonym->language_id)
+                ->without($term->language_id)
                 ->orderBy('ref_name')
                 ->get();
         
@@ -167,15 +164,15 @@ class TermsController extends Controller
      * @param string $slugUnique The unique slug used to identify term.
      * @return type
      */
-    public function edit($slugUnique)
+    public function edit($slug)
     {
         // Get the term with relationships.
-        $term = Term::where('slug_unique', $slugUnique)
-                ->with('status', 'synonym.language', 'synonym.scientificField', 'synonym.partOfSpeech', 'synonym.definitions')
+        $term = Term::where('slug', $slug)
+                ->with('status', 'language', 'scientificField', 'partOfSpeech', 'concept.definitions')
                 ->firstOrFail();
         
         // Prepare data for the form withouth the ones already in the term instance.
-        $partOfSpeeches = PartOfSpeech::active()->without($term->synonym->part_of_speech_id)->get();
+        $partOfSpeeches = PartOfSpeech::active()->without($term->part_of_speech_id)->get();
         $scientificFields = $this->prepareScientificFields();
         // Left filterLanguages() method for example. Using the Form::select for Languages.
         // $languages = $this->filterLanguages($term->language_id);

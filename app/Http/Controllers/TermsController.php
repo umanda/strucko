@@ -33,7 +33,7 @@ class TermsController extends Controller
         // User has to be authenticated, except for specified methods.
         $this->middleware('auth', ['except' => ['index', 'show']]);
         // Check if user has Administrator role for specified methods.
-        $this->middleware('role:1000', ['only' => ['edit', 'update']]);
+        $this->middleware('role:1000', ['only' => ['edit', 'update', 'updateStatus']]);
     }
 
     /**
@@ -112,8 +112,7 @@ class TermsController extends Controller
      */
     public function store(EditTermRequest $request)
     {
-        // Get input from the request and prepare slugs.
-        // $input = Request::all();
+        // Get input from the request and prepare slug and menu letter.
         $input = $this->prepareInputValues($request->all());
         // Get the user suggesting the term
         $input['user_id'] = Auth::id();
@@ -148,7 +147,7 @@ class TermsController extends Controller
      */
     public function show(Term $term, ShowTermRequest $request)
     {
-        //$term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        //$term = Term::where('slug', $slug)->firstOrFail();
         // Get languages for translation options
         $languages = Language::active()
                 ->without($term->language_id)
@@ -161,7 +160,7 @@ class TermsController extends Controller
     /**
      * Show the view to edit the term.
      * 
-     * @param string $slugUnique The unique slug used to identify term.
+     * @param string $slug The unique slug used to identify term.
      * @return type
      */
     public function edit($slug)
@@ -186,16 +185,13 @@ class TermsController extends Controller
     /**
      * Update the term.
      * 
-     * @param string $slugUnique Unique slug used to identify term.
+     * @param string $slug Unique slug used to identify term.
      * @param EditTermRequest $request
      */
-    public function update($slugUnique, EditTermRequest $request)
+    public function update($slug, EditTermRequest $request)
     {
         // Get the term to be updated, and synonym.
-        $term = Term::where('slug_unique', $slugUnique)->with('synonym')->firstOrFail();
-//        $synonym = Synonym::whereHas('terms', function ($query) use ($slugUnique) { 
-//            $query->where('slug_unique', $slugUnique);
-//        })->with('terms')->firstOrFail();
+        $term = Term::where('slug', $slug)->firstOrFail();
         
         // Prepare new input values, without user_id
         $input = $this->prepareInputValues($request->all());
@@ -205,18 +201,16 @@ class TermsController extends Controller
         // Make sure that the term doesn't already exist (check unique constraint).
         // We will send the ID of the term we are updating so that we can check
         // if the term which exists is the same term we are updating.
-        // TODO: Unique constraint - try to check using custom validation.
         if ($this->termExists($input, $term->id)) {
             // Flash messages that the term exists.
             $this->flashTermExists();
             return back()->withInput();
         }
                 
-        // Update the term and synonym.
+        // Update the term.
         $term->update($input);
-        $term->synonym()->update($input);
         
-        return redirect(action('TermsController@show', ['slugUnique' => $input['slug_unique']]))
+        return redirect(action('TermsController@show', ['slug' => $input['slug']]))
                 ->with([
                     'alert' => 'Term updated...',
                     'alert_class' => 'alert alert-success'
@@ -227,12 +221,12 @@ class TermsController extends Controller
      * Update the status of the Term.
      * 
      * @param \App\Http\Requests\EditStatusRequest $request
-     * @param string $slugUnique Unique slug for Term
+     * @param string $slug Unique slug for Term
      * @return type Return to the previous page
      */
-    public function updateStatus(Requests\EditStatusRequest $request, $slugUnique) {
+    public function updateStatus(Requests\EditStatusRequest $request, $slug) {
         
-        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        $term = Term::where('slug', $slug)->firstOrFail();
         
         $term->status_id = $request->input('status_id');
         
@@ -247,12 +241,12 @@ class TermsController extends Controller
     /**
      * Set the status of the term to approved.
      * 
-     * @param string $slugUnique Unique slug of the term
+     * @param string $slug Unique slug of the term
      * @return \Illuminate\Http\RedirectResponse Go back
      */
-    public function approveTerm($slugUnique)
+    public function approveTerm($slug)
     {
-        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        $term = Term::where('slug', $slug)->firstOrFail();
         
         $term->status_id = 1000;
         
@@ -267,12 +261,12 @@ class TermsController extends Controller
     /**
      * Set the status of the term to rejected.
      * 
-     * @param string $slugUnique Unique slug of the term
+     * @param string $slug Unique slug of the term
      * @return \Illuminate\Http\RedirectResponse Go back
      */
-    public function rejectTerm($slugUnique)
+    public function rejectTerm($slug)
     {
-        $term = Term::where('slug_unique', $slugUnique)->firstOrFail();
+        $term = Term::where('slug', $slug)->firstOrFail();
         
         $term->status_id = 250;
         

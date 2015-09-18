@@ -24,14 +24,14 @@
                     <div class="col-md-12">
                         <ul>
                             @foreach ($terms as $term)
-                            <li>{{ $term->term }} - {{ $term->votes()->sum('vote') }} 
+                            <li>{{ $term->term }} - {{ $term->votes_sum }} 
                                 @include('terms.votes.form_up') 
                                 @include('terms.votes.form_down')
                             </li>
-                            <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug_unique]) }}">
+                            <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug]) }}">
                                 @include('suggestions.forms.approve')
                             </form>
-                            <form method="POST" action="{{ action('TermsController@rejectTerm', [$term->slug_unique]) }}">
+                            <form method="POST" action="{{ action('TermsController@rejectTerm', [$term->slug]) }}">
                                 @include('suggestions.forms.reject')
                             </form>
                             @endforeach

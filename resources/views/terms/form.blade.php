@@ -20,7 +20,7 @@
     <label for="part_of_speech_id">Part of Speech:</label>
     <select id="part_of_speech_id" name="part_of_speech_id" required="required" class="form-control" >
         @if (isset($term))
-        <option value="{{ $term->partOfSpeech->id }}" selected="selected">{{ $term->partOfSpeech->part_of_speech }}</option>
+        <option value="{{ $term->part_of_speech_id }}" selected="selected">{{ $term->partOfSpeech->part_of_speech }}</option>
         @endif
         @foreach ($partOfSpeeches as $partOfSpeech)
         <option value="{{ $partOfSpeech->id }}">{{ $partOfSpeech->part_of_speech }}</option>

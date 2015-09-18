@@ -19,7 +19,8 @@ class CreateTermsTable extends Migration
             $table->string('term');
             $table->string('slug')->unique();
             $table->string('menu_letter', 30);
-            $table->integer('votes')->default(0);
+            // Sum of votes in term_votes table
+            $table->integer('votes_sum')->default(0);
             $table->timestamps();
             
             // Attributes - foreign keys

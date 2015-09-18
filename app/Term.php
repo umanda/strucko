@@ -16,12 +16,10 @@ class Term extends Model
         'term',
         'slug',
         'menu_letter',
-        'concept_id',
         'user_id',
         'language_id',
         'part_of_speech_id',
         'scientific_field_id',
-        'votes',
     ];
 
     public function scopeApproved($query)

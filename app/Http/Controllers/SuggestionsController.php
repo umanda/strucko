@@ -10,9 +10,7 @@ use App\Term;
 use App\Synonym;
 use App\Repositories\SuggestionsTermsFilterRepository;
 use App\Language;
-use App\ScientificField;
 use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
-use DB;
 
 class SuggestionsController extends Controller
 {
@@ -32,12 +30,10 @@ class SuggestionsController extends Controller
         $scientificFields = $this->prepareScientificFields();
         
         $terms = Term::suggested()
-                    ->whereHas('synonym', function ($query) use ($termFilters) {
-                        $query->where($termFilters);
-                    })
+                    ->where($termFilters)
                     ->with('votes')
                     ->get();
-                    //dd($terms);
+        
         return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
     }
     

@@ -6,7 +6,7 @@
 
 @section('content')
 <h2> Edit {!! $term->term !!}</h2>
-<form class="form-inline" method="POST" action="{{ action('TermsController@updateStatus', ['slug_unique' => $term->slug_unique]) }}">
+<form class="form-inline" method="POST" action="{{ action('TermsController@updateStatus', ['slug' => $term->slug]) }}">
     <input type="hidden" name="_method" value="PATCH">
     {!! csrf_field() !!}
     <div class="form-group">
@@ -19,7 +19,7 @@
     <button type="submit" class="btn btn-default">Set status</button>
 </form>
 
-<form method="POST" action="{{ action('TermsController@update', ['slugUnique' => $term->slug_unique]) }}">
+<form method="POST" action="{{ action('TermsController@update', ['slug' => $term->slug]) }}">
 
     <input type="hidden" name="_method" value="PATCH">
 

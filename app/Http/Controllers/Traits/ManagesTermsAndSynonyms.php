@@ -164,7 +164,7 @@ trait ManagesTermsAndSynonyms
     }
     
     /**
-     * Prepare slugs, abbreciation, menu letter for term.
+     * Prepare slugs, menu letter for term.
      * 
      * @param array $input
      * @return array

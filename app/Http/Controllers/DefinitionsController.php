@@ -43,8 +43,13 @@ class DefinitionsController extends Controller
      */
     public function store(Requests\CreateDefinitionRequest $request)
     {
+        $input = $request->all();
+        // Prepare optional values.
+        $input['source'] = getNullForOptionalInput($input['source']);
+        $input['link'] = getNullForOptionalInput($input['link']);
+        
         // Save the definition using relationship with user.
-        Auth::user()->definitions()->create($request->all());
+        Auth::user()->definitions()->create($input);
         
         // Return back with alerts in session.
         return back()->with([

@@ -20,6 +20,7 @@ class Term extends Model
         'language_id',
         'part_of_speech_id',
         'scientific_field_id',
+        'is_abbreviation',
     ];
 
     public function scopeApproved($query)

@@ -9,6 +9,7 @@ class TermVote extends Model
     protected $fillable = [
         'term_id',
         'user_id',
-        'is_positive'
+        'concept_id',
+        'is_positive',
     ];
 }

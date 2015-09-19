@@ -22,8 +22,8 @@ get('terms/{terms}', 'TermsController@show');
 get('terms/{slugUnique}/edit', [
     'as' => 'terms.edit', 'uses' => 'TermsController@edit'
     ]);
-post('terms/{slugUnique}/translations', 'SynonymsController@addTranslation');
-post('terms/{slugUnique}/synonyms', 'SynonymsController@suggestMergeSynonym');
+post('terms/{slugUnique}/translations', 'ConceptsController@addTranslation');
+post('terms/{slugUnique}/synonyms', 'ConceptsController@addSynonym');
 post('terms/{slugUnique}/vote/up', 'TermVotesController@voteUp');
 post('terms/{slugUnique}/vote/down', 'TermVotesController@voteDown');
 post('terms/{slugUnique}/status/approve', 'TermsController@approveTerm');

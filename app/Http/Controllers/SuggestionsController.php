@@ -10,17 +10,22 @@ use App\Term;
 use App\Synonym;
 use App\Repositories\SuggestionsTermsFilterRepository;
 use App\Language;
-use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
+use App\Http\Controllers\Traits\ManagesTerms;
 
 class SuggestionsController extends Controller
 {
-    use ManagesTermsAndSynonyms;
+    use ManagesTerms;
     
     public function index()
     {
         return view('suggestions.index');
     }
     
+    /**
+     * Get all suggested terms.
+     * @param SuggestionsTermsFilterRepository $filters
+     * @return type
+     */
     public function terms(SuggestionsTermsFilterRepository $filters)
     {
         $termFilters = $filters->allFilters();
@@ -37,6 +42,12 @@ class SuggestionsController extends Controller
         return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
     }
     
+    /**
+     * Get all merge suggestions
+     * TODO Refactor this
+     * @param SuggestionsTermsFilterRepository $filters
+     * @return type
+     */
     public function mergeSuggestions(SuggestionsTermsFilterRepository $filters) {
         $synonymFilters = $filters->allFilters();
         

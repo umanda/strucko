@@ -15,7 +15,7 @@
     {{ $term->status->status }}, 
     {{ $term->menu_letter }}
 </p>
-<h4>Synonyms (ID is {{ $term->synonym_id }}):</h4>
+<h4>Synonyms (ID is {{ $term->concept_id }}):</h4>
 <ul>
     <i> TODO</i>
 </ul>

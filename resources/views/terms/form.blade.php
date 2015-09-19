@@ -6,13 +6,18 @@
            placeholder="Term" class="form-control"
            value="{{ isset($term) ? $term->term : old('term') }}">
 </div>
-
+<div class="checkbox">
+    <label>
+        {!! Form::checkbox('is_abbreviation', 1, isset($term) ? $term->is_abbreviation : old('is_abbreviation')) !!}
+        This is abbreviation
+    </label>
+</div>
 <div class="form-group">
     <label for="language_id">Language:</label>
 
     {!! Form::select('language_id', $languages->lists('ref_name', 'id'),
-            isset($term) ? $term->language_id : old('language_id'), 
-            ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
+    isset($term) ? $term->language_id : old('language_id'), 
+    ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
 
 </div>
 
@@ -31,9 +36,9 @@
 <div class="form-group">
     <label for="scientific_field_id">Scientific field (category):</label>
     {!! Form::select('scientific_field_id', $scientificFields,
-            isset($term) ? $term->scientific_field_id : old('scientific_field_id'), 
-            ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
-    
+    isset($term) ? $term->scientific_field_id : old('scientific_field_id'), 
+    ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
+
 </div>
 
 @if(isset($term))

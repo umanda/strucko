@@ -27,7 +27,7 @@
         </div>
         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
             <div class="panel-body">
-                <form method="POST" action="{{ action('SynonymsController@addTranslation', [$term->slug_unique]) }}">
+                <form method="POST" action="{{ action('ConceptsController@addTranslation', [$term->slug]) }}">
                     @include('terms.translations.form')
                     <button type="submit" class="btn btn-default">Suggest translation</button>
                 </form>
@@ -38,13 +38,13 @@
         <div class="panel-heading" role="tab" id="headingThree">
             <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Synonyms
+                    Synonym
                 </a>
             </h4>
         </div>
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
             <div class="panel-body">
-                <form method="POST" action="{{ action('SynonymsController@suggestMergeSynonym', [$term->slug_unique]) }}">
+                <form method="POST" action="{{ action('ConceptsController@addSynonym', [$term->slug]) }}">
                     @include('terms.synonyms.form')
                     <button type="submit" class="btn btn-default">Suggest synonym</button>
                 </form>

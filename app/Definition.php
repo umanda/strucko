@@ -8,7 +8,8 @@ class Definition extends Model
 {
     protected $fillable = [
         'definition',
-        'synonym_id',
+        'concept_id',
+        'language_id',
         'source',
         'link'
     ];

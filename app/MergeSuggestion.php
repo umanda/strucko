@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class MergeSuggestion extends Model
 {
     protected $fillable = [
-        'synonym_id',
-        'merge_id',
+        'term_id',
+        'concept_id',
     ];
     
     /**
@@ -36,13 +36,13 @@ class MergeSuggestion extends Model
     }
     
     /**
-     * Merge suggestion belongs to synonym.
+     * Merge suggestion belongs to Concept.
      * 
      * @return type
      */
-    public function synonym()
+    public function concept()
     {
-        return $this->belongsTo('App\Synonym');
+        return $this->belongsTo('App\Concept');
     }
     
     /**
@@ -50,8 +50,9 @@ class MergeSuggestion extends Model
      * 
      * @return type
      */
-    public function mergedSynonym()
+    public function term()
     {
-        return $this->belongsTo('App\Synonym', 'merge_id');
+        return $this->belongsTo('App\Term');
     }
+    
 }

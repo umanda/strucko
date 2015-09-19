@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
+use App\Http\Controllers\Traits\ManagesTerms;
 use App\Http\Requests;
 use App\Http\Requests\EditTranslationRequest;
 use App\Synonym;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SynonymsController extends Controller
 {
-    use ManagesTermsAndSynonyms;
+    use ManagesTerms;
     
     public function __construct()
     {
@@ -50,7 +50,7 @@ class SynonymsController extends Controller
         // Check if the translation term already exist
         if ($this->termExists($input)) {
             // We will get the existing term and use its synonym_id as translation_id
-            $translationId = $this->getExistingSynonymId($input);
+            $translationId = $this->getExistingConceptId($input);
             
             // Check if the translation for synonyms already exists
             if ($term->synonym->translations->contains($translationId)) {
@@ -94,7 +94,7 @@ class SynonymsController extends Controller
         // 
         // Check if the suggested term exists in language, field, part of speech.
         if ($this->termExists($input)) {
-            $mergeId = $this->getExistingSynonymId($input);
+            $mergeId = $this->getExistingConceptId($input);
             
             // Make sure that the synonyms are not the same
             if ($term->synonym_id === $mergeId) {

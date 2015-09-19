@@ -15,11 +15,11 @@ use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
 use App\Repositories\TermsFilterRepository;
 
-use App\Http\Controllers\Traits\ManagesTermsAndSynonyms;
+use App\Http\Controllers\Traits\ManagesTerms;
 
 class TermsController extends Controller
 {
-    use ManagesTermsAndSynonyms;
+    use ManagesTerms;
     
     /**
      * Filters used to get specific terms.

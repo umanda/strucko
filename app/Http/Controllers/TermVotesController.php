@@ -30,9 +30,15 @@ class TermVotesController extends Controller
         $input = $request->all();
         $term = Term::where('slug', $slug)->with('votes')->firstOrFail();
         
+        // Set user_id and concept_id for the vote.
         $input['user_id'] = Auth::id();
+        $input['concept_id'] = $term->concept_id;
+        
         // Check if the vote already exists
-        $exists = $term->votes()->where('user_id', $input['user_id'])->exists();
+        $exists = $term->votes()
+                ->where('user_id', $input['user_id'])
+                ->where('concept_id', $input['concept_id'])
+                ->exists();
         
         if ($exists) {
             return back()->with([
@@ -70,9 +76,15 @@ class TermVotesController extends Controller
         $input = $request->all();
         $term = Term::where('slug', $slug)->with('votes')->firstOrFail();
         
+        // Set user_id and concept_id for the vote.
         $input['user_id'] = Auth::id();
+        $input['concept_id'] = $term->concept_id;
+        
         // Check if the vote already exists
-        $exists = $term->votes()->where('user_id', $input['user_id'])->exists();
+        $exists = $term->votes()
+                ->where('user_id', $input['user_id'])
+                ->where('concept_id', $input['concept_id'])
+                ->exists();
         
         if ($exists) {
             return back()->with([

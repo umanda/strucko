@@ -19,6 +19,7 @@ class CreateTermsTable extends Migration
             $table->string('term');
             $table->string('slug')->unique();
             $table->string('menu_letter', 30);
+            $table->boolean('is_abbreviation')->default(false);
             // Sum of votes in term_votes table
             $table->integer('votes_sum')->default(0);
             $table->timestamps();

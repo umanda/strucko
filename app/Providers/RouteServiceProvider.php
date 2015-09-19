@@ -28,11 +28,15 @@ class RouteServiceProvider extends ServiceProvider
         {
             return \App\Term::where('slug', $slug)
                     ->with('concept.definitions',
+                            'concept.definitions.status',
                             'user',
                             'status',
                             'language',
                             'scientificField',
-                            'partOfSpeech')
+                            'partOfSpeech',
+                            'votes',
+                            'mergeSuggestions',
+                            'mergeSuggestions.concept.terms')
                     ->firstOrFail();
         });
 

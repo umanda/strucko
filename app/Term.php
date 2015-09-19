@@ -20,6 +20,7 @@ class Term extends Model
         'language_id',
         'part_of_speech_id',
         'scientific_field_id',
+        'is_abbreviation',
     ];
 
     public function scopeApproved($query)
@@ -30,6 +31,16 @@ class Term extends Model
     public function scopeSuggested($query)
     {
         $query->where('status_id', 500);
+    }
+    
+    /**
+     * 
+     * @param type $query
+     * @param type $itemToRemove
+     */
+    public function scopeWithout($query, $itemToRemove)
+    {
+        $query->where('id', '<>', $itemToRemove);
     }
 
     /**
@@ -100,5 +111,15 @@ class Term extends Model
     public function partOfSpeech()
     {
         return $this->belongsTo('App\PartOfSpeech');
+    }
+    
+    /**
+     * Term can have many merge suggestions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mergeSuggestions()
+    {
+        return $this->hasMany('App\MergeSuggestion');
     }
 }

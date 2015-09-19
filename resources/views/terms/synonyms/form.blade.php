@@ -10,3 +10,9 @@
     <input type="text" id="term" name="term" value="{{ old('term') }}" required="required" 
            maxlength="255" placeholder="Term" class="form-control">
 </div>
+<div class="checkbox">
+    <label>
+        {!! Form::checkbox('is_abbreviation', 1) !!}
+        This is abbreviation
+    </label>
+</div>

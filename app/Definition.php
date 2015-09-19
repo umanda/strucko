@@ -8,10 +8,17 @@ class Definition extends Model
 {
     protected $fillable = [
         'definition',
-        'synonym_id',
+        'concept_id',
+        'language_id',
         'source',
         'link'
     ];
+    
+    public function scopeSuggested($query)
+    {
+        $query->where('status_id', 500);
+    }
+    
     /**
      * Definition belongs to synonym.
      *
@@ -30,5 +37,15 @@ class Definition extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+    
+    /**
+     * Definition has a status.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo('App\Status');
     }
 }

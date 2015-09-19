@@ -10,7 +10,7 @@ use App\Term;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
 
-trait ManagesTermsAndSynonyms
+trait ManagesTerms
 {
     /**
      * Check if the term already exists in the database for the choosen language,
@@ -152,19 +152,7 @@ trait ManagesTermsAndSynonyms
     }
 
     /**
-     * Get null if the string from the form input is actually empty. 
-     * If it is not empty, it will return its value.
-     * 
-     * @param string $input Value to check if it is empty or not
-     * @return string|null String if not empty, else null
-     */
-    protected function getNullForOptionalInput($input)
-    {
-        return empty(trim($input)) ? null : $input;
-    }
-    
-    /**
-     * Prepare slugs, menu letter for term.
+     * Prepare slugs, menu letter, and is_abbreviation for term.
      * 
      * @param array $input
      * @return array
@@ -175,6 +163,8 @@ trait ManagesTermsAndSynonyms
         $input = $this->prepareSlug($input);
         // Prepare menu_letter for the term and add to input.
         $input['menu_letter'] = $this->prepareMenuLetter($input['term'], $input['language_id']);
+        // Prepare is_abbreviation value.
+        $input['is_abbreviation'] = isset($input['is_abbreviation']) ? 1 : 0;
         
         return $input;
        
@@ -202,14 +192,12 @@ trait ManagesTermsAndSynonyms
      * @param array $input Form data
      * @return integer ID of the Synonym
      */
-    protected function getExistingSynonymId (array $input)
+    protected function getExistingConceptId (array $input)
     {
        return Term::where('term', $input['term'])
-                ->whereHas('synonym', function ($query) use ($input) {
-                        $query->where('language_id', $input['language_id'])
-                              ->where('part_of_speech_id', $input['part_of_speech_id'])
-                              ->where('scientific_field_id', $input['scientific_field_id']);
-                    })
-                ->value('synonym_id');
+                ->where('language_id', $input['language_id'])
+                ->where('part_of_speech_id', $input['part_of_speech_id'])
+                ->where('scientific_field_id', $input['scientific_field_id'])
+                ->value('concept_id');
     }
 }

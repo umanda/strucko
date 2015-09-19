@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class MergeSuggestion extends Model
 {
     protected $fillable = [
-        'synonym_id',
-        'merge_id',
+        'term_id',
+        'concept_id',
     ];
     
     /**
@@ -36,22 +36,33 @@ class MergeSuggestion extends Model
     }
     
     /**
-     * Merge suggestion belongs to synonym.
+     * Merge suggestion belongs to Concept.
      * 
      * @return type
      */
-    public function synonym()
+    public function concept()
     {
-        return $this->belongsTo('App\Synonym');
+        return $this->belongsTo('App\Concept');
     }
     
     /**
-     * Merge suggestion has a merged synonym suggestion.
+     * Merge suggestion belongs to term.
      * 
      * @return type
      */
-    public function mergedSynonym()
+    public function term()
     {
-        return $this->belongsTo('App\Synonym', 'merge_id');
+        return $this->belongsTo('App\Term');
     }
+    
+    /**
+     * MergeSuggestion can have many votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\MergeSuggestionVote');
+    }
+    
 }

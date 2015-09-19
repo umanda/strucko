@@ -28,6 +28,7 @@
     <div class="form-group">
         <input type="submit" id="submit" name="submit" value="Save term"
                class="btn btn-primary">
+        <a class="btn btn-default" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">Cancel</a>
     </div>
 
 </form>

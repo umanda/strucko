@@ -5,9 +5,9 @@ namespace App\Repositories;
 use Illuminate\Http\Request;
 
 /**
- * Repository for filters used when searching for terms. Repo is populated using
+ * Repository for filters used when searching for terms in /terms. Repo is populated using
  * query parameters when searching for filters. Also, last used filter is put 
- * in session as 'filter'.
+ * in session as 'allFilters'.
  *
  * @author mivancic
  */
@@ -73,7 +73,7 @@ class TermsFilterRepository
         'language_id',
         'scientific_field_id',
         'menu_letter',
-        'search',
+        // 'search',
     ];
     
     /**

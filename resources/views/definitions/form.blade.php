@@ -3,7 +3,8 @@
 
 <div class="form-group">
     <label hidden="hidden" for="definition">Definition</label>
-    <textarea id="definition" name="definition" placeholder="Definition {{ isset($term) ? 'in ' . $term->language->ref_name : '' }}"
+    <textarea id="definition" name="definition" 
+              placeholder="Definition {{ isset($term) ? 'in ' . $term->language->ref_name . ' language': '' }}"
               rows="3" class="form-control">{{ old('definition') }}</textarea>
 </div>
 
@@ -27,6 +28,8 @@
     </span>
 </div>
 
-<input type="hidden" id="concept_id" name="synonym_id" 
+<input type="hidden" id="concept_id" name="concept_id" 
        value="{{ isset($term) ? $term->concept_id : old('concept_id') }}">
 
+<input type="hidden" id="language_id" name="language_id" 
+       value="{{ isset($term) ? $term->language_id : old('language_id') }}">

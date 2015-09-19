@@ -6,29 +6,66 @@
 
 @section('content')
 
-<h3>{{ $term->term }}</h3>
-
+<h3>{{ $term->term }} {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}</h3>
+@include('votes.form_up')
+@include('votes.form_down')
 <p> 
     {{ $term->language->ref_name }}, 
     {{ $term->scientificField->scientific_field }}, 
     {{ $term->partOfSpeech->part_of_speech }},
-    {{ $term->status->status }}, 
     {{ $term->menu_letter }}
 </p>
-<h4>Synonyms (ID is {{ $term->synonym_id }}):</h4>
+<p>Votes: {{ $term->votes_sum }}</p>
+@if( ! $synonyms->isEmpty())
+<h4>Synonyms (ID is {{ $term->concept_id }}):</h4>
 <ul>
-    <i> TODO</i>
+    @foreach($synonyms as $synonym)
+        <li> {{ $synonym->term }} {{ $synonym->votes_sum }} {{ $synonym->status->id < 1000 ? $synonym->status->status : '' }}    
+            <form action="{{ action('TermVotesController@voteUp', [$synonym->slug]) }}" method="POST">
+                @include('votes.form_up_naked')
+            </form>
+            <form action="{{ action('TermVotesController@voteDown', [$synonym->slug]) }}" method="POST">
+                @include('votes.form_down_naked')
+            </form>
+        </li>
+    @endforeach
 </ul>
-<i> Fali merge suggestions </i>
+@endif
+
+@if($term->mergeSuggestions()->exists())
+<p>This term is suggested to be merged with these:</p>
+@foreach($term->mergeSuggestions as $mergeSuggestion)
+    @foreach($mergeSuggestion->concept->terms as $term)
+        {{ $term->term }},
+    @endforeach
+@endforeach
+@endif
 
 <h4>Sugessted by user:</h4>
 <p>{{ $term->user->name }}</p>
 <h4>Translations:</h4>
-    <i>TODO</i>
+    @if (isset($translations))
+        @unless($translations->isEmpty())
+        <ul>
+            @foreach($translations as $translation)
+            <li> {{ $translation->term }} {{ $translation->votes_sum }} {{ $translation->status->id < 1000 ? $translation->status->status : '' }}
+                <form action="{{ action('TermVotesController@voteUp', [$translation->slug]) }}" method="POST">
+                    @include('votes.form_up_naked')
+                </form>
+                <form action="{{ action('TermVotesController@voteDown', [$translation->slug]) }}" method="POST">
+                    @include('votes.form_down_naked')
+                </form>
+                </li>
+            @endforeach
+        </ul>
+        @else
+        <p>No translations to selected language</p>
+        @endunless
+    @endif
 <h4>Definitions:</h4>
 <ul>
 @foreach ($term->concept->definitions as $definition)
-    <li>{{ $definition->definition }}</li>
+    <li>{{ $definition->definition }} {{ $definition->status->id < 1000 ? $definition->status->status : '' }}</li>
 @endforeach
 </ul>
 

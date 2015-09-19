@@ -6018,4 +6018,10 @@ body {
   margin-left: auto;
   margin-right: auto; }
 
+.strucko-header {
+  height: 10em; }
+
+.strucko-nav {
+  background-color: #f8f8f8; }
+
 /*# sourceMappingURL=app.css.map */

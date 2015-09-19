@@ -3,19 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Term;
+use App\MergeSuggestion;
 use Auth;
 
-class TermVotesController extends Controller
+class MergeSuggestionsController extends Controller
 {
-    public function __construct()
+    /**
+     * Show the specific merge suggestion.
+     * 
+     */
+    public function show($id)
     {
-        // User has to be authenticated, except for specified methods.
-        $this->middleware('auth');
+        $mergeSuggestion = MergeSuggestion::where('id', $id)->with('term', 'concept.terms')->firstOrFail();
+        
+        return view('suggestions.merges.show', compact('mergeSuggestion'));
+    }
+    
+    /**
+     * Approve the sugegsted merge
+     */
+    public function approveMerge ()
+    {
+    // After the merge, reset votes_sum on the merged term.
+    // Merge all terms with the same concept_id.
+    // Merge all definitions with the same concept_id to the new concept_id.
     }
     
     /**
@@ -25,24 +38,22 @@ class TermVotesController extends Controller
      * @param string $slug
      * @return type
      */
-    public function voteUp(Request $request, $slug)
+    public function voteUp(Request $request, $id)
     {
         $input = $request->all();
-        $term = Term::where('slug', $slug)->with('votes')->firstOrFail();
+        $mergeSuggestion = MergeSuggestion::where('id', $id)->with('votes')->firstOrFail();
         
-        // Set user_id and concept_id for the vote.
+        // Set user_id
         $input['user_id'] = Auth::id();
-        $input['concept_id'] = $term->concept_id;
         
         // Check if the vote already exists
-        $exists = $term->votes()
+        $exists = $mergeSuggestion->votes()
                 ->where('user_id', $input['user_id'])
-                ->where('concept_id', $input['concept_id'])
                 ->exists();
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this term...',
+                    'alert' => 'You have already voted for this suggestion...',
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -52,10 +63,10 @@ class TermVotesController extends Controller
         $input['is_positive'] = true;
         
         // Create vote for the term.
-        $term->votes()->create($input);
+        $mergeSuggestion->votes()->create($input);
         
         // Increment the votes_sum on the term
-        $term->increment('votes_sum', $voteWeight);
+        $mergeSuggestion->increment('votes_sum', $voteWeight);
         
         return back()->with([
                     'alert' => 'Voted up!',
@@ -65,30 +76,28 @@ class TermVotesController extends Controller
     }
     
     /**
-     * Give down vote for the term
+     * Give down vote for the suggestion
      * 
      * @param Request $request
      * @param string $slug
      * @return type
      */
-    public function voteDown(Request $request, $slug)
+    public function voteDown(Request $request, $id)
     {
         $input = $request->all();
-        $term = Term::where('slug', $slug)->with('votes')->firstOrFail();
+        $mergeSuggestion = MergeSuggestion::where('id', $id)->with('votes')->firstOrFail();
         
         // Set user_id and concept_id for the vote.
         $input['user_id'] = Auth::id();
-        $input['concept_id'] = $term->concept_id;
         
         // Check if the vote already exists
-        $exists = $term->votes()
+        $exists = $mergeSuggestion->votes()
                 ->where('user_id', $input['user_id'])
-                ->where('concept_id', $input['concept_id'])
                 ->exists();
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this term...',
+                    'alert' => 'You have already voted for this suggestion...',
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -98,15 +107,14 @@ class TermVotesController extends Controller
         $input['is_positive'] = false;
         
         // Create vote for the term.
-        $term->votes()->create($input);
+        $mergeSuggestion->votes()->create($input);
         
         // Decrement the votes_sum on the term
-        $term->decrement('votes_sum', $voteWeight);
+        $mergeSuggestion->decrement('votes_sum', $voteWeight);
         
         return back()->with([
                     'alert' => 'Voted down!',
                     'alert_class' => 'alert alert-success'
                 ]);
     }
-
 }

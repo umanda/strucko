@@ -28,7 +28,7 @@ class EditTranslationRequest extends Request
             'language_id' => 'required|alpha|min:1|max:3',
             'part_of_speech_id' => 'required|integer|min:1',
             'scientific_field_id' => 'required|integer|min:1', 
-            'synonym_id' => 'required|integer|min:1',
+            'concept_id' => 'required|integer|min:1',
         ];
     }
 }

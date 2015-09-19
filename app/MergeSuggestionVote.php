@@ -4,12 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TermVote extends Model
+class MergeSuggestionVote extends Model
 {
     protected $fillable = [
-        'term_id',
+        'merge_suggestion_id',
         'user_id',
-        'concept_id',
         'is_positive',
     ];
 }

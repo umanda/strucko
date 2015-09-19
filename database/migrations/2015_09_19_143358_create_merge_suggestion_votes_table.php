@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTermVotesTable extends Migration
+class CreateMergeSuggestionVotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,21 +12,18 @@ class CreateTermVotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('term_votes', function (Blueprint $table) {
+        Schema::create('merge_suggestion_votes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('term_id')->unsigned();
-            // Term can change concepts, so the vote also depends on it.
-            $table->integer('concept_id')->unsigned();
+            $table->integer('merge_suggestion_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->boolean('is_positive');
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');
-            $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
+            $table->foreign('merge_suggestion_id')->references('id')->on('merge_suggestions')->onDelete('cascade');
             
             // Unique constraint for one term per language, part of speech and field. 
-            $table->unique(['term_id', 'user_id']);
+            $table->unique(['merge_suggestion_id', 'user_id']);
         });
     }
 
@@ -37,6 +34,6 @@ class CreateTermVotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('term_votes');
+        Schema::drop('merge_suggestion_votes');
     }
 }

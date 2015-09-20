@@ -32,7 +32,8 @@ class RouteServiceProvider extends ServiceProvider
                             'status',
                             'language',
                             'scientificField',
-                            'partOfSpeech')
+                            'partOfSpeech',
+                            'votes')
                     ->firstOrFail();
         });
 

@@ -32,6 +32,16 @@ class Term extends Model
     {
         $query->where('status_id', 500);
     }
+    
+    /**
+     * 
+     * @param type $query
+     * @param type $itemToRemove
+     */
+    public function scopeWithout($query, $itemToRemove)
+    {
+        $query->where('id', '<>', $itemToRemove);
+    }
 
     /**
      * Term is owned by user.
@@ -101,5 +111,15 @@ class Term extends Model
     public function partOfSpeech()
     {
         return $this->belongsTo('App\PartOfSpeech');
+    }
+    
+    /**
+     * Term can have many merge suggestions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mergeSuggestions()
+    {
+        return $this->hasMany('App\MergeSuggestion');
     }
 }

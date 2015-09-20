@@ -22,6 +22,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
+                        @if ( ! $suggestedTerms->isEmpty())
                         <table class="table-borderless table-responsive">
                             <thead>
                                 <tr>
@@ -32,26 +33,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($synonyms as $synonym)
-                            <tr>
-                                <td>
-                                    @foreach ($synonym->terms as $term)
-                                        {{ $term->term }},
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach ($synonym->mergeSuggestions as $mergeSuggestion)
-                                        @foreach ($mergeSuggestion->mergedSynonym->terms as $mergedTerm)
-                                          {{ $mergedTerm->term }},
+                                
+                                @foreach ($suggestedTerms as $suggestedTerm)
+                                <tr>
+                                    <td>
+                                        {{ $suggestedTerm->term }} ({{ $suggestedTerm->language->ref_name }})
+                                        <p>TODO other terms from this concept</p>
+                                    </td>
+                                    <td>
+                                        @foreach ($suggestedTerm->mergeSuggestions as $mergeSuggestion)
+                                            @foreach($mergeSuggestion->concept->terms as $conceptTerm)
+                                            {{ $conceptTerm->term }} ({{ $conceptTerm->language->ref_name }})
+                                            @endforeach
                                         @endforeach
-                                    @endforeach
-                                </td>
-                                <td> TODO Votes</td>
-                                <td>TODO Actions</td>
-                            </tr>
-                            @endforeach
+                                    </td>
+                                    <td> TODO Votes</td>
+                                    <td>TODO Actions</td>
+                                </tr>
+                                @endforeach
+                                @else
+                                    <p>No suggestions...</p>
                             </tbody>
                         </table>
+                        
+                        @endif
+                            
                     </div>
                 </div>
             </div>

@@ -46,7 +46,7 @@ class MergeSuggestion extends Model
     }
     
     /**
-     * Merge suggestion has a merged synonym suggestion.
+     * Merge suggestion belongs to term.
      * 
      * @return type
      */

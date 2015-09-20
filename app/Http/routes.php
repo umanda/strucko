@@ -41,6 +41,7 @@ post('terms', 'TermsController@store');
 get('suggestions', 'SuggestionsController@index');
 get('suggestions/terms', 'SuggestionsController@terms');
 get('suggestions/merge-suggestions', 'SuggestionsController@mergeSuggestions');
+get('suggestions/definitions', 'SuggestionsController@definitions');
 
 // Pages...
 // TODO: implement /home route for users.

@@ -7,7 +7,6 @@
 @section('content')
 
 <h3>{{ $term->term }}</h3>
-
 <p> 
     {{ $term->language->ref_name }}, 
     {{ $term->scientificField->scientific_field }}, 
@@ -15,11 +14,17 @@
     {{ $term->status->status }}, 
     {{ $term->menu_letter }}
 </p>
+<p>Votes: {{ $term->votes_sum }}</p>
+@if(isset($synonyms))
 <h4>Synonyms (ID is {{ $term->concept_id }}):</h4>
 <ul>
-    <i> TODO</i>
+    @foreach($synonyms as $synonym)
+        <li> {{ $synonym->term }} {{ $synonym->votes_sum }} {{ $synonym->status->id < 1000 ? $synonym->status->status : '' }}</li>
+    @endforeach
 </ul>
-<i> Fali merge suggestions </i>
+@endif
+
+<i> TODO merge suggestions </i>
 
 <h4>Sugessted by user:</h4>
 <p>{{ $term->user->name }}</p>

@@ -14,20 +14,20 @@ use Auth;
 use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
 use App\Repositories\TermsFilterRepository;
-
 use App\Http\Controllers\Traits\ManagesTerms;
 
 class TermsController extends Controller
 {
+
     use ManagesTerms;
-    
+
     /**
      * Filters used to get specific terms.
      * 
      * @var type 
      */
     protected $filters;
-    
+
     public function __construct()
     {
         // User has to be authenticated, except for specified methods.
@@ -43,48 +43,46 @@ class TermsController extends Controller
      */
     public function index(TermsFilterRepository $filters)
     {
-        $this->filters = $filters;        
-        $allFilters = $this->filters->allFilters();        
-        $termFilters = $this->filters->termFilters();        
+        $this->filters = $filters;
+        $allFilters = $this->filters->allFilters();
+        $termFilters = $this->filters->termFilters();
         $menuLetterFilters = $this->filters->menuLetterFilters();
-        
+
         // Check appropriate query parameters and variables.
         if ($this->filters->isSetLanguageAndField()) {
-            
+
             $menuLetters = $this->getMenuLettersForLanguageAndField($allFilters);
-            
+
             $languageId = $allFilters['language_id'];
             $scientificFieldId = $allFilters['scientific_field_id'];
-            
+
             // Check if the menu_letter is set. If so, get terms with that letter
             // and other term filters.
             if ($this->filters->isSetMenuLetter()) {
                 $terms = Term::approved()
-                    ->where($termFilters)
-                    ->orderBy('term')
-                    ->get();
+                        ->where($termFilters)
+                        ->orderBy('term')
+                        ->get();
             }
-            
+
             // Check if the search is set. If so, try to find terms.
             if ($this->filters->isSetSearch()) {
                 $terms = Term::approved()
-                    ->where('term', 'like', '%'. $allFilters['search'] . '%')
-                    ->where('language_id', $allFilters['language_id'])
-                    ->where('scientific_field_id', $allFilters['scientific_field_id'])
-                    ->orderBy('term')
-                    ->get();
+                        ->where('term', 'like', '%' . $allFilters['search'] . '%')
+                        ->where('language_id', $allFilters['language_id'])
+                        ->where('scientific_field_id', $allFilters['scientific_field_id'])
+                        ->orderBy('term')
+                        ->get();
             }
         }
-        
+
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
-        
-        return view('terms.index',
-                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId',
-                        'languages', 'scientificFields', 'menuLetterFilters'));
+
+        return view('terms.index', compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
     }
-    
+
     /**
      * Show the create view.
      *  
@@ -96,15 +94,13 @@ class TermsController extends Controller
         $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
         $scientificFields = $this->prepareScientificFields();
         $languages = Language::active()->orderBy('ref_name')->get();
-        
+
         return view('terms.create', compact(
-            'partOfSpeeches',
-            'scientificFields',
-            'languages'
+                        'partOfSpeeches', 'scientificFields', 'languages'
         ));
     }
-    
-     /**
+
+    /**
      * TODO Make sure that only active language, part of speech and category can be set (implement guarding - trough request?).
      * TODO Consider making this a transaction.
      * 
@@ -123,20 +119,20 @@ class TermsController extends Controller
             $this->flashTermExists();
             return back()->withInput();
         }
-        
+
         // Prepare new concept
         $concept = Concept::create();
-        
+
         // Persist the new Term using the relationship
         $concept->terms()->create($input);
-        
+
         // Redirect with alerts in session.
         return redirect('terms/' . $input['slug'])->with([
-            'alert' => 'Term suggested...',
-            'alert_class' => 'alert alert-success'
+                    'alert' => 'Term suggested...',
+                    'alert_class' => 'alert alert-success'
         ]);
     }
-    
+
     /**
      * Show the term.
      * This method uses route model binding, just to have that example.
@@ -148,13 +144,26 @@ class TermsController extends Controller
     public function show(Term $term, ShowTermRequest $request)
     {
         //$term = Term::where('slug', $slug)->firstOrFail();
-        // Get languages for translation options
+        // Get languages for translation options in suggest translation section.
         $languages = Language::active()
                 ->without($term->language_id)
                 ->orderBy('ref_name')
                 ->get();
+        // Prepare filters for synonyms. Approved ones are only for authenticated users.
+        $synonymFilters = [];
+        $synonymFilters['concept_id'] = $term->concept_id;
+        $synonymFilters['language_id'] = $term->language_id;
+        Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
         
-        return view('terms.show', compact('term', 'languages'));
+        // Get the terms with the same concept_id and the same language (synonyms)
+        $synonyms = Term::where($synonymFilters)
+                ->without($term->id)
+                ->with('status')
+                ->orderBy('status_id', 'DESC')
+                ->orderBy('votes_sum', 'DESC')
+                ->get();
+
+        return view('terms.show', compact('term', 'synonyms', 'languages'));
     }
 
     /**
@@ -169,7 +178,7 @@ class TermsController extends Controller
         $term = Term::where('slug', $slug)
                 ->with('status', 'language', 'scientificField', 'partOfSpeech', 'concept.definitions')
                 ->firstOrFail();
-        
+
         // Prepare data for the form withouth the ones already in the term instance.
         $partOfSpeeches = PartOfSpeech::active()->without($term->part_of_speech_id)->get();
         $scientificFields = $this->prepareScientificFields();
@@ -177,9 +186,8 @@ class TermsController extends Controller
         // $languages = $this->filterLanguages($term->language_id);
         $languages = Language::active()->orderBy('ref_name')->get();
         $statuses = Status::active()->orderBy('id')->lists('status', 'id');
-        
-        return view('terms.edit', 
-                compact('term', 'partOfSpeeches', 'scientificFields', 'languages', 'statuses'));
+
+        return view('terms.edit', compact('term', 'partOfSpeeches', 'scientificFields', 'languages', 'statuses'));
     }
 
     /**
@@ -192,12 +200,12 @@ class TermsController extends Controller
     {
         // Get the term to be updated, and synonym.
         $term = Term::where('slug', $slug)->firstOrFail();
-        
+
         // Prepare new input values, without user_id
         $input = $this->prepareInputValues($request->all());
         // Make sure that the user_id stays the same
         $input['user_id'] = $term->user_id;
-        
+
         // Make sure that the term doesn't already exist (check unique constraint).
         // We will send the ID of the term we are updating so that we can check
         // if the term which exists is the same term we are updating.
@@ -206,17 +214,17 @@ class TermsController extends Controller
             $this->flashTermExists();
             return back()->withInput();
         }
-                
+
         // Update the term.
         $term->update($input);
-        
+
         return redirect(action('TermsController@show', ['slug' => $input['slug']]))
-                ->with([
-                    'alert' => 'Term updated...',
-                    'alert_class' => 'alert alert-success'
-                ]);
+                        ->with([
+                            'alert' => 'Term updated...',
+                            'alert_class' => 'alert alert-success'
+        ]);
     }
-    
+
     /**
      * Update the status of the Term.
      * 
@@ -224,20 +232,21 @@ class TermsController extends Controller
      * @param string $slug Unique slug for Term
      * @return type Return to the previous page
      */
-    public function updateStatus(Requests\EditStatusRequest $request, $slug) {
-        
+    public function updateStatus(Requests\EditStatusRequest $request, $slug)
+    {
+
         $term = Term::where('slug', $slug)->firstOrFail();
-        
+
         $term->status_id = $request->input('status_id');
-        
+
         $term->save();
-        
+
         return back()->with([
                     'alert' => 'Status updated...',
                     'alert_class' => 'alert alert-success'
-                ]);
+        ]);
     }
-    
+
     /**
      * Set the status of the term to approved.
      * 
@@ -247,17 +256,17 @@ class TermsController extends Controller
     public function approveTerm($slug)
     {
         $term = Term::where('slug', $slug)->firstOrFail();
-        
+
         $term->status_id = 1000;
-        
+
         $term->save();
-        
+
         return back()->with([
                     'alert' => 'Term approved...',
                     'alert_class' => 'alert alert-success'
-                ]);
+        ]);
     }
-    
+
     /**
      * Set the status of the term to rejected.
      * 
@@ -267,14 +276,15 @@ class TermsController extends Controller
     public function rejectTerm($slug)
     {
         $term = Term::where('slug', $slug)->firstOrFail();
-        
+
         $term->status_id = 250;
-        
+
         $term->save();
-        
+
         return back()->with([
                     'alert' => 'Term rejected...',
                     'alert_class' => 'alert alert-success'
-                ]);
+        ]);
     }
+
 }

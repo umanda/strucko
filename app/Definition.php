@@ -13,6 +13,12 @@ class Definition extends Model
         'source',
         'link'
     ];
+    
+    public function scopeSuggested($query)
+    {
+        $query->where('status_id', 500);
+    }
+    
     /**
      * Definition belongs to synonym.
      *

@@ -27,6 +27,9 @@ class CreateMergeSuggestionsTable extends Migration
             $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');
             $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
+            
+            // Unique constraint for one term per language, part of speech and field. 
+            $table->unique(['term_id', 'concept_id']);
         });
     }
 

@@ -22,6 +22,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
+                        <i>TODO definition voting</i>
                         @if ( ! $concepts->isEmpty())
                         <ul>
                             @foreach ($concepts as $concept)

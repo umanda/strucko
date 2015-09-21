@@ -38,4 +38,14 @@ class Definition extends Model
     {
         return $this->belongsTo('App\User');
     }
+    
+    /**
+     * Definition has a status.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo('App\Status');
+    }
 }

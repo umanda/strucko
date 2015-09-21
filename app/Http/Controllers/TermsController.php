@@ -80,7 +80,8 @@ class TermsController extends Controller
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
 
-        return view('terms.index', compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
+        return view('terms.index', 
+                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
     }
 
     /**

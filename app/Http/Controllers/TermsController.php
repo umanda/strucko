@@ -15,10 +15,12 @@ use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
 use App\Repositories\TermsFilterRepository;
 use App\Http\Controllers\Traits\ManagesTerms;
+use App\Repositories\TermShowFilterRepository;
 
 class TermsController extends Controller
 {
 
+    // Trait with common functions related to Terms.
     use ManagesTerms;
 
     /**
@@ -80,8 +82,7 @@ class TermsController extends Controller
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
 
-        return view('terms.index', 
-                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
+        return view('terms.index', compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
     }
 
     /**
@@ -142,8 +143,11 @@ class TermsController extends Controller
      * @param ShowTermRequest $request
      * @return type
      */
-    public function show(Term $term, ShowTermRequest $request)
+    public function show(Term $term, ShowTermRequest $request, TermShowFilterRepository $filters)
     {
+        // Prepare all filters from request
+        $termShowFilters = $filters->allFilters();
+
         //$term = Term::where('slug', $slug)->firstOrFail();
         // Get languages for translation options in suggest translation section.
         $languages = Language::active()
@@ -154,8 +158,9 @@ class TermsController extends Controller
         $synonymFilters = [];
         $synonymFilters['concept_id'] = $term->concept_id;
         $synonymFilters['language_id'] = $term->language_id;
+        // For guests we will set the filter to get only approved terms.
         Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
-        
+
         // Get the terms with the same concept_id and the same language (synonyms)
         $synonyms = Term::where($synonymFilters)
                 ->without($term->id)
@@ -164,7 +169,23 @@ class TermsController extends Controller
                 ->orderBy('votes_sum', 'DESC')
                 ->get();
 
-        return view('terms.show', compact('term', 'synonyms', 'languages'));
+        // If the translate_to is set, get the translations.
+        if ($filters->isSetTranslateTo()) {
+            // Prepare filters needed for translation
+            $translationFilters = [];
+            $translationFilters['concept_id'] = $term->concept_id;
+            $translationFilters['language_id'] = $termShowFilters['translate_to'];
+            // For guests we will only show approved translations
+            Auth::check() ? '' : $translationFilters['status_id'] = 1000;
+            
+            // Get the terms with the same concept_id but with different language_id
+            $translations = Term::where($translationFilters)
+                    ->with('status', 'votes')
+                    ->orderBy('votes_sum')
+                    ->get();
+        }
+
+        return view('terms.show', compact('term', 'synonyms', 'languages', 'translations'));
     }
 
     /**

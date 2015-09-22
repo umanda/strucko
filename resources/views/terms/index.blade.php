@@ -18,11 +18,11 @@
         <br>
         <p>Please select language and field...</p> 
     @endif
-    
+    <i>TODO nekako postavi translate_to. Postavi to da se ne može prijevod postaviti na isti jezik </i>
     @if(isset($terms))
         @foreach($terms as $term)
             <h2><a href="{{ action('TermsController@show', ['slug' =>
-                    $term->slug]) }}">{{ $term->term }}</a>
+                    $term->slug, isset($allFilters['translate_to']) ? 'translate_to=' . $allFilters['translate_to'] : '']) }}">{{ $term->term }}</a>
             </h2>
             <p>Slug: {{ $term->slug }}</p>
         @endforeach

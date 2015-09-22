@@ -5,13 +5,13 @@ namespace App\Repositories;
 use Illuminate\Http\Request;
 
 /**
- * Repository for filters used when searching for terms. Repo is populated using
- * query parameters when searching for filters. Also, last used filter is put 
- * in session as 'filter'.
+ * Repository for filters used when showing specific term on /terms/{slug}.
+ * Repo is populated using query parameters. Also, last used filter is put 
+ * in session as 'suggestionsTermsFilters'.
  *
  * @author mivancic
  */
-class SuggestionsTermsFilterRepository
+class TermShowFilterRepository
 {
     /**
      * Current request
@@ -33,8 +33,7 @@ class SuggestionsTermsFilterRepository
      * @var array
      */
     protected $allFilterKeys = [
-        'language_id',
-        'scientific_field_id',
+        'translate_to',
     ];
     
     public function __construct(Request $request)
@@ -60,10 +59,9 @@ class SuggestionsTermsFilterRepository
      * 
      * @return boolean
      */
-    public function isSetLanguageAndField()
+    public function isSetTranslateTo()
     {
-        return isset($this->allFilters['language_id']) 
-                && isset($this->allFilters['scientific_field_id']);
+        return isset($this->allFilters['translate_to']);
     }
     
     /**
@@ -83,7 +81,7 @@ class SuggestionsTermsFilterRepository
         }
         
         // Also put the values in the session.
-        $request->session()->put('SuggestionsTermsFilters', $this->allFilters);
+        $request->session()->put('termShowFilters', $this->allFilters);
         
     }
 }

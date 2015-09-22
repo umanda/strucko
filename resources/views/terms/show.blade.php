@@ -6,7 +6,7 @@
 
 @section('content')
 
-<h3>{{ $term->term }} {{ $term->status->id < 1000 ? $synonym->status->status : '' }}</h3>
+<h3>{{ $term->term }} {{ $term->status->id < 1000 ? $term->status->status : '' }}</h3>
 @include('terms.votes.form_up')
 @include('terms.votes.form_down')
 <p> 
@@ -44,7 +44,24 @@
 <h4>Sugessted by user:</h4>
 <p>{{ $term->user->name }}</p>
 <h4>Translations:</h4>
-    <i>TODO</i>
+    @if (isset($translations))
+        @unless($translations->isEmpty())
+        <ul>
+            @foreach($translations as $translation)
+            <li> {{ $translation->term }} {{ $translation->votes_sum }} {{ $translation->status->id < 1000 ? $translation->status->status : '' }}
+                <form action="{{ action('TermVotesController@voteUp', [$translation->slug]) }}" method="POST">
+                    @include('terms.votes.form_up_naked')
+                </form>
+                <form action="{{ action('TermVotesController@voteDown', [$translation->slug]) }}" method="POST">
+                    @include('terms.votes.form_down_naked')
+                </form>
+                </li>
+            @endforeach
+        </ul>
+        @else
+        <p>No translations to selected language</p>
+        @endunless
+    @endif
 <h4>Definitions:</h4>
 <ul>
 @foreach ($term->concept->definitions as $definition)

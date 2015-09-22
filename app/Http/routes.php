@@ -40,7 +40,7 @@ post('terms', 'TermsController@store');
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');
 get('suggestions/terms', 'SuggestionsController@terms');
-get('suggestions/merge-suggestions', 'SuggestionsController@mergeSuggestions');
+get('suggestions/merges', 'SuggestionsController@merges');
 get('suggestions/definitions', 'SuggestionsController@definitions');
 
 // Pages...

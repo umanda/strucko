@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Term;
-use App\Repositories\SuggestionsTermsFilterRepository;
+use App\Repositories\SuggestionsFilterRepository;
 use App\Language;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Concept;
@@ -23,10 +23,10 @@ class SuggestionsController extends Controller
 
     /**
      * Get all suggested terms.
-     * @param SuggestionsTermsFilterRepository $filters
+     * @param SuggestionsFilterRepository $filters
      * @return type
      */
-    public function terms(SuggestionsTermsFilterRepository $filters)
+    public function terms(SuggestionsFilterRepository $filters)
     {
         $termFilters = $filters->allFilters();
 
@@ -45,10 +45,10 @@ class SuggestionsController extends Controller
     /**
      * Get all merge suggestions
      * TODO Refactor this
-     * @param SuggestionsTermsFilterRepository $filters
+     * @param SuggestionsFilterRepository $filters
      * @return type
      */
-    public function mergeSuggestions(SuggestionsTermsFilterRepository $filters)
+    public function merges(SuggestionsFilterRepository $filters)
     {
         $termFilters = $filters->allFilters();
 
@@ -73,10 +73,10 @@ class SuggestionsController extends Controller
 //                    }, 'concept.terms.language' ])
 //                ->get();
 
-        return view('suggestions.merge_suggestions', compact('termFilters', 'languages', 'scientificFields', 'suggestedTerms'));
+        return view('suggestions.merges', compact('termFilters', 'languages', 'scientificFields', 'suggestedTerms'));
     }
 
-    public function definitions(SuggestionsTermsFilterRepository $filters)
+    public function definitions(SuggestionsFilterRepository $filters)
     {
         $termFilters = $filters->allFilters();
         // Prepare languages and fields for filtering

@@ -11,7 +11,13 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="{{ set_active('terms') }}"><a href="{{ action('TermsController@index', Session::has('allFilters') ? Session::get('allFilters') : '') }}">Terms</a></li>
+                <li class="{{ set_active('terms') }}">
+                    @if(Session::has('allFilters'))
+                    <a href="{{ action('TermsController@index', Session::get('allFilters') ) }}">Terms</a>
+                    @else
+                    <a href="{{ action('TermsController@index') }}">Terms</a>
+                    @endif
+                </li>
                 <li class="{{ set_active('terms/create') }}"><a href="/terms/create">Create</a></li>
                 <li class="{{ set_active('suggestions*') }}"><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
                 <li class="{{ set_active('scientific-areas*') }}"><a href="/scientific-areas/">Areas and Fields</a></li>

@@ -6,7 +6,7 @@
 
 @section('content')
 
-<h3>{{ $term->term }} {{ $term->status->id < 1000 ? $term->status->status : '' }}</h3>
+<h3>{{ $term->term }} {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}</h3>
 @include('terms.votes.form_up')
 @include('terms.votes.form_down')
 <p> 

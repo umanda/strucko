@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Set active page
+ * Set active page class
  *
  * @param string $uri
  * @return string
@@ -21,4 +21,14 @@ function set_active($uri)
 function getNullForOptionalInput($input)
 {
     return empty(trim($input)) ? null : $input;
+}
+
+/**
+ * Set the appropriate warning label for the status.
+ * 
+ * @param string $status
+ * @return string
+ */
+function status_warning($status) {
+    return '<span class="label label-warning">' . $status . '</span>';
 }

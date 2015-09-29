@@ -25,8 +25,8 @@
                         <ul>
                             @foreach ($terms as $term)
                             <li>{{ $term->term }} - {{ $term->votes_sum }} 
-                                @include('terms.votes.form_up') 
-                                @include('terms.votes.form_down')
+                                @include('votes.form_up') 
+                                @include('votes.form_down')
                             </li>
                             <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug]) }}">
                                 @include('suggestions.forms.approve')

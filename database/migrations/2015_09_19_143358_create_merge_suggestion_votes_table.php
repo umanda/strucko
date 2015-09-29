@@ -14,7 +14,16 @@ class CreateMergeSuggestionVotesTable extends Migration
     {
         Schema::create('merge_suggestion_votes', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('merge_suggestion_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->boolean('is_positive');
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('merge_suggestion_id')->references('id')->on('merge_suggestions')->onDelete('cascade');
+            
+            // Unique constraint for one term per language, part of speech and field. 
+            $table->unique(['merge_suggestion_id', 'user_id']);
         });
     }
 

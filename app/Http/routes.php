@@ -41,6 +41,9 @@ post('terms', 'TermsController@store');
 get('suggestions', 'SuggestionsController@index');
 get('suggestions/terms', 'SuggestionsController@terms');
 get('suggestions/merges', 'SuggestionsController@merges');
+get('suggestions/merges/{id}', 'MergeSuggestionsController@show');
+post('suggestions/merges/{id}/vote/up', 'MergeSuggestionsController@voteUp');
+post('suggestions/merges/{id}/vote/up', 'MergeSuggestionsController@voteDown');
 get('suggestions/definitions', 'SuggestionsController@definitions');
 
 // Pages...

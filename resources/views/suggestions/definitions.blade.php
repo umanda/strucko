@@ -34,8 +34,8 @@
                                 @foreach ($concept->definitions as $definition)
                                     {{ $definition->definition }}, 
                                 @endforeach
-                                @include('terms.votes.form_up') 
-                                @include('terms.votes.form_down')
+                                @include('votes.form_up') 
+                                @include('votes.form_down')
                             </li>
                             <form method="POST" action="{{ action('TermsController@approveTerm', [$term->slug]) }}">
                                 @include('suggestions.forms.approve')

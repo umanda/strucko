@@ -60,7 +60,7 @@ class SuggestionsController extends Controller
                     $query->where('status_id', 500);
                 })
                 ->where($termFilters)
-                ->with('language', 'concept', 'concept.terms', 'mergeSuggestions.concept.terms', 'mergeSuggestions.concept.terms.language')
+                ->with('language', 'concept', 'concept.terms', 'concept.terms.language', 'mergeSuggestions.concept.terms', 'mergeSuggestions.concept.terms.language')
                 ->get();
 
 //        $mergeSuggestions = MergeSuggestion::where('status_id', 500)

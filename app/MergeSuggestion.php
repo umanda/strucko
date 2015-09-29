@@ -55,4 +55,14 @@ class MergeSuggestion extends Model
         return $this->belongsTo('App\Term');
     }
     
+    /**
+     * MergeSuggestion can have many votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\MergeSuggestionVote');
+    }
+    
 }

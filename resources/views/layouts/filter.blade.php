@@ -7,11 +7,16 @@
                 </a>
             </h4>
         </div>
-        <div id="collapseOne" 
-             class="panel-collapse collapse {{ isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']) ? '' : 'in' }}" 
-             role="tabpanel" 
-             aria-labelledby="headingOne"
-             >
+        {{--Komentar--}}
+        @if(isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
+            @if(isset($menuLetters) && $menuLetters->isEmpty())
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            @else
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            @endif
+        @else
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        @endif
             <div class="panel-body">
 
                 <form method="GET" action="/terms" class="form-horizontal">

@@ -7,8 +7,8 @@
 @section('content')
 
 <h3>{{ $term->term }} {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}</h3>
-@include('terms.votes.form_up')
-@include('terms.votes.form_down')
+@include('votes.form_up')
+@include('votes.form_down')
 <p> 
     {{ $term->language->ref_name }}, 
     {{ $term->scientificField->scientific_field }}, 
@@ -22,10 +22,10 @@
     @foreach($synonyms as $synonym)
         <li> {{ $synonym->term }} {{ $synonym->votes_sum }} {{ $synonym->status->id < 1000 ? $synonym->status->status : '' }}    
             <form action="{{ action('TermVotesController@voteUp', [$synonym->slug]) }}" method="POST">
-                @include('terms.votes.form_up_naked')
+                @include('votes.form_up_naked')
             </form>
             <form action="{{ action('TermVotesController@voteDown', [$synonym->slug]) }}" method="POST">
-                @include('terms.votes.form_down_naked')
+                @include('votes.form_down_naked')
             </form>
         </li>
     @endforeach
@@ -50,10 +50,10 @@
             @foreach($translations as $translation)
             <li> {{ $translation->term }} {{ $translation->votes_sum }} {{ $translation->status->id < 1000 ? $translation->status->status : '' }}
                 <form action="{{ action('TermVotesController@voteUp', [$translation->slug]) }}" method="POST">
-                    @include('terms.votes.form_up_naked')
+                    @include('votes.form_up_naked')
                 </form>
                 <form action="{{ action('TermVotesController@voteDown', [$translation->slug]) }}" method="POST">
-                    @include('terms.votes.form_down_naked')
+                    @include('votes.form_down_naked')
                 </form>
                 </li>
             @endforeach

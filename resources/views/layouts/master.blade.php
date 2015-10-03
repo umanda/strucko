@@ -22,7 +22,12 @@
                 @include('shared.alert')
             </div>
             <div class="row">
-                @yield('content')
+                <div class="col-sm-8">
+                    @yield('content')
+                </div>
+                <div class="col-sm-4">
+                    <img src="http://lorempixel.com/300/300/technics/google-ad" class="img-responsive" alt="Temp for ad" title="Temp for ad" />
+                </div>
             </div>
             <div class="row">
                 @include('errors.list')

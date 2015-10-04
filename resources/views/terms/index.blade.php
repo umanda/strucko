@@ -56,6 +56,8 @@
                 </h2>
                 <p>Slug: {{ $term->slug }}</p>
             @endforeach
+            
+            {!! $terms->appends($allFilters)->render() !!}
         @endif
     </div>
 </div>

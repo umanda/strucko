@@ -52,9 +52,9 @@ class TermsController extends Controller
 
         // Check appropriate query parameters and variables.
         if ($this->filters->isSetLanguageAndField()) {
-
+            // Get available letters for selected language and filed.
             $menuLetters = $this->getMenuLettersForLanguageAndField($allFilters);
-
+            // I will send the language and filed to the view.
             $languageId = $allFilters['language_id'];
             $scientificFieldId = $allFilters['scientific_field_id'];
 
@@ -64,7 +64,7 @@ class TermsController extends Controller
                 $terms = Term::approved()
                         ->where($termFilters)
                         ->orderBy('term')
-                        ->get();
+                        ->paginate(2);
             }
 
             // Check if the search is set. If so, try to find terms.
@@ -74,7 +74,7 @@ class TermsController extends Controller
                         ->where('language_id', $allFilters['language_id'])
                         ->where('scientific_field_id', $allFilters['scientific_field_id'])
                         ->orderBy('term')
-                        ->get();
+                        ->paginate(2);
             }
         }
 

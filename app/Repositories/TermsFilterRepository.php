@@ -73,7 +73,7 @@ class TermsFilterRepository
         'language_id',
         'scientific_field_id',
         'menu_letter',
-        'search',
+        // 'search',
     ];
     
     /**

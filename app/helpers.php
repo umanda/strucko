@@ -32,3 +32,22 @@ function getNullForOptionalInput($input)
 function status_warning($status) {
     return '<span class="label label-warning">' . $status . '</span>';
 }
+
+/**
+ * Check if the current key is the same as the last key in the provided collection
+ * 
+ * @param Illuminate\Support\Collection $collection Array with all of the items in it
+ * @param integer|string $currentKey Current array key used in the iterator
+ * @return boolean True if it is the last key
+ */
+function is_last($collection, $currentKey)
+{
+    // Convert the collection to array
+    $array = $collection->toArray();
+    // Go to the end of the array
+    end($array);
+    // Get the key from the last element
+    $endKey = key($array);
+    // Return true if the current key is the same as the end key on the array.
+    return $endKey == $currentKey;
+}

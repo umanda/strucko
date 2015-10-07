@@ -64,7 +64,16 @@ class TermsController extends Controller
                 $terms = Term::approved()
                         ->where($termFilters)
                         ->orderBy('term')
+                        ->with('concept.terms')
                         ->paginate(2);
+                
+                if ($this->filters->isSetTranslateTo()) {
+                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
+                        $query->where('language_id', $allFilters['translate_to'])
+                                ->approved()
+                                ->orderBy('votes_sum');
+                    }]);
+                }
             }
 
             // Check if the search is set. If so, try to find terms.
@@ -177,7 +186,7 @@ class TermsController extends Controller
             $translationFilters['language_id'] = $termShowFilters['translate_to'];
             // For guests we will only show approved translations
             Auth::check() ? '' : $translationFilters['status_id'] = 1000;
-            
+
             // Get the terms with the same concept_id but with different language_id
             $translations = Term::where($translationFilters)
                     ->with('status', 'votes')

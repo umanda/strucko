@@ -48,7 +48,21 @@
                 <h2>
                     @if (isset($allFilters['translate_to']))
                     <a href="{{ action('TermsController@show', ['slug' =>
-                            $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">{{ $term->term }}</a>
+                            $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
+                        {{ $term->term }}
+                    
+                    </a>
+                        @unless ($term->concept->terms->isEmpty())
+                            ( {{ $allFilters['translate_to'] }}.
+                            @foreach ($term->concept->terms as $key => $translationTerm)
+                                @if (is_last($term->concept->terms, $key))
+                                    {{ $translationTerm->term }}
+                                @else
+                                    {{ $translationTerm->term }},
+                                @endif
+                            @endforeach
+                            )
+                        @endunless
                     @else
                     <a href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
                     @endif

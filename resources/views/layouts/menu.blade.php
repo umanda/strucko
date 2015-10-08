@@ -11,7 +11,7 @@
                     @endif">
                     <a href="{{ action('TermsController@index', array_merge($menuLetterFilters, ['menu_letter' => $menuLetter])) 
                        }}">
-                        {{ $menuLetter }}
+                        {{ urldecode($menuLetter) }}
                     </a>
                 </li>
                 @endforeach

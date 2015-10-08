@@ -42,7 +42,9 @@
         <i>TODO Postavi to da se ne može prijevod postaviti na isti jezik </i>
 
         @if(isset($terms))
-            {{ isset($allFilters['search']) && $terms->isEmpty() ? 'No results, try something else...' : '' }}
+        
+        {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p>No results, try some other letter...</p>' : '' !!}
+        {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p>No results, try something else...</p>' : '' !!}
 
             @foreach($terms as $term)
                 <h2>
@@ -72,7 +74,13 @@
             @endforeach
             
             {!! $terms->appends($allFilters)->render() !!}
-        @endif
+        
+            {{-- Terms are empty --}}
+            @else
+                
+                {!! !(isset($allFilters['menu_letter'])) && !(isset($allFilters['search'])) ? '<p>Please select some letter or search for specific term</p>' : '' !!}
+        
+            @endif
     </div>
 </div>
 @endsection

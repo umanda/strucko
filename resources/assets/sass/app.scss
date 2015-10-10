@@ -1,4 +1,11 @@
+/* Import Bootstrap */
+
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+/* Import Select2 */
+@import "node_modules/select2/dist/css/select2.min";
+
+/* Import Strucko */
 
 body {
     padding-top: 70px;

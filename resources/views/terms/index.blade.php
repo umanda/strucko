@@ -39,17 +39,17 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <i>TODO Postavi to da se ne može prijevod postaviti na isti jezik </i>
 
         @if(isset($terms))
         
         {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p>No results, try some other letter...</p>' : '' !!}
         {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p>No results, try something else...</p>' : '' !!}
-
+            
+        <ul class="list-unstyled">
             @foreach($terms as $term)
-                <h2>
+            <li>
                     @if (isset($allFilters['translate_to']))
-                    <a href="{{ action('TermsController@show', ['slug' =>
+                    <a class="btn" href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
                         {{ $term->term }}
                     
@@ -66,19 +66,21 @@
                             )
                         @endunless
                     @else
-                    <a href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
+                    <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
                     @endif
 
-                </h2>
-                <p>Slug: {{ $term->slug }}</p>
+                </li>
             @endforeach
-            
+        </ul>
             {!! $terms->appends($allFilters)->render() !!}
         
             {{-- Terms are empty --}}
             @else
                 
-                {!! !(isset($allFilters['menu_letter'])) && !(isset($allFilters['search'])) ? '<p>Please select some letter or search for specific term</p>' : '' !!}
+                {!! !(isset($allFilters['menu_letter']))
+                && !(isset($allFilters['search']))
+                && isset($menuLetters) 
+                && !($menuLetters->isEmpty()) ? '<p>Please select some letter or search for specific term</p>' : '' !!}
         
             @endif
     </div>

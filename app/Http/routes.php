@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
-// Terms routes...
+// Terms routes.
 get('terms', 'TermsController@index');
 get('terms/create', 'TermsController@create');
 get('terms/{terms}', 'TermsController@show');
@@ -36,6 +36,10 @@ patch('terms/{slugUnique}/status', [
     ]);
 post('terms', 'TermsController@store');
 
+// Definition routes.
+post('definitions', 'DefinitionsController@store');
+post('definitions/{id}/vote/up', 'DefinitionVotesController@voteUp');
+post('definitions/{id}/vote/down', 'DefinitionVotesController@voteDown');
 
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');
@@ -73,6 +77,6 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::resource('scientific-areas', 'ScientificAreasController');
 Route::resource('scientific-areas.scientific-fields', 'ScientificFieldsController');
 
-Route::resource('definitions', 'DefinitionsController');
+
 
 Route::resource('languages', 'LanguagesController');

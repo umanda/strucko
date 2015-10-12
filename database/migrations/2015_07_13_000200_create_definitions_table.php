@@ -17,11 +17,14 @@ class CreateDefinitionsTable extends Migration
             $table->text('definition');
             $table->text('source')->nullable();
             $table->text('link')->nullable();
+            // Sum of votes in definition_votes table
+            $table->integer('votes_sum')->default(0);
             $table->timestamps();
             
             $table->integer('concept_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('status_id')->unsigned()->default(500);
+            // Definition is for the concept in specific language.
             $table->char('language_id', 3);
             
             $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');

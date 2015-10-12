@@ -6,76 +6,194 @@
 
 @section('content')
 
-<h3>{{ $term->term }} {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}</h3>
-@include('votes.form_up')
-@include('votes.form_down')
-<p> 
-    {{ $term->language->ref_name }}, 
-    {{ $term->scientificField->scientific_field }}, 
-    {{ $term->partOfSpeech->part_of_speech }},
-    {{ $term->menu_letter }}
-</p>
-<p>Votes: {{ $term->votes_sum }}</p>
-@if( ! $synonyms->isEmpty())
-<h4>Synonyms (ID is {{ $term->concept_id }}):</h4>
-<ul>
-    @foreach($synonyms as $synonym)
-        <li> {{ $synonym->term }} {{ $synonym->votes_sum }} {{ $synonym->status->id < 1000 ? $synonym->status->status : '' }}    
-            <form action="{{ action('TermVotesController@voteUp', [$synonym->slug]) }}" method="POST">
-                @include('votes.form_up_naked')
-            </form>
-            <form action="{{ action('TermVotesController@voteDown', [$synonym->slug]) }}" method="POST">
-                @include('votes.form_down_naked')
-            </form>
-        </li>
-    @endforeach
-</ul>
-@endif
+<div class="row">
 
+    <div class="col-xs-12 text-right">
+        <a class="btn-link btn-lg" 
+           href="{{ action('TermsController@index', [
+               'language_id' => $term->language_id,
+               'scientific_field_id' => $term->scientific_field_id,
+               'menu_letter' => $term->menu_letter,
+           ] + Session::get('termShowFilters')) }}">
+            {{ $term->language->ref_name }}, 
+            {{ $term->scientificField->scientific_field }}
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-2 text-center vertical-center">
+        <div class="center-block">
+            @include('votes.form_term')
+        </div>
+    </div>
+    <div class="col-xs-10 vertical-center">
+        <h1>
+            {{ $term->term }} 
+            <small>
+                {{ $term->partOfSpeech->part_of_speech }}
+            </small>
+            {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
+        </h1>
+        <small>in <strong>{{ $term->language->ref_name }}, {{ $term->scientificField->scientific_field }};</strong></small>
+        <small>by {{ $term->user->name }}</small>
+    </div>
+</div>
+
+<hr>
+<!-- Definitions -->
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th class="col-xs-9">Definitions</th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @unless($term->concept->definitions->isEmpty())
+                    @foreach ($term->concept->definitions as $definition)
+                        <tr>
+                            <td class="vertical-center-cell">
+                                {{ $definition->definition }}
+                                {!! $definition->status->id < 1000 ? status_warning($definition->status->status) : '' !!}  
+                            </td>
+                            {{-- Votes for definition --}}
+                            @include('votes.form_definition_table')
+                        </tr>
+                    @endforeach
+                @else
+                    <tr><td><span class="text-warning">
+                                    No definitions
+                                </span></td></tr>
+                @endunless
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Translations -->
+    <div class="col-sm-6">
+        
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th class="col-xs-9">
+                        {{-- The Translate to form for selecting translation language --}}
+                        @include('terms.translations.translate_to')
+                    </th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{-- First chek if the translate_to is set, and show appropriate message --}}
+                @if(Session::has('termShowFilters'))
+                    @if(null == Session::get('termShowFilters.translate_to'))
+                    <tr><td><span class="text-warning">Select language to translate to</span></td></tr>
+                    @endif
+                @endif
+                @if (isset($translations))
+                    @unless($translations->isEmpty())
+                        @foreach($translations as $translation)
+                        <tr>
+                            <td class="vertical-center-cell">
+                                {{ $translation->term }}
+                                {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}  
+                            </td>
+                            {{-- Votes for translations --}}
+                            @include('votes.form_term_table', ['workingTerm' => $translation])
+                            
+                        </tr>
+                        @endforeach
+                    @else
+                        {{-- No translations, translations is empty --}}
+                        <tr><td><span class="text-warning">
+                                    No translations in selected language
+                                </span></td></tr>
+                    @endunless
+                @endif
+            </tbody>
+        </table>
+        
+    </div>
+    <!-- Synonyms -->
+    <div class="col-sm-6">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th class="col-xs-9">Synonyms</th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if( ! $synonyms->isEmpty())
+                    @foreach($synonyms as $synonym)
+                    <tr>
+                        <td class="vertical-center-cell">
+                            {{ $synonym->term }}
+                            {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}  
+                        </td>
+                        {{-- Votes for translations --}}
+                        @include('votes.form_term_table', ['workingTerm' => $synonym])
+                    </tr>
+                    @endforeach
+                @else
+                    {{-- No translations, translations is empty --}}
+                    <tr><td><span class="text-warning">
+                                    No synonyms
+                            </span></td></tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{--Check if merge suggestions exist--}}
 @if($term->mergeSuggestions()->exists())
-<p>This term is suggested to be merged with these:</p>
-@foreach($term->mergeSuggestions as $mergeSuggestion)
-    @foreach($mergeSuggestion->concept->terms as $term)
-        {{ $term->term }},
-    @endforeach
-@endforeach
+    <table class="table table-condensed">
+        <caption>Merge suggestion</caption>
+        <thead>
+            <tr>
+                <th class="col-xs-9">Merge suggestions</th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($term->mergeSuggestions as $mergeSuggestion)
+                <tr>
+                    <td class="vertical-center-cell">
+                        @foreach($mergeSuggestion->concept->terms as $key => $mergeTerm)
+                            @if($mergeTerm->language_id == $term->language_id)
+                                {{ $mergeTerm->term }};
+                            @endif
+                        @endforeach
+                    </td>
+                    {{-- Votes for translations --}}
+                    {{-- @include('votes.form_term_table', ['workingTerm' => $synonym]) --}}
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endif
 
-<h4>Sugessted by user:</h4>
-<p>{{ $term->user->name }}</p>
-<h4>Translations:</h4>
-    @if (isset($translations))
-        @unless($translations->isEmpty())
-        <ul>
-            @foreach($translations as $translation)
-            <li> {{ $translation->term }} {{ $translation->votes_sum }} {{ $translation->status->id < 1000 ? $translation->status->status : '' }}
-                <form action="{{ action('TermVotesController@voteUp', [$translation->slug]) }}" method="POST">
-                    @include('votes.form_up_naked')
-                </form>
-                <form action="{{ action('TermVotesController@voteDown', [$translation->slug]) }}" method="POST">
-                    @include('votes.form_down_naked')
-                </form>
-                </li>
-            @endforeach
-        </ul>
-        @else
-        <p>No translations to selected language</p>
-        @endunless
-    @endif
-<h4>Definitions:</h4>
-<ul>
-@foreach ($term->concept->definitions as $definition)
-    <li>{{ $definition->definition }} {{ $definition->status->id < 1000 ? $definition->status->status : '' }}</li>
-@endforeach
-</ul>
+
 
 @if (Auth::check() && ! (Auth::user()->role_id < 1000))
 
     <a class="btn btn-default" href="{{ action('TermsController@edit', ['slug' =>
-                $term->slug]) }}">Edit</a>
-    
+                    $term->slug]) }}">Edit</a>
+
     @include('terms.suggestions')
-                
+
 @elseif(Auth::check())
 
     @include('terms.suggestions')

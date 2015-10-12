@@ -39,44 +39,69 @@
 
 <div class="row">
     <div class="col-sm-12">
-
-        @if(isset($terms))
-        
-        {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p>No results, try some other letter...</p>' : '' !!}
-        {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p>No results, try something else...</p>' : '' !!}
+        @if(isset($terms) && !($terms->isEmpty()))
+        <h2 class="text-right">{{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
+            {{ collect(call_user_func_array('array_replace', $scientificFields))->get($allFilters['scientific_field_id']) }}
+            {{ isset($allFilters['translate_to']) ? '- translated to ' . $languages->lists('ref_name', 'id')->get($allFilters['translate_to']) : '' }}
+            {{ isset($allFilters['search']) ? '- results for ' . $allFilters['search']  : '' }}
             
-        <ul class="list-unstyled">
+        </h2>
+        
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th class="col-xs-5">Terms</th>
+                    {!! isset($allFilters['translate_to']) ? '<th class="col-xs-7">Translations</th>' : '' !!}
+                </tr>
+            </thead>
+            <tbody>
             @foreach($terms as $term)
-            <li>
+            <tr>
+                <td class="vertical-center-cell">
                     @if (isset($allFilters['translate_to']))
-                    <a class="btn" href="{{ action('TermsController@show', ['slug' =>
+                        <small>{{ $term->partOfSpeech->part_of_speech }}</small><br>
+                        <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
-                        {{ $term->term }}
-                    
-                    </a>
+                        {{ $term->term }}</a>
+                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
+                    @else
+                        <small>{{ $term->partOfSpeech->part_of_speech }}</small><br>
+                        <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
+                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
+                    @endif
+                </td>
+                @if (isset($allFilters['translate_to']))
+                    <td class="vertical-center-cell">
                         @unless ($term->concept->terms->isEmpty())
-                            ( {{ $allFilters['translate_to'] }}.
+                            {{ $allFilters['translate_to'] }}.
                             @foreach ($term->concept->terms as $key => $translationTerm)
                                 @if (is_last($term->concept->terms, $key))
                                     {{ $translationTerm->term }}
+                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!}
                                 @else
-                                    {{ $translationTerm->term }},
+                                    {{ $translationTerm->term }}
+                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!},
                                 @endif
                             @endforeach
-                            )
+                        @else
+                        <span>...no translation</span>
                         @endunless
-                    @else
-                    <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
-                    @endif
-
-                </li>
+                    </td>
+                @endif
+            </tr>
             @endforeach
-        </ul>
+            </tbody>
+        </table>
+        
             {!! $terms->appends($allFilters)->render() !!}
         
             {{-- Terms are empty --}}
             @else
+                {{-- Messages for the user if there are no terms to display --}}
+                {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p>No results, try some other letter...</p>' : '' !!}
+                {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p>No results, try something else...</p>' : '' !!}
                 
+                {{-- If letter or search is not set, but we have menu letters displayed... --}}
                 {!! !(isset($allFilters['menu_letter']))
                 && !(isset($allFilters['search']))
                 && isset($menuLetters) 

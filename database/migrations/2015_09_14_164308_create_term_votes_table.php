@@ -25,7 +25,7 @@ class CreateTermVotesTable extends Migration
             $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');
             $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
             
-            // Unique constraint for one term per language, part of speech and field. 
+            // Unique constraint for one vote per term. 
             $table->unique(['term_id', 'user_id']);
         });
     }

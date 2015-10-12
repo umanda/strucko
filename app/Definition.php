@@ -48,4 +48,14 @@ class Definition extends Model
     {
         return $this->belongsTo('App\Status');
     }
+    
+    /**
+     * Definition can have many votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\DefinitionVote');
+    }
 }

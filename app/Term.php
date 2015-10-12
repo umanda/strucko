@@ -33,6 +33,11 @@ class Term extends Model
         $query->where('status_id', 500);
     }
     
+    public function scopeGreaterThanRejected($query)
+    {
+        $query->where('status_id', '>', 250);
+    }
+    
     /**
      * 
      * @param type $query

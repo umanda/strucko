@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Http\Request;
+use Auth;
 
 /**
  * Repository for filters used when searching for terms in /terms. Repo is populated using
@@ -128,6 +129,8 @@ class TermsFilterRepository
         // Prepare term filters from query parameters in request or in session, or
         // set defaults.
         $this->prepareTermFilters($this->request);
+        // If user is not logged in, show only approved terms.
+        Auth::check() ? '' : $this->termFilters['status_id'] = 1000;
         return $this->termFilters;
     }
     

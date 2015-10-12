@@ -10,22 +10,23 @@
         </div>
         {{-- If language and field is set, check for menu letters --}}
         @if(isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
-        {{-- If there are no menu letters, show filter --}}
-        @if(isset($menuLetters) && $menuLetters->isEmpty())
-        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            {{-- If there are no menu letters, show filter --}}
+            @if(isset($menuLetters) && $menuLetters->isEmpty())
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 
             {{-- If there are menu letters, do not show filter --}}
             @else
             <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                @endif
+            @endif
 
-                {{-- No language and field, show filter --}}
-                @else
-                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                    @endif
-                    <div class="panel-body">
+        {{-- No language and field, show filter --}}
+        @else
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        @endif
+        <div class="panel-body">
 
-                        <form method="GET" action="/terms" class="form-horizontal">
+            <form method="GET" action="/terms" class="form-horizontal">
+                            
                             <div class="form-group">
                                 <label for="language_id" class="col-sm-2 control-label">Language:</label>
                                 <div class="col-sm-10">
@@ -50,6 +51,16 @@
                                     ['id' => 'translate_to', 'class' => 'form-control']) !!}
                                 </div>
                             </div>
+                
+                {{-- If menu_letter is set, include it in the form 
+                            @if (isset($allFilters['menu_letter']))
+                            <input type="hidden" name="menu_letter" value="{{ $allFilters['menu_letter'] }}">
+                            @endif --}}
+                {{-- If search is set, include it in the form --}}
+                            @if (isset($allFilters['search']))
+                            <input type="hidden" name="search" value="{{ $allFilters['search'] }}">
+                            @endif
+                            
                             <div class="form-group">
 
                                 <div class="col-sm-offset-2 col-sm-10">

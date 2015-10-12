@@ -25,7 +25,7 @@ $(document).ready(function () {
     $('div.alert').not('.alert-warning').delay(3000).slideUp(300);
 
     // Make select elements select2
-    $('select').select2({
+    $('#language_id, #scientific_field_id, #translate_to, #part_of_speech_id').select2({
         width: "100%"
     });
 
@@ -38,7 +38,8 @@ $(document).ready(function () {
 /**
  * Set the appropriate translate_to option to disabled, depending on the 
  * selected language_id. Implemented because we shouldn't be able to select to
- * translate to the same language.
+ * translate to the same language. Also set the translate_to to the
+ * old language_id if the new language_id is the same as the current translate_to.
  * 
  * @returns {undefined}
  */

@@ -64,9 +64,9 @@ class TermsController extends Controller
                 $terms = Term::approved()
                         ->where($termFilters)
                         ->orderBy('term')
-                        ->with('concept.terms')
-                        ->paginate(2);
+                        ->paginate();
                 
+                // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
                     $terms->load(['concept.terms' => function ($query) use ($allFilters) {
                         $query->where('language_id', $allFilters['translate_to'])
@@ -83,7 +83,16 @@ class TermsController extends Controller
                         ->where('language_id', $allFilters['language_id'])
                         ->where('scientific_field_id', $allFilters['scientific_field_id'])
                         ->orderBy('term')
-                        ->paginate(2);
+                        ->paginate();
+                
+                // If the translate_to is set, get approved translations.
+                if ($this->filters->isSetTranslateTo()) {
+                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
+                        $query->where('language_id', $allFilters['translate_to'])
+                                ->approved()
+                                ->orderBy('votes_sum');
+                    }]);
+                }
             }
         }
 

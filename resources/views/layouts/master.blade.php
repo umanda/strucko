@@ -13,11 +13,13 @@
 
     </head>
     <body>
-        @include('layouts.navbar')
         <div class="container">
             <div class="row">
                 @include('layouts.header')
             </div>
+            
+            @include('layouts.navbar')
+            
             <div class="row">
                 @include('shared.alert')
             </div>

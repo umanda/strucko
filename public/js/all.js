@@ -24,7 +24,7 @@ $(document).ready(function () {
     // Take care of the alert
     $('div.alert').not('.alert-warning').delay(3000).slideUp(300);
 
-    // Make select elements select2
+    // Make these elements select2
     $('#language_id, #scientific_field_id, #translate_to, #part_of_speech_id').select2({
         width: "100%"
     });

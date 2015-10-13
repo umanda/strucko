@@ -25,10 +25,20 @@ body {
     margin-right: auto;
 }
 
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 .strucko-header {
     height: 10em;
 }
 
 .strucko-nav {
     background-color: #f8f8f8;
+}
+
+.vote-lg {
+    font-size: 2em;
 }

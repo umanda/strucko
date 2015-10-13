@@ -6,26 +6,39 @@
 
 @section('content')
 
-<div class="text">
-    <a class="btn btn-default btn-lg" href="#">
-        {{ $term->language->ref_name }}, 
-        {{ $term->scientificField->scientific_field }}
-    </a>
-</div>
-<h1>
-    {{ $term->term }} 
-    <small>{{ $term->partOfSpeech->part_of_speech }}</small>
-    {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
-</h1>
+<div class="row">
 
-@include('votes.form_up')
-@include('votes.form_down')
-<p> 
-    , 
-    
-    {{ $term->menu_letter }}
-</p>
-<p>Votes: {{ $term->votes_sum }}</p>
+    <div class="col-xs-12 text-right">
+        <a class="btn-default btn-lg" href="#">
+            Go to
+            {{ $term->language->ref_name }}, 
+            {{ $term->scientificField->scientific_field }}
+            Još malo teksta da vidim dulji dio
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-2 col-lg-1 text-center">
+        @include('votes.form_up')
+        <span class="vote-lg">{{ $term->votes_sum }}</span>
+        @include('votes.form_down')
+    </div>
+    <div class="col-xs-10 col-lg-7">
+        <h1>
+            {{ $term->term }} 
+            <small>
+                {{ $term->partOfSpeech->part_of_speech }}
+            </small>
+            {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
+        </h1>
+         <small>in {{ $term->language->ref_name }}, {{ $term->scientificField->scientific_field }};</small>
+       <small>by {{ $term->user->name }}</small>
+    </div>
+    <div class="col-sm-12 col-lg-4 vcenter">
+        <p>TODO translate to form</p>
+    </div>
+</div>
+
 @if( ! $synonyms->isEmpty())
 <h4>Synonyms (ID is {{ $term->concept_id }}):</h4>
 <ul>
@@ -51,8 +64,6 @@
 @endforeach
 @endif
 
-<h4>Sugessted by user:</h4>
-<p>{{ $term->user->name }}</p>
 <h4>Translations:</h4>
 @if (isset($translations))
 @unless($translations->isEmpty())

@@ -9,6 +9,7 @@ use App\ScientificField;
 use App\Term;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
+use Auth;
 
 trait ManagesTerms
 {
@@ -71,8 +72,10 @@ trait ManagesTerms
         // Limit the length of the slug_unique and append the IDs
         $input['slug'] = str_limit($input['slug'], 200);
         $input['slug'] = $input['slug'] . '-'
-                . str_limit($language->id . $partOfSpeech->id . $scientificField->id, 55);
-
+                . str_limit($language->id . $partOfSpeech->id . $scientificField->id, 50);
+        // Append random string to the end of the slug.
+        $input['slug'] = $input['slug'] . '-' . str_slug(str_random(5));
+        
         return $input;
     }
 
@@ -176,20 +179,25 @@ trait ManagesTerms
     /**
      * Get menu letters for terms in the selected language and scientific field.
      * 
-     * @param array $activeFilters Filters for terms
+     * @param array $allFilters Filters for terms
      * @return Collection Filtered letters
      */
-    protected function getMenuLettersForLanguageAndField(array $activeFilters)
+    protected function getMenuLettersForLanguageAndField(array $allFilters)
     {
         // Get locale for the language
-        $locale = Language::where('id', $activeFilters['language_id'])->value('locale');
+        $locale = Language::where('id', $allFilters['language_id'])->value('locale');
 
         // Create collator instance which will be used to properly sort items.
         $collator = new \Collator($locale);
-
-        $letters = Term::approved()
-                ->where('language_id', $activeFilters['language_id'])
-                ->where('scientific_field_id', $activeFilters['scientific_field_id'])
+        
+        // Set filters to be used when searching for letters.
+        $activeFilters = [];
+        $activeFilters['language_id'] = $allFilters['language_id'];
+        $activeFilters['scientific_field_id'] = $allFilters['scientific_field_id'];
+        // If user is not logged in, only approved terms will be searched.
+        Auth::check() ? '' :  $activeFilters['status_id'] = 1000;
+        
+        $letters = Term::where($activeFilters)
                 ->groupBy('menu_letter')
                 ->lists('menu_letter')
                 ->toArray();

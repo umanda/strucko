@@ -40,41 +40,57 @@
 <div class="row">
     <div class="col-sm-12">
         @if(isset($terms) && !($terms->isEmpty()))
-        <h2>Terms in {{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
+        <h2>{{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
             {{ collect(call_user_func_array('array_replace', $scientificFields))->get($allFilters['scientific_field_id']) }}
             {{ isset($allFilters['translate_to']) ? '- translated to ' . $languages->lists('ref_name', 'id')->get($allFilters['translate_to']) : '' }}
             {{ isset($allFilters['search']) ? '- results for ' . $allFilters['search']  : '' }}
             
         </h2>
-            
-        <ul class="list-unstyled">
+        
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Terms</th>
+                    {!! isset($allFilters['translate_to']) ? '<th>Translations</th>' : '' !!}
+                </tr>
+            </thead>
+            <tbody>
             @foreach($terms as $term)
-            <li>
+            <tr>
+                <td>
                     @if (isset($allFilters['translate_to']))
                     <a class="btn" href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
                         {{ $term->term }}
-                    
+                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     </a>
+                    @else
+                    <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
+                    @endif
+                </td>
+                @if (isset($allFilters['translate_to']))
+                    <td>
                         @unless ($term->concept->terms->isEmpty())
                             {{ $allFilters['translate_to'] }}.
                             @foreach ($term->concept->terms as $key => $translationTerm)
                                 @if (is_last($term->concept->terms, $key))
                                     {{ $translationTerm->term }}
+                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!}
                                 @else
-                                    {{ $translationTerm->term }},
+                                    {{ $translationTerm->term }}
+                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!},
                                 @endif
                             @endforeach
                         @else
                         <span>...no translation</span>
                         @endunless
-                    @else
-                    <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
-                    @endif
-
-                </li>
+                    </td>
+                @endif
+            </tr>
             @endforeach
-        </ul>
+            </tbody>
+        </table>
+        
             {!! $terms->appends($allFilters)->render() !!}
         
             {{-- Terms are empty --}}

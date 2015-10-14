@@ -61,16 +61,20 @@ class TermsController extends Controller
             // Check if the menu_letter is set. If so, get terms with that letter
             // and other term filters.
             if ($this->filters->isSetMenuLetter()) {
-                $terms = Term::approved()
-                        ->where($termFilters)
+                $terms = Term::where($termFilters)
                         ->orderBy('term')
                         ->paginate();
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
                     $terms->load(['concept.terms' => function ($query) use ($allFilters) {
-                        $query->where('language_id', $allFilters['translate_to'])
-                                ->approved()
+                        $translateFilters = [];
+                        $translateFilters['language_id'] = $allFilters['translate_to'];
+                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
+                        
+                        $query->where($translateFilters)
+                                ->with('status')
+                                ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
                     }]);
                 }
@@ -78,18 +82,26 @@ class TermsController extends Controller
 
             // Check if the search is set. If so, try to find terms.
             if ($this->filters->isSetSearch()) {
-                $terms = Term::approved()
-                        ->where('term', 'like', '%' . $allFilters['search'] . '%')
-                        ->where('language_id', $allFilters['language_id'])
-                        ->where('scientific_field_id', $allFilters['scientific_field_id'])
+                $searchFilters = [];
+                $searchFilters['language_id'] = $allFilters['language_id'];
+                $searchFilters['scientific_field_id'] = $allFilters['scientific_field_id'];
+                Auth::check() ? '' : $searchFilters['status_id'] = 1000;
+                
+                $terms = Term::where('term', 'like', '%' . $allFilters['search'] . '%')
+                        ->where($searchFilters)
                         ->orderBy('term')
                         ->paginate();
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
                     $terms->load(['concept.terms' => function ($query) use ($allFilters) {
-                        $query->where('language_id', $allFilters['translate_to'])
-                                ->approved()
+                        $translateFilters = [];
+                        $translateFilters['language_id'] = $allFilters['translate_to'];
+                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
+                        
+                        $query->where($translateFilters)
+                                ->with('status')
+                                ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
                     }]);
                 }

@@ -9,11 +9,14 @@
 <div class="row">
 
     <div class="col-xs-12 text-right">
-        <a class="btn-default btn-lg" href="#">
-            Go to
+        <a class="btn-link btn-lg" 
+           href="{{ action('TermsController@index', [
+               'language_id' => $term->language_id,
+               'scientific_field_id' => $term->scientific_field_id,
+               'menu_letter' => $term->menu_letter,
+           ] + Session::get('termShowFilters')) }}">
             {{ $term->language->ref_name }}, 
             {{ $term->scientificField->scientific_field }}
-            Još malo teksta da vidim dulji dio
         </a>
     </div>
 </div>

@@ -6551,7 +6551,13 @@ body {
 .strucko-nav {
   background-color: #f8f8f8; }
 
-.vote-lg {
+.votes-lg {
   font-size: 2em; }
+
+.vote-positive {
+  color: green; }
+
+.vote-negative {
+  color: red; }
 
 /*# sourceMappingURL=app.css.map */

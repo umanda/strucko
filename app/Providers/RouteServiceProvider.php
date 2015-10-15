@@ -27,9 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->bind('terms', function($slug)
         {
             return \App\Term::where('slug', $slug)
-                    ->with('concept.definitions',
-                            'concept.definitions.status',
-                            'user',
+                    ->with('user',
                             'status',
                             'language',
                             'scientificField',

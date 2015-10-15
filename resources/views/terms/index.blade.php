@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-sm-12">
         @if(isset($terms) && !($terms->isEmpty()))
-        <h2>{{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
+        <h2 class="text-right">{{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
             {{ collect(call_user_func_array('array_replace', $scientificFields))->get($allFilters['scientific_field_id']) }}
             {{ isset($allFilters['translate_to']) ? '- translated to ' . $languages->lists('ref_name', 'id')->get($allFilters['translate_to']) : '' }}
             {{ isset($allFilters['search']) ? '- results for ' . $allFilters['search']  : '' }}
@@ -50,8 +50,8 @@
         <table class="table table-condensed table-striped">
             <thead>
                 <tr>
-                    <th>Terms</th>
-                    {!! isset($allFilters['translate_to']) ? '<th>Translations</th>' : '' !!}
+                    <th class="col-xs-5">Terms</th>
+                    {!! isset($allFilters['translate_to']) ? '<th class="col-xs-7">Translations</th>' : '' !!}
                 </tr>
             </thead>
             <tbody>
@@ -59,13 +59,14 @@
             <tr>
                 <td>
                     @if (isset($allFilters['translate_to']))
-                    <a class="btn" href="{{ action('TermsController@show', ['slug' =>
+                    <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
                         {{ $term->term }}
-                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     </a>
+                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     @else
                     <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
+                    {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     @endif
                 </td>
                 @if (isset($allFilters['translate_to']))

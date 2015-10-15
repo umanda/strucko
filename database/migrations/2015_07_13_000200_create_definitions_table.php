@@ -17,6 +17,8 @@ class CreateDefinitionsTable extends Migration
             $table->text('definition');
             $table->text('source')->nullable();
             $table->text('link')->nullable();
+            // Sum of votes in definition_votes table
+            $table->integer('votes_sum')->default(0);
             $table->timestamps();
             
             $table->integer('concept_id')->unsigned();

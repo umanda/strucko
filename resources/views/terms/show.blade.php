@@ -23,7 +23,7 @@
 <div class="row">
     <div class="col-xs-2 col-lg-1 text-center">
         @include('votes.form_up')
-        <span class="vote-lg">{{ $term->votes_sum }}</span>
+        <span class="votes-lg">{{ $term->votes_sum }}</span>
         @include('votes.form_down')
     </div>
     <div class="col-xs-10 col-lg-7">

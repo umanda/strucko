@@ -61,7 +61,8 @@ class TermsController extends Controller
             // Check if the menu_letter is set. If so, get terms with that letter
             // and other term filters.
             if ($this->filters->isSetMenuLetter()) {
-                $terms = Term::where($termFilters)
+                $terms = Term::greaterThanRejected()
+                        ->where($termFilters)
                         ->orderBy('term')
                         ->paginate();
                 
@@ -72,7 +73,8 @@ class TermsController extends Controller
                         $translateFilters['language_id'] = $allFilters['translate_to'];
                         Auth::check() ? '' : $translateFilters['status_id'] = 1000;
                         
-                        $query->where($translateFilters)
+                        $query->greaterThanRejected()
+                                ->where($translateFilters)
                                 ->with('status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
@@ -87,7 +89,8 @@ class TermsController extends Controller
                 $searchFilters['scientific_field_id'] = $allFilters['scientific_field_id'];
                 Auth::check() ? '' : $searchFilters['status_id'] = 1000;
                 
-                $terms = Term::where('term', 'like', '%' . $allFilters['search'] . '%')
+                $terms = Term::greaterThanRejected()
+                        ->where('term', 'like', '%' . $allFilters['search'] . '%')
                         ->where($searchFilters)
                         ->orderBy('term')
                         ->paginate();
@@ -99,7 +102,8 @@ class TermsController extends Controller
                         $translateFilters['language_id'] = $allFilters['translate_to'];
                         Auth::check() ? '' : $translateFilters['status_id'] = 1000;
                         
-                        $query->where($translateFilters)
+                        $query->greaterThanRejected()
+                                ->where($translateFilters)
                                 ->with('status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
@@ -191,13 +195,26 @@ class TermsController extends Controller
         // For guests we will set the filter to get only approved terms.
         Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
 
-        // Get the terms with the same concept_id and the same language (synonyms)
+        // Get the terms with the same concept_id and the same language_id (synonyms)
         $synonyms = Term::where($synonymFilters)
                 ->without($term->id)
                 ->with('status')
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
                 ->get();
+        
+        // Load definitions in the appropriate language.
+        $languageId = $term->language_id;
+        $term->load(['concept.definitions' => function ($query) use ($languageId) {
+            $definitionFilters = [];
+            $definitionFilters['language_id'] = $languageId;
+            Auth::check() ? '' : $definitionFilters['status_id'] = 1000;
+                        
+            $query->where($definitionFilters)
+                    ->with('status')
+                    ->orderBy('status_id', 'DESC')
+                    ->orderBy('votes_sum');
+        }]);
 
         // If the translate_to is set, get the translations.
         if ($filters->isSetTranslateTo()) {

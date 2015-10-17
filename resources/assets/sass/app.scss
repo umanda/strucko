@@ -18,20 +18,19 @@ body {
 .margin-top-25 { margin-top: 2.5em; }
 .margin-top-30 { margin-top: 3.0em; }
 
-.col-center-block {
-    float: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.vcenter {
+.vertical-center {
     display: inline-block;
     vertical-align: middle;
     float: none;
+    margin-right: -3px;
+}
+
+.table tbody>tr>td.vertical-center-cell{
+    vertical-align: middle;
 }
 
 .strucko-header {
+    
     height: 10em;
 }
 

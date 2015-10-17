@@ -63,6 +63,7 @@ class TermsController extends Controller
             if ($this->filters->isSetMenuLetter()) {
                 $terms = Term::greaterThanRejected()
                         ->where($termFilters)
+                        ->with('partOfSpeech')
                         ->orderBy('term')
                         ->paginate();
                 
@@ -92,6 +93,7 @@ class TermsController extends Controller
                 $terms = Term::greaterThanRejected()
                         ->where('term', 'like', '%' . $allFilters['search'] . '%')
                         ->where($searchFilters)
+                        ->with('partOfSpeech')
                         ->orderBy('term')
                         ->paginate();
                 
@@ -196,7 +198,8 @@ class TermsController extends Controller
         Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
 
         // Get the terms with the same concept_id and the same language_id (synonyms)
-        $synonyms = Term::where($synonymFilters)
+        $synonyms = Term::greaterThanRejected()
+                ->where($synonymFilters)
                 ->without($term->id)
                 ->with('status')
                 ->orderBy('status_id', 'DESC')
@@ -215,7 +218,11 @@ class TermsController extends Controller
                     ->orderBy('status_id', 'DESC')
                     ->orderBy('votes_sum');
         }]);
-
+        // Load votes from the user on the term. Auth::id() returns null if guest.
+        $term->load(['votes' => function ($query) {
+            $query->where('user_id', Auth::id());
+        }]);
+        
         // If the translate_to is set, get the translations.
         if ($filters->isSetTranslateTo()) {
             // Prepare filters needed for translation
@@ -226,7 +233,8 @@ class TermsController extends Controller
             Auth::check() ? '' : $translationFilters['status_id'] = 1000;
 
             // Get the terms with the same concept_id but with different language_id
-            $translations = Term::where($translationFilters)
+            $translations = Term::greaterThanRejected()
+                    ->where($translationFilters)
                     ->with('status', 'votes')
                     ->orderBy('votes_sum')
                     ->get();

@@ -57,20 +57,21 @@
             <tbody>
             @foreach($terms as $term)
             <tr>
-                <td>
+                <td class="vertical-center-cell">
                     @if (isset($allFilters['translate_to']))
-                    <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' =>
+                        <small>{{ $term->partOfSpeech->part_of_speech }}</small><br>
+                        <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
-                        {{ $term->term }}
-                    </a>
+                        {{ $term->term }}</a>
                         {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     @else
-                    <a class="btn" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
-                    {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
+                        <small>{{ $term->partOfSpeech->part_of_speech }}</small><br>
+                        <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' => $term->slug]) }}">{{ $term->term }}</a>
+                        {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
                     @endif
                 </td>
                 @if (isset($allFilters['translate_to']))
-                    <td>
+                    <td class="vertical-center-cell">
                         @unless ($term->concept->terms->isEmpty())
                             {{ $allFilters['translate_to'] }}.
                             @foreach ($term->concept->terms as $key => $translationTerm)

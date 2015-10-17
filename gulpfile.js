@@ -13,7 +13,10 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
     // Bootstrap CSS and Selecte2 CSS is imported in app.scss
-    mix.sass('app.scss');
+    mix.sass('app.scss')
+        .browserSync({
+            proxy: "localhost:8000"
+        });
     
     // Copy JS files to resources/assets folder
     mix.copy('node_modules/jquery/dist/jquery.min.js', 'resources/assets/js');

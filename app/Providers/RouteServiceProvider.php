@@ -32,7 +32,6 @@ class RouteServiceProvider extends ServiceProvider
                             'language',
                             'scientificField',
                             'partOfSpeech',
-                            'votes',
                             'mergeSuggestions',
                             'mergeSuggestions.concept.terms')
                     ->firstOrFail();

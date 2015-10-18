@@ -31,4 +31,7 @@
             </div>
         @endif
     @endif
+@else
+{{-- Guest user, only show votes --}}
+    <span class="votes-lg">{{ $term->votes_sum }}</span>
 @endif

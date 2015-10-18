@@ -214,9 +214,9 @@ class TermsController extends Controller
             Auth::check() ? '' : $definitionFilters['status_id'] = 1000;
                         
             $query->where($definitionFilters)
-                    ->with('status')
+                    ->with('status', 'votes')
                     ->orderBy('status_id', 'DESC')
-                    ->orderBy('votes_sum');
+                    ->orderBy('votes_sum', 'DESC');
         }]);
         // Load votes from the user on the term. Auth::id() returns null if guest.
         $term->load(['votes' => function ($query) {
@@ -236,7 +236,7 @@ class TermsController extends Controller
             $translations = Term::greaterThanRejected()
                     ->where($translationFilters)
                     ->with('status', 'votes')
-                    ->orderBy('votes_sum')
+                    ->orderBy('votes_sum', 'DESC')
                     ->get();
         }
 

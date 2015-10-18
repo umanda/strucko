@@ -24,6 +24,7 @@ class CreateDefinitionsTable extends Migration
             $table->integer('concept_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('status_id')->unsigned()->default(500);
+            // Definition is for the concept in specific language.
             $table->char('language_id', 3);
             
             $table->foreign('concept_id')->references('id')->on('concepts')->onDelete('cascade');

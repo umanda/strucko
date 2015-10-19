@@ -157,13 +157,34 @@
 
 {{--Check if merge suggestions exist--}}
 @if($term->mergeSuggestions()->exists())
-<p>This term is suggested to be merged with these:</p>
-@foreach($term->mergeSuggestions as $mergeSuggestion)
-@foreach($mergeSuggestion->concept->terms as $mergeTerm)
-{{ $mergeTerm->term }},
-@endforeach
-@endforeach
+    <table class="table table-condensed">
+        <caption>Merge suggestion</caption>
+        <thead>
+            <tr>
+                <th class="col-xs-9">Merge suggestions</th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($term->mergeSuggestions as $mergeSuggestion)
+                <tr>
+                    <td class="vertical-center-cell">
+                        @foreach($mergeSuggestion->concept->terms as $key => $mergeTerm)
+                            @if($mergeTerm->language_id == $term->language_id)
+                                {{ $mergeTerm->term }};
+                            @endif
+                        @endforeach
+                    </td>
+                    {{-- Votes for translations --}}
+                    {{-- @include('votes.form_term_table', ['workingTerm' => $synonym]) --}}
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endif
+
 
 
 @if (Auth::check() && ! (Auth::user()->role_id < 1000))

@@ -13,9 +13,10 @@
 </div>
 
 <div class="form-group">
-    <label for="term_translation">Term</label>
+    <label for="term_translation">Translation</label>
     <input type="text" id="term_translation" name="term" value="{{ old('term') }}" required="required" 
-           maxlength="255" placeholder="Term" class="form-control">
+           maxlength="255" 
+           placeholder="Translation {{ isset($term) ? 'for ' . $term->term : '' }}" class="form-control">
 </div>
 <div class="checkbox">
     <label>

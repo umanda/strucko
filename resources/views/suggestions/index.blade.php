@@ -10,7 +10,12 @@
         @include('suggestions.menu')
     </div>
     <div class="col-md-9">
-        <p>Please, feel free to look at all suggestions and vote!</p>
+        <div class="jumbotron">
+           <p>
+               Here you can browse all terms and definitions that are not yet approved.
+               Feel free to look around and be sure to vote. Log in first...
+           </p>
+        </div>
     </div>
 </div>
     

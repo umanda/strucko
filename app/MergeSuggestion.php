@@ -15,6 +15,11 @@ class MergeSuggestion extends Model
         'concept_id',
     ];
     
+    public function scopeGreaterThanRejected($query)
+    {
+        $query->where('status_id', '>', 250);
+    }
+    
     /**
      * Merge suggestion has a status.
      * 

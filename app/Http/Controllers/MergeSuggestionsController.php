@@ -10,6 +10,12 @@ use Auth;
 
 class MergeSuggestionsController extends Controller
 {
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth');
+    }
+    
     /**
      * Show the specific merge suggestion.
      * 
@@ -32,10 +38,10 @@ class MergeSuggestionsController extends Controller
     }
     
     /**
-     * Give up vote for the term
+     * Give up vote for the merge suggestion
      * 
      * @param Request $request
-     * @param string $slug
+     * @param string $id
      * @return type
      */
     public function voteUp(Request $request, $id)
@@ -79,7 +85,7 @@ class MergeSuggestionsController extends Controller
      * Give down vote for the suggestion
      * 
      * @param Request $request
-     * @param string $slug
+     * @param string $id
      * @return type
      */
     public function voteDown(Request $request, $id)

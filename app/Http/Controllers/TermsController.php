@@ -197,16 +197,23 @@ class TermsController extends Controller
         // For guests we will set the filter to get only approved terms.
         Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
 
-        // Get the terms with the same concept_id and the same language_id (synonyms)
+        // Get the terms with the same concept_id and the same language_id (synonyms).
+        // Get votes only for logged in user.
         $synonyms = Term::greaterThanRejected()
                 ->where($synonymFilters)
                 ->without($term->id)
-                ->with('status')
+                ->with(['status',
+                    'votes' => function($query) {
+                        $query->where('user_id', Auth::id());
+                    },
+                    'user'
+                    ])
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
                 ->get();
         
         // Load definitions in the appropriate language.
+        // Only load votes for current user.
         $languageId = $term->language_id;
         $term->load(['concept.definitions' => function ($query) use ($languageId) {
             $definitionFilters = [];
@@ -214,7 +221,12 @@ class TermsController extends Controller
             Auth::check() ? '' : $definitionFilters['status_id'] = 1000;
                         
             $query->where($definitionFilters)
-                    ->with('status', 'votes')
+                    ->with(['status',
+                        'votes' => function($query) {
+                            $query->where('user_id', Auth::id());
+                        },
+                        'user'
+                        ])
                     ->orderBy('status_id', 'DESC')
                     ->orderBy('votes_sum', 'DESC');
         }]);
@@ -232,12 +244,37 @@ class TermsController extends Controller
             // For guests we will only show approved translations
             Auth::check() ? '' : $translationFilters['status_id'] = 1000;
 
-            // Get the terms with the same concept_id but with different language_id
+            // Get the terms with the same concept_id but with different language_id (translations)
+            // Get votes for the current user
             $translations = Term::greaterThanRejected()
                     ->where($translationFilters)
-                    ->with('status', 'votes')
+                    ->with(['status',
+                        'votes' => function($query) {
+                            $query->where('user_id', Auth::id());
+                        },
+                        'user'
+                        ])
                     ->orderBy('votes_sum', 'DESC')
                     ->get();
+        }
+        
+        // Load merge suggestions if user is logged in.
+        // Only load votes for the current user.
+        if (Auth::check()) {
+            $term->load(['mergeSuggestions' => function($query) {
+                            $query->greaterThanRejected()
+                                    ->orderBy('votes_sum');
+                        },
+                        'mergeSuggestions.concept.terms' => function($query) use ($languageId) {
+                            $query->greaterThanRejected()
+                                    ->where('language_id', $languageId)
+                                    ->orderBy('votes_sum');
+                        },
+                        'mergeSuggestions.votes' => function($query) {
+                            $query->where('user_id', Auth::id());
+                        },
+                        'user'
+                        ]);
         }
 
         return view('terms.show', compact('term', 'synonyms', 'languages', 'translations'));

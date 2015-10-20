@@ -31,12 +31,7 @@ class RouteServiceProvider extends ServiceProvider
                             'status',
                             'language',
                             'scientificField',
-                            'partOfSpeech',
-                            'mergeSuggestions',
-                            'mergeSuggestions.concept.terms' => function($query) {
-                                $query->greaterThanRejected()
-                                      ->orderBy('language_id');
-                            }])
+                            'partOfSpeech'])
                     ->firstOrFail();
         });
 

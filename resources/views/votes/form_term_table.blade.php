@@ -3,7 +3,7 @@
 --}}
 
 {{-- If user is logged in, he can vote unless already voted --}}
-@if(Auth::check())
+@if(Auth::check() && ! ($term->status_id < 1000))
     {{-- If the user didnt vote, show the form. --}}
     @if($workingTerm->votes->isEmpty())
         <td class="text-center vertical-center-cell">

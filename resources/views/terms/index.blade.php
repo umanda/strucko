@@ -73,7 +73,6 @@
                 @if (isset($allFilters['translate_to']))
                     <td class="vertical-center-cell">
                         @unless ($term->concept->terms->isEmpty())
-                            {{ $allFilters['translate_to'] }}.
                             @foreach ($term->concept->terms as $key => $translationTerm)
                                 @if (is_last($term->concept->terms, $key))
                                     {{ $translationTerm->term }}

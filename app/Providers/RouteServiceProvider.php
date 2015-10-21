@@ -27,13 +27,11 @@ class RouteServiceProvider extends ServiceProvider
         $router->bind('terms', function($slug)
         {
             return \App\Term::where('slug', $slug)
-                    ->with('user',
+                    ->with(['user',
                             'status',
                             'language',
                             'scientificField',
-                            'partOfSpeech',
-                            'mergeSuggestions',
-                            'mergeSuggestions.concept.terms')
+                            'partOfSpeech'])
                     ->firstOrFail();
         });
 

@@ -40,6 +40,17 @@
 </div>
 
 <hr>
+{{--
+If term is not yet approved, we will show the note for voting on definitions,
+translations and synonyms.
+--}}
+@if ($term->status_id < 1000)
+<p class="text-info">
+    <strong>Note:</strong> you can vote for the term <i>{{ $term->term }}</i> (if you haven't); however, since this therm
+    is not yet approved, you can't vote for its definitions, translations and
+    synonyms.
+</p>
+@endif
 <!-- Definitions -->
 <div class="row">
     <div class="col-xs-12">
@@ -48,7 +59,7 @@
                 <tr>
                     <th class="col-xs-9">Definitions</th>
                     <th class="col-xs-1"></th>
-                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1 text-center">Votes</th>
                     <th class="col-xs-1"></th>
                 </tr>
             </thead>
@@ -86,12 +97,12 @@
                         @include('terms.translations.translate_to')
                     </th>
                     <th class="col-xs-1"></th>
-                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1 text-center">Votes</th>
                     <th class="col-xs-1"></th>
                 </tr>
             </thead>
             <tbody>
-                {{-- First chek if the translate_to is set, and show appropriate message --}}
+                {{-- First check if the translate_to is set and show appropriate message --}}
                 @if(Session::has('termShowFilters'))
                     @if(null == Session::get('termShowFilters.translate_to'))
                     <tr><td><span class="text-warning">Select language to translate to</span></td></tr>
@@ -102,7 +113,20 @@
                         @foreach($translations as $translation)
                         <tr>
                             <td class="vertical-center-cell">
-                                {{ $translation->term }}
+                                {{--Depending on the translate_to query,
+                                show the appropriate link with translate_to--}}
+                                @if(Session::has('termShowFilters'))
+                                    @if(null !== Session::get('termShowFilters.translate_to'))
+                                        <a href="{{ action('TermsController@show', [
+                                            'slug' => $translation->slug,
+                                            'translate_to' => $term->language_id
+                                        ])}}">
+                                            {{ $translation->term }}</a>
+                                    @endif
+                                @else
+                                <a href="{{ action('TermsController@show', $translation->slug) }}">
+                                    {{ $translation->term }}</a>
+                                @endif
                                 {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}  
                             </td>
                             {{-- Votes for translations --}}
@@ -128,7 +152,7 @@
                 <tr>
                     <th class="col-xs-9">Synonyms</th>
                     <th class="col-xs-1"></th>
-                    <th class="col-xs-1"></th>
+                    <th class="col-xs-1 text-center">Votes</th>
                     <th class="col-xs-1"></th>
                 </tr>
             </thead>
@@ -137,7 +161,19 @@
                     @foreach($synonyms as $synonym)
                     <tr>
                         <td class="vertical-center-cell">
-                            {{ $synonym->term }}
+                            {{--Depending on the translate_to query,
+                                show the appropriate link with translate_to--}}
+                            @if(Session::has('termShowFilters')
+                                && (null !== Session::get('termShowFilters.translate_to')))
+                                <a href="{{ action('TermsController@show', [
+                                    'slug' => $synonym->slug,
+                                    'translate_to' => Session::get('termShowFilters.translate_to')
+                                ])}}">
+                                    {{ $synonym->term }}</a>
+                            @else
+                            <a href="{{ action('TermsController@show', $synonym->slug) }}">
+                                {{ $synonym->term }}</a>
+                            @endif
                             {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}  
                         </td>
                         {{-- Votes for translations --}}
@@ -156,14 +192,42 @@
 </div>
 
 {{--Check if merge suggestions exist--}}
-@if($term->mergeSuggestions()->exists())
-<p>This term is suggested to be merged with these:</p>
-@foreach($term->mergeSuggestions as $mergeSuggestion)
-@foreach($mergeSuggestion->concept->terms as $mergeTerm)
-{{ $mergeTerm->term }},
-@endforeach
-@endforeach
+@if(Auth::check() && $term->mergeSuggestions()->exists())
+    <table class="table table-condensed">
+        <caption>
+            Merge suggestions are used to link synonyms that are (by mistake) added
+            separately to the database. For example, if we separately enter
+            terms <i>Honest</i> and <i>Sincere</i>, we can merge them and in that way
+            relate them as synonyms.
+        </caption>
+        <thead>
+            <tr>
+                <th class="col-xs-9">Merge suggestions for {{ $term->term }}</th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1 text-center">Votes</th>
+                <th class="col-xs-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($term->mergeSuggestions as $mergeSuggestion)
+                <tr>
+                    <td class="vertical-center-cell">
+                        @foreach($mergeSuggestion->concept->terms as $key => $mergeTerm)
+                            @if(is_last($mergeSuggestion->concept->terms, $key))
+                                {{ $mergeTerm->term }}
+                            @else
+                                {{ $mergeTerm->term }},
+                            @endif
+                        @endforeach
+                    </td>
+                    {{-- Votes for merge suggestions --}}
+                    @include('votes.form_merge_suggestion_table')
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endif
+
 
 
 @if (Auth::check() && ! (Auth::user()->role_id < 1000))

@@ -69,7 +69,19 @@ translations and synonyms.
                         <tr>
                             <td class="vertical-center-cell">
                                 {{ $definition->definition }}
-                                {!! $definition->status->id < 1000 ? status_warning($definition->status->status) : '' !!}  
+                                {!! $definition->status->id < 1000 ? status_warning($definition->status->status) : '' !!}
+                                @if($definition->source)
+                                    @if($definition->link)
+                                        <br>
+                                        <small>source: <a href="{{ $definition->link }}" target="_blank">
+                                                {{ $definition->source }}</a></small>
+                                    @else
+                                        <br>
+                                        <small>source: {{ $definition->source }}</small>
+                                    @endif
+                                @endif
+                                
+                                <br><small>by <em>{{ $definition->user->name }}</em></small>
                             </td>
                             {{-- Votes for definition --}}
                             @include('votes.form_definition_table')
@@ -128,6 +140,7 @@ translations and synonyms.
                                     {{ $translation->term }}</a>
                                 @endif
                                 {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}  
+                                <br><small>by <i>{{ $translation->user->name }}</i></small>
                             </td>
                             {{-- Votes for translations --}}
                             @include('votes.form_term_table', ['workingTerm' => $translation])
@@ -174,7 +187,8 @@ translations and synonyms.
                             <a href="{{ action('TermsController@show', $synonym->slug) }}">
                                 {{ $synonym->term }}</a>
                             @endif
-                            {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}  
+                            {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}
+                            <br><small>by <i>{{ $synonym->user->name }}</i></small>
                         </td>
                         {{-- Votes for translations --}}
                         @include('votes.form_term_table', ['workingTerm' => $synonym])
@@ -219,6 +233,7 @@ translations and synonyms.
                                 {{ $mergeTerm->term }},
                             @endif
                         @endforeach
+                        <br><small>by <i>{{ $mergeSuggestion->user->name }}</i></small>
                     </td>
                     {{-- Votes for merge suggestions --}}
                     @include('votes.form_merge_suggestion_table')

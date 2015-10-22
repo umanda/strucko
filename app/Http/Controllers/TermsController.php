@@ -205,7 +205,8 @@ class TermsController extends Controller
                 ->with(['status',
                     'votes' => function($query) {
                         $query->where('user_id', Auth::id());
-                    },    
+                    },
+                    'user'
                     ])
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
@@ -224,6 +225,7 @@ class TermsController extends Controller
                         'votes' => function($query) {
                             $query->where('user_id', Auth::id());
                         },
+                        'user'
                         ])
                     ->orderBy('status_id', 'DESC')
                     ->orderBy('votes_sum', 'DESC');
@@ -249,7 +251,8 @@ class TermsController extends Controller
                     ->with(['status',
                         'votes' => function($query) {
                             $query->where('user_id', Auth::id());
-                        }
+                        },
+                        'user'
                         ])
                     ->orderBy('votes_sum', 'DESC')
                     ->get();
@@ -269,7 +272,8 @@ class TermsController extends Controller
                         },
                         'mergeSuggestions.votes' => function($query) {
                             $query->where('user_id', Auth::id());
-                        }
+                        },
+                        'user'
                         ]);
         }
 

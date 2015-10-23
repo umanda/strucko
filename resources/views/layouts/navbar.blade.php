@@ -19,26 +19,29 @@
                     @endif
                 </li>
                 <li class="{{ set_active('terms/create') }}"><a href="/terms/create">Create</a></li>
-                <li class="{{ set_active('suggestions*') }}"><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
-                <li class="{{ set_active('scientific-areas*') }}"><a href="/scientific-areas/">Areas and Fields</a></li>
-                <li class="{{ set_active('languages*') }}"><a href="/languages">Languages</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
+                <li><a href="/contact">Contact</a></li>
+                
+                {{--Admin menu--}}
+                @if (Auth::check() && ! (Auth::user()->role_id < 1000))
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
+                           role="button" aria-haspopup="true" aria-expanded="false">Admin menu <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="{{ set_active('suggestions*') }}"><a href="{{ action('SuggestionsController@index') }}">Suggestions</a></li>
+                            <li class="{{ set_active('scientific-areas*') }}"><a href="/scientific-areas/">Areas and Fields</a></li>
+                            <li class="{{ set_active('languages*') }}"><a href="/languages">Languages</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">Nav header</li>
+                            <li><a href="#">Separated link</a></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                @endif
+                
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::check())
-                    <li><a href="#">{{ Auth::user()->name }}</a></li>
+                    <li><a href="/home">{{ Auth::user()->name }}</a></li>
                     <li><a href="/auth/logout">Log out</a></li>
                 @else
                     <li class="{{ set_active('auth/login') }}"><a href="/auth/login">Log in</a></li>

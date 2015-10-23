@@ -4,11 +4,13 @@
             <ul class="nav nav-pills">
                 @foreach ($menuLetters as $menuLetter)
                 <li role="presentation" 
-                    class="@if (isset($allFilters['menu_letter']))
-                    @if ($menuLetter == $allFilters['menu_letter'])
-                    {{ 'active' }}
+                    class="
+                    @if (isset($allFilters['menu_letter']))
+                        @if ($menuLetter == $allFilters['menu_letter'])
+                        {{ 'active' }}
+                        @endif
                     @endif
-                    @endif">
+                    ">
                     <a href="{{ action('TermsController@index', array_merge($menuLetterFilters, ['menu_letter' => $menuLetter])) 
                        }}">
                         {{ urldecode($menuLetter) }}

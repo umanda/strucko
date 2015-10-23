@@ -13,7 +13,7 @@ class DefinitionVotesController extends Controller
 
     public function __construct()
     {
-        // User has to be authenticated, except for specified methods.
+        // User has to be authenticated.
         $this->middleware('auth');
     }
 

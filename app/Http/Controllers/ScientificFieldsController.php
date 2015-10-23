@@ -13,10 +13,10 @@ class ScientificFieldsController extends Controller
 {
     public function __construct()
     {
-        // User has to be authenticated, except for specified methods.
-        $this->middleware('auth', ['except' => ['index', 'show']]);
-        // Check if user has Administrator role, except for specified methods.
-        $this->middleware('role:1000', ['except' => ['index', 'show']]);
+        // User has to be authenticated.
+        $this->middleware('auth');
+        // Check if user has Administrator role..
+        $this->middleware('role:1000');
     }
     
     /**

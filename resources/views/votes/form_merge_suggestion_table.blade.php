@@ -1,5 +1,6 @@
 
 {{-- If user is logged in and term is approved, he can vote unless already voted --}}
+{{-- If the original term is not approved, user can not vote for merge suggestion --}}
 @if(Auth::check() && ! ($term->status_id < 1000))
     {{-- If the user didnt vote, show the form. --}}
     @if($mergeSuggestion->votes->isEmpty())

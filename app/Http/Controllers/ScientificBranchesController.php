@@ -11,6 +11,13 @@ use App\ScientificField;
 
 class ScientificBranchesController extends Controller
 {
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth');
+        // Check if user has Administrator role for specified methods.
+        $this->middleware('role:1000');
+    }
     /**
      * Display a listing of the resource.
      *

@@ -12,8 +12,14 @@ class MergeSuggestionsController extends Controller
 {
     public function __construct()
     {
-        // User has to be authenticated, except for specified methods.
+        // User has to be authenticated.
         $this->middleware('auth');
+        // Check if user has Administrator role for specified methods.
+        $this->middleware('role:1000', ['except' => [
+            'show',
+            'voteUp',
+            'voteDown'
+            ]]);
     }
     
     /**
@@ -27,15 +33,6 @@ class MergeSuggestionsController extends Controller
         return view('suggestions.merges.show', compact('mergeSuggestion'));
     }
     
-    /**
-     * Approve the sugegsted merge
-     */
-    public function approveMerge ()
-    {
-    // After the merge, reset votes_sum on the merged term.
-    // Merge all terms with the same concept_id.
-    // Merge all definitions with the same concept_id to the new concept_id.
-    }
     
     /**
      * Give up vote for the merge suggestion
@@ -122,5 +119,16 @@ class MergeSuggestionsController extends Controller
                     'alert' => 'Voted down!',
                     'alert_class' => 'alert alert-success'
                 ]);
+    }
+    
+    
+    /**
+     * Approve the sugegsted merge
+     */
+    public function approveMerge ()
+    {
+    // After the merge, reset votes_sum on the merged term.
+    // Merge all terms with the same concept_id.
+    // Merge all definitions with the same concept_id to the new concept_id.
     }
 }

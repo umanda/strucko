@@ -14,7 +14,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <form method="GET" action="/suggestions/merges" class="form-inline">
+                        <form method="GET" action="/suggestions/merges" class="form-horizontal">
                             @include('suggestions.filter')
                         </form>
                     </div>
@@ -22,58 +22,72 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
-                        @if ( ! $suggestedTerms->isEmpty())
-                        <table class="table-borderless table-responsive">
+                        
+                            <table class="table table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th>Original term(s)</th>
-                                    <th>Suggested merges</th>
-                                    <th>More info</th>
-                                    <th>Votes</th>
-                                    <th>Actions</th>
+                                    <th class="col-xs-3">Term</th>
+                                    <th class="col-xs-4">Merge with</th>
+                                    <th class="col-xs-1 text-center">Votes</th>
+                                    @if (Auth::check() && ! (Auth::user()->role_id < 1000))
+                                        <th class="col-xs-1 text-center">Approve</th>
+                                        <th class="col-xs-1 text-center">Reject</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                @foreach ($suggestedTerms as $suggestedTerm)
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-link" href="{{ action('TermsController@show', $suggestedTerm->slug) }}">
-                                        {{ $suggestedTerm->term }} ({{ $suggestedTerm->language->ref_name }})
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @foreach ($suggestedTerm->mergeSuggestions as $mergeSuggestion)
-                                            @foreach($mergeSuggestion->concept->terms as $conceptTerm)
-                                            {{ $conceptTerm->term }} ({{ $conceptTerm->language->ref_name }})
-                                            @endforeach
-                                            <form method="POST" action="{{ action('MergeSuggestionsController@voteUp', [$mergeSuggestion->id]) }}">
-                                            @include('votes.form_up_naked')
-                                            </form>
-                                            <form method="POST" action="{{ action('MergeSuggestionsController@voteDown', [$mergeSuggestion->id]) }}">
-                                            @include('votes.form_down_naked')
-                                            </form>
+                                {{-- We have to have at least language_id --}}
+                                @if(isset($termFilters['language_id']))
+                                    @if(isset($mergeSuggestions) && ! ($mergeSuggestions->isEmpty()))
+                                        @foreach($mergeSuggestions as $mergeSuggestion)
+                                            <tr>
+                                                <td class="vertical-center-cell">
+                                                    <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' => $mergeSuggestion->term->slug]) }}">
+                                                        {{ $mergeSuggestion->term->term }}</a>
+                                                    <br><small>merge suggested by <i>{{ $mergeSuggestion->user->name }}</i></small>
+                                                </td>
+
+                                                <td class="vertical-center-cell">
+                                                    @foreach($mergeSuggestion->concept->terms as $key => $suggestedTerm)
+                                                        @if(is_last($mergeSuggestion->concept->terms, $key))
+                                                            {{ $suggestedTerm->term }}
+                                                        @else
+                                                            {{ $suggestedTerm->term }},
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+
+                                                <td class="text-center vertical-center-cell">
+                                                    {{ $mergeSuggestion->votes_sum }}
+                                                </td>
+
+                                                @if (Auth::check() && ! (Auth::user()->role_id < 1000))
+                                                <td class="text-center vertical-center-cell">
+                                                    todo
+                                                </td>
+                                                <td class="text-center vertical-center-cell">
+                                                    todo
+                                                </td>
+                                                @endif
+                                            </tr>
                                         @endforeach
-                                    </td>
-                                    <td><a class="btn" href="{{ action('MergeSuggestionsController@show', $mergeSuggestion->id) }}" >Details</a></td>
-                                    <td>
-                                        ...
-                                    </td>
-                                    <td>TODO Actions</td>
-                                </tr>
-                                @endforeach
+                                    @else
+                                    {{--No merge suggestions --}}
+                                        <td colspan="3"><span class="text-warning">No merge suggestions...</span></td>
+                                    @endif
                                 @else
-                                    <p>No suggestions...</p>
+                                {{-- language_id is not set --}}
+                                    <td colspan="3"><span class="text-warning">Please filter by language at least</span></td>
+                                @endif
                             </tbody>
                         </table>
                         
+                        @if(isset($mergeSuggestions) && ! ($mergeSuggestions->isEmpty()))
+                            {!! $mergeSuggestions->appends($termFilters)->render() !!}
                         @endif
-                            
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>

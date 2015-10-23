@@ -48,8 +48,10 @@
         <table class="table table-condensed table-striped">
             <thead>
                 <tr>
-                    <th class="col-xs-5">Terms</th>
-                    {!! isset($allFilters['translate_to']) ? '<th class="col-xs-7">Translations</th>' : '' !!}
+                    <th class="col-xs-5 vertical-center-cell">Terms</th>
+                    <th class="col-xs-7">
+                        @include('terms.translate_to_2')
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +86,8 @@
                         <span>...no translation</span>
                         @endunless
                     </td>
+                @else
+                    <td></td>
                 @endif
             </tr>
             @endforeach
@@ -102,7 +106,7 @@
                 {!! !(isset($allFilters['menu_letter']))
                 && !(isset($allFilters['search']))
                 && isset($menuLetters) 
-                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select some letter or search for specific term</p>' : '' !!}
+                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select a letter or search for specific term</p>' : '' !!}
         
             @endif
     </div>

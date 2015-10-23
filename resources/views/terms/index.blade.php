@@ -23,16 +23,14 @@
 <hr>
 <div class="row">
     <div class="col-sm-12">
-        <br>
-        <p>Sorry, no terms in selected language and field...</p>
+        <p class="btn-lg btn-info">Sorry, no terms in selected language and field</p>
     </div>
 </div>
 @else
 <hr>
 <div class="row">
     <div class="col-sm-12">
-        <br>
-        <p>Please select language and field...</p>
+        <p class="btn-lg btn-info">Select language and field</p>
     </div>
 </div>
 @endif
@@ -97,14 +95,14 @@
             {{-- Terms are empty --}}
             @else
                 {{-- Messages for the user if there are no terms to display --}}
-                {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p>No results, try some other letter...</p>' : '' !!}
-                {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p>No results, try something else...</p>' : '' !!}
+                {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try some other letter</p>' : '' !!}
+                {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try something else</p>' : '' !!}
                 
                 {{-- If letter or search is not set, but we have menu letters displayed... --}}
                 {!! !(isset($allFilters['menu_letter']))
                 && !(isset($allFilters['search']))
                 && isset($menuLetters) 
-                && !($menuLetters->isEmpty()) ? '<p>Please select some letter or search for specific term</p>' : '' !!}
+                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select some letter or search for specific term</p>' : '' !!}
         
             @endif
     </div>

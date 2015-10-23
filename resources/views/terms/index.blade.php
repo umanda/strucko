@@ -102,7 +102,7 @@
                 {!! !(isset($allFilters['menu_letter']))
                 && !(isset($allFilters['search']))
                 && isset($menuLetters) 
-                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select some letter or search for specific term</p>' : '' !!}
+                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select a letter or search for specific term</p>' : '' !!}
         
             @endif
     </div>

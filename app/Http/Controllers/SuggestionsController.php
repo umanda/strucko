@@ -10,11 +10,17 @@ use App\Repositories\SuggestionsFilterRepository;
 use App\Language;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Concept;
+use Auth;
 
 class SuggestionsController extends Controller
 {
-
     use ManagesTerms;
+    
+    public function __construct()
+    {
+        // User has to be authenticated, except for specified methods.
+        $this->middleware('auth', ['except' => ['index']]);
+    }
 
     public function index()
     {
@@ -33,12 +39,19 @@ class SuggestionsController extends Controller
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
-
+        
+        // Get the suggested terms, and load votes for current user.
         $terms = Term::suggested()
                 ->where($termFilters)
-                ->with('votes')
-                ->get();
-
+                ->with(['votes' => function($query) {
+                    $query->where('user_id', Auth::id());
+                },
+                'user',
+                'partOfSpeech'
+                ])
+                ->orderBy('votes_sum', 'DESC')
+                ->paginate();
+        
         return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
     }
 

@@ -3,6 +3,7 @@
 --}}
 
 {{-- If user is logged in, he can vote unless already voted --}}
+{{-- If the original term is not approved, user can not vote for translation or synonym --}}
 @if(Auth::check() && ! ($term->status_id < 1000))
     {{-- If the user didnt vote, show the form. --}}
     @if($workingTerm->votes->isEmpty())

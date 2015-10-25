@@ -35,7 +35,12 @@ class TermsController extends Controller
         // User has to be authenticated, except for specified methods.
         $this->middleware('auth', ['except' => ['index', 'show']]);
         // Check if user has Administrator role for specified methods.
-        $this->middleware('role:1000', ['only' => ['edit', 'update', 'updateStatus']]);
+        $this->middleware('role:1000', ['except' => [
+            'index',
+            'create',
+            'store',
+            'show',
+            ]]);
     }
 
     /**
@@ -118,7 +123,8 @@ class TermsController extends Controller
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
 
-        return view('terms.index', compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
+        return view('terms.index',
+                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
     }
 
     /**
@@ -190,7 +196,7 @@ class TermsController extends Controller
                 ->without($term->language_id)
                 ->orderBy('ref_name')
                 ->get();
-        // Prepare filters for synonyms. Approved ones are only for authenticated users.
+        // Prepare filters for synonyms. Suggested ones are only for authenticated users.
         $synonymFilters = [];
         $synonymFilters['concept_id'] = $term->concept_id;
         $synonymFilters['language_id'] = $term->language_id;

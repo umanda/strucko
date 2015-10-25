@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label for="translate_to" class="col-sm-2 control-label">Translate to:</label>
                                 <div class="col-sm-10">
-                                    {!! Form::select('translate_to', array_merge(['' => '...optional'], $languages->lists('ref_name', 'id')->toArray()),
+                                    {!! Form::select('translate_to', array_merge(['' => 'Choose language'], $languages->lists('ref_name', 'id')->toArray()),
                                     isset($allFilters['translate_to']) ? $allFilters['translate_to'] : old('translate_to'), 
                                     ['id' => 'translate_to', 'class' => 'form-control']) !!}
                                 </div>

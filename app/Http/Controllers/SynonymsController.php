@@ -17,9 +17,9 @@ class SynonymsController extends Controller
     public function __construct()
     {
         // User has to be authenticated, except for specified methods.
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth');
         // Check if user has Administrator role for specified methods.
-        $this->middleware('role:1000', ['only' => ['edit', 'update']]);
+        $this->middleware('role:1000');
     }
     
     /**

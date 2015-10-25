@@ -20,13 +20,13 @@ class Definition extends Model
     }
     
     /**
-     * Definition belongs to synonym.
+     * Definition belongs to concept.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function synonym()
+    public function concept()
     {
-        return $this->belongsTo('App\Synonym');
+        return $this->belongsTo('App\Concept');
     }
     
     /**

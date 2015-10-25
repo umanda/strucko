@@ -11,6 +11,8 @@ use App\Language;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Concept;
 use Auth;
+use App\MergeSuggestion;
+use App\Definition;
 
 class SuggestionsController extends Controller
 {
@@ -19,7 +21,10 @@ class SuggestionsController extends Controller
     public function __construct()
     {
         // User has to be authenticated, except for specified methods.
-        $this->middleware('auth', ['except' => ['index']]);
+        $this->middleware('auth');
+        // Check if user has Administrator role for specified methods.
+        //$this->middleware('role:1000', ['only' => ['edit', 'update', 'updateStatus']]);
+        $this->middleware('role:1000');
     }
 
     public function index()
@@ -68,25 +73,35 @@ class SuggestionsController extends Controller
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
-
-        $suggestedTerms = Term::whereHas('mergeSuggestions', function ($query) {
-                    $query->where('status_id', 500);
-                })
-                ->where($termFilters)
-                ->with('language', 'concept', 'concept.terms', 'concept.terms.language', 'mergeSuggestions.concept.terms', 'mergeSuggestions.concept.terms.language')
-                ->get();
-
-//        $mergeSuggestions = MergeSuggestion::where('status_id', 500)
-//                ->with(['term' => function ($query) use ($termFilters) {
-//                    $query->where($termFilters);
-//                }
-//                    , 'term.language', 'concept',
-//                    'concept.terms' => function ($query) {
-//                        $query->orderBy('language_id');
-//                    }, 'concept.terms.language' ])
+        
+//        $suggestedTerms = Term::whereHas('mergeSuggestions', function ($query) {
+//                    $query->where('status_id', 500);
+//                })
+//                ->where($termFilters)
+//                ->with('language', 'concept', 'concept.terms', 'concept.terms.language', 'mergeSuggestions.concept.terms', 'mergeSuggestions.concept.terms.language')
 //                ->get();
 
-        return view('suggestions.merges', compact('termFilters', 'languages', 'scientificFields', 'suggestedTerms'));
+        $mergeSuggestions = MergeSuggestion::where('status_id', 500)
+                ->whereHas('term', function ($query) use ($termFilters) {
+                        $query->greaterThanRejected()
+                                ->where($termFilters)
+                                ->orderBy('votes_sum');
+                })
+                ->with(['term' => function ($query) use ($termFilters) {
+                        $query->greaterThanRejected()
+                                ->where($termFilters)
+                                ->orderBy('votes_sum');
+                    },
+                    'concept',
+                    'concept.terms' => function ($query) use ($termFilters) {
+                        $query->where($termFilters);
+                    },
+                    'user',
+                    ])
+                ->orderBy('votes_sum')
+                ->paginate();
+            
+        return view('suggestions.merges', compact('termFilters', 'languages', 'scientificFields', 'mergeSuggestions'));
     }
 
     public function definitions(SuggestionsFilterRepository $filters)
@@ -96,20 +111,44 @@ class SuggestionsController extends Controller
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
 
-        $concepts = Concept::whereHas('definitions', function ($query) {
-                    $query->suggested();
-                })
-                ->whereHas('terms', function($query) use ($termFilters) {
-                    $query->where($termFilters);
-                })
-                ->with(['terms' => function ($query) use ($termFilters) {
-                    $query->where($termFilters);
-                }, 
-                    'terms.status', 'terms.language'
-                  ])
-                ->get();
+        if (isset($termFilters['language_id'])) {
+            $definitions = Definition::suggested()
+                    ->where('language_id', $termFilters['language_id'])
+                    ->whereHas('concept.terms', function($query) use ($termFilters) {
+                        $query->greaterThanRejected()
+                                ->where($termFilters);
+                    })
+                    ->with(['concept.terms' => function($query) use($termFilters) {
+                        $query->greaterThanRejected()
+                                ->where($termFilters)
+                                ->orderBy('votes_sum', 'DESC');
+                        },
+                        'concept',
+                        'concept.terms.status'
+                        ])
+                    ->orderBy('votes_sum', 'DESC')
+                    ->paginate();
+                    
+        }
+//        $concepts = Concept::whereHas('terms', function($query) use ($termFilters) {
+//                        $query->greaterThanRejected()
+//                                ->where($termFilters);
+//                    })
+//                ->whereHas('definitions', function ($query) use ($termFilters) {
+//                    $query->suggested();
+//                })
+//                ->with(['terms' => function ($query) use ($termFilters) {
+//                    $query->greaterThanRejected()
+//                          ->where($termFilters)
+//                          ->orderBy('votes_sum');
+//                }, 
+//                'definitions',
+//                'terms.status',
+//                'terms.language'
+//                ])
+//                ->paginate();
 
-        return view('suggestions.definitions', compact('termFilters', 'languages', 'scientificFields', 'concepts'));
+        return view('suggestions.definitions', compact('termFilters', 'languages', 'scientificFields', 'definitions'));
     }
 
 }

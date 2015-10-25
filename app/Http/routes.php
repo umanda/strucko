@@ -40,6 +40,8 @@ post('terms', 'TermsController@store');
 post('definitions', 'DefinitionsController@store');
 post('definitions/{id}/vote/up', 'DefinitionVotesController@voteUp');
 post('definitions/{id}/vote/down', 'DefinitionVotesController@voteDown');
+post('terms/{id}/status/approve', 'DefinitionsController@approveTerm');
+post('terms/{id}/status/reject', 'DefinitionsController@rejectTerm');
 
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');
@@ -51,9 +53,11 @@ post('suggestions/merges/{id}/vote/down', 'MergeSuggestionsController@voteDown')
 get('suggestions/definitions', 'SuggestionsController@definitions');
 
 // Pages...
-// TODO: implement /home route for users.
 get('home', function () {
-   return view('pages.home');
+   return view('pages.user');
+});
+get('contact', function () {
+   return view('pages.contact');
 });
 
 // Authentication routes...

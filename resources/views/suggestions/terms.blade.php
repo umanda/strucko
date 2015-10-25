@@ -63,7 +63,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        
+                        {!! $terms->appends($termFilters)->render() !!}
                     </div>
                 </div>
             </div>

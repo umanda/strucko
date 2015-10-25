@@ -14,6 +14,11 @@ class ConceptsController extends Controller
 {
 
     use ManagesTerms;
+    public function __construct()
+    {
+        // User has to be authenticated.
+        $this->middleware('auth');
+    }
 
     public function addTranslation(Requests\EditTranslationRequest $request, $slug)
     {

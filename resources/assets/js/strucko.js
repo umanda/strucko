@@ -10,7 +10,7 @@ $(document).ready(function () {
     $('div.alert').not('.alert-warning').delay(3000).slideUp(300);
 
     // Make these elements select2
-    $('#language_id, #scientific_field_id, #translate_to, #part_of_speech_id').select2({
+    $('#language_id, #scientific_field_id, #translate_to, #part_of_speech_id, #translate_to_2').select2({
         width: "100%"
     });
 

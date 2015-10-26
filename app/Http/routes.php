@@ -50,6 +50,8 @@ get('suggestions/merges', 'SuggestionsController@merges');
 get('suggestions/merges/{id}', 'MergeSuggestionsController@show');
 post('suggestions/merges/{id}/vote/up', 'MergeSuggestionsController@voteUp');
 post('suggestions/merges/{id}/vote/down', 'MergeSuggestionsController@voteDown');
+post('suggestions/merges/{id}/approveMerge', 'MergeSuggestionsController@voteDown');
+
 get('suggestions/definitions', 'SuggestionsController@definitions');
 
 // Pages...

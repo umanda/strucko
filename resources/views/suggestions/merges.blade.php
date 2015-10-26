@@ -50,9 +50,11 @@
                                                 <td class="vertical-center-cell">
                                                     @foreach($mergeSuggestion->concept->terms as $key => $suggestedTerm)
                                                         @if(is_last($mergeSuggestion->concept->terms, $key))
-                                                            {{ $suggestedTerm->term }}
+                                                        <a href="{{ action('TermsController@show', $suggestedTerm->slug) }}">
+                                                            {{ $suggestedTerm->term }}</a>
                                                         @else
-                                                            {{ $suggestedTerm->term }},
+                                                            <a href="{{ action('TermsController@show', $suggestedTerm->slug) }}">
+                                                                {{ $suggestedTerm->term }}</a>,
                                                         @endif
                                                     @endforeach
                                                 </td>

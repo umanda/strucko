@@ -98,7 +98,7 @@ class SuggestionsController extends Controller
                     },
                     'user',
                     ])
-                ->orderBy('votes_sum')
+                ->orderBy('votes_sum', 'DESC')
                 ->paginate();
             
         return view('suggestions.merges', compact('termFilters', 'languages', 'scientificFields', 'mergeSuggestions'));

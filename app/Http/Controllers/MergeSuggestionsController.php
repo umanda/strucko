@@ -16,7 +16,6 @@ class MergeSuggestionsController extends Controller
         $this->middleware('auth');
         // Check if user has Administrator role for specified methods.
         $this->middleware('role:1000', ['except' => [
-            'show',
             'voteUp',
             'voteDown'
             ]]);

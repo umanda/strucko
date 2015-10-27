@@ -13,24 +13,30 @@ class UserTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        // Create fake users.
-        factory(App\User::class, 5)->create();
-        
+    {   
         // TODO Delete this before production
+        // Create admin user.
+        User::create([
+            'name' => 'Strucko Admin',
+            'email' => 'admin@strucko.com',
+            'password' => bcrypt('admin'),
+            'role_id' => 1000
+        ]);
         // Also create demo user.
         User::create([
             'name' => 'Demo User',
             'email' => 'demo@example.com',
             'password' => bcrypt('demo')
         ]);
-        
-         // Also create admin user.
+        // Create Microsoft Terminology seeding user
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin'),
-            'role_id' => 1000
+            'name' => 'MLT Seeder',
+            'email' => 'noreply@example.com',
+            'password' => bcrypt(str_random())
         ]);
+        // Create fake users.
+        factory(App\User::class, 5)->create();
+        
+        
     }
 }

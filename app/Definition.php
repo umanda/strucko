@@ -11,7 +11,9 @@ class Definition extends Model
         'concept_id',
         'language_id',
         'source',
-        'link'
+        'link',
+        //TODO remove user_id from fillable array after seed
+        'user_id'
     ];
     
     public function scopeSuggested($query)

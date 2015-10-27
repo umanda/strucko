@@ -14,6 +14,8 @@ class CreateConceptsTable extends Migration
     {
         Schema::create('concepts', function (Blueprint $table) {
             $table->increments('id');
+            // Microsoft Terminology Collection termEntry id
+            $table->string('term_entry_id')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,8 @@ class CreateDefinitionsTable extends Migration
             $table->text('link')->nullable();
             // Sum of votes in definition_votes table
             $table->integer('votes_sum')->default(0);
+            // Microsoft Terminology Collection termEntry id
+            $table->string('term_entry_id')->nullable();
             $table->timestamps();
             
             $table->integer('concept_id')->unsigned();

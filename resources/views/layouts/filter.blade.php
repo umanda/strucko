@@ -52,14 +52,15 @@
                                 </div>
                             </div>
                 
-                {{-- If menu_letter is set, include it in the form 
+                {{-- If menu_letter or search is set, include it in the form 
                             @if (isset($allFilters['menu_letter']))
                             <input type="hidden" name="menu_letter" value="{{ $allFilters['menu_letter'] }}">
-                            @endif --}}
-                {{-- If search is set, include it in the form --}}
+                            @endif 
+                
                             @if (isset($allFilters['search']))
                             <input type="hidden" name="search" value="{{ $allFilters['search'] }}">
                             @endif
+                --}}           
                             
                             <div class="form-group">
 

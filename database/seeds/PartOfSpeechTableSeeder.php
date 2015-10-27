@@ -24,6 +24,10 @@ class PartOfSpeechTableSeeder extends Seeder
             ['part_of_speech' => 'Preposition'],
             ['part_of_speech' => 'Conjunction'],
             ['part_of_speech' => 'Interjection'],
+            ['part_of_speech' => 'Proper Noun'],
+            ['part_of_speech' => 'Adjective'],
+            ['part_of_speech' => 'Other'],
+            
         ];
         
         foreach ($partOfSpeeches as $partOfSpeech) {

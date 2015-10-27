@@ -10,7 +10,8 @@ class ConceptTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        factory(App\Concept::class, 50)->create();
+    {   
+        // Dummy data
+        // factory(App\Concept::class, 50)->create();
     }
 }

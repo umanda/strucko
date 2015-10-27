@@ -11,7 +11,7 @@ class Definition extends Model
         'concept_id',
         'language_id',
         'source',
-        'link'
+        'link',
     ];
     
     public function scopeSuggested($query)

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Concept extends Model
 {
     protected $fillable = [
-        
+        'term_entry_id',
     ];
     /**
      * Concept may have many terms.

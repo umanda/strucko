@@ -30,7 +30,7 @@ class LanguageTableSeeder extends Seeder
         
         // $data is the iterator. Skip the first row, usually the header.
         // Original limit: 7865
-        $data = $csv->setOffset(1)->setLimit(500)->query();
+        $data = $csv->setOffset(1)->setLimit(7865)->query();
         
         foreach ($data as $index => $row) {
             Language::create([

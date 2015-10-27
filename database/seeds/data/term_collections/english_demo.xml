@@ -54,48 +54,6 @@
           </ntig>
         </langSet>
       </termEntry>
-      <termEntry id="25_42999">
-        <langSet xml:lang="en-US">
-          <descripGrp>
-            <descrip type="definition">In communications, the portion of a Data Terminal Equipment (DTE) device that sends data.</descrip>
-          </descripGrp>
-          <ntig>
-            <termGrp>
-              <term id="42999">data source</term>
-              <termNote type="partOfSpeech">Noun</termNote>
-            </termGrp>
-          </ntig>
-        </langSet>
-        <langSet xml:lang="en-gb">
-          <ntig>
-            <termGrp>
-              <term id="2119739">data source</term>
-              <termNote type="partOfSpeech">Noun</termNote>
-            </termGrp>
-          </ntig>
-        </langSet>
-      </termEntry>
-      <termEntry id="27_136378">
-        <langSet xml:lang="en-US">
-          <descripGrp>
-            <descrip type="definition">A transmission medium designed for high-speed data transfers over long distances. Cable modem services and Digital Subscriber Line (DSL) are examples of broadband networks.</descrip>
-          </descripGrp>
-          <ntig>
-            <termGrp>
-              <term id="136378">broadband</term>
-              <termNote type="partOfSpeech">Noun</termNote>
-            </termGrp>
-          </ntig>
-        </langSet>
-        <langSet xml:lang="en-gb">
-          <ntig>
-            <termGrp>
-              <term id="1972044">broadband</term>
-              <termNote type="partOfSpeech">Noun</termNote>
-            </termGrp>
-          </ntig>
-        </langSet>
-      </termEntry>
     </body>
   </text>
 </martif>

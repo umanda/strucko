@@ -5,11 +5,13 @@ use App\Concept;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\ScientificField;
 use App\PartOfSpeech;
+use App\Definition;
+use App\Term;
 
 class TermTableSeeder extends Seeder
 {
     use ManagesTerms;
-    // TODO remove from fillable: user_id in Definitions
+    
     /**
      * Run the database seeds.
      *
@@ -62,42 +64,67 @@ class TermTableSeeder extends Seeder
         while ($reader->name == 'termEntry') {
             // Use SimpleXML to work with current entry.
             $termEntry = new SimpleXMLElement($reader->readOuterXML());
-            $termEntryId = (string)$termEntry['id'];
-            $concept = Concept::firstOrCreate(['term_entry_id' => $termEntryId]);
-            // Create definition
-            $concept->definitions()->create([
-                'user_id' => 1,
-                'definition' => (string)$termEntry->langSet->descripGrp->descrip,
-                'language_id' => $firstFile['language_id'],
-                'source' => 'Entry from the Microsoft Language Portal. © 2015 Microsoft Corporation. All rights reserved.',
-                'link' => 'http://www.microsoft.com/Language/en-US/Terminology.aspx'
-            ]);
             
-            // Get term
-            $term = (string)$termEntry->langSet->ntig->termGrp->term;
-            // Get part of speech
-            $partOfSpeech = PartOfSpeech::firstOrCreate(['part_of_speech' => (string)$termEntry->langSet->ntig->termGrp->termNote]);
-            // prepare slug
-            $slug = str_slug(
-                    $term . '-'
-                    . $firstFile['language'] . '-'
-                    . $partOfSpeech->part_of_speech . '-'
-                    . $scientificField->scientific_field . '-'
-                    . str_random()
+            $seedTermEntryId = (string)$termEntry['id'];
+            $seedDefinition = (string)$termEntry->langSet->descripGrp->descrip;
+            $seedTerm = (string)$termEntry->langSet->ntig->termGrp->term;
+            $seedPartOfSpeech = PartOfSpeech::firstOrCreate([
+                    'part_of_speech' => (string)$termEntry->langSet->ntig->termGrp->termNote
+                ]);
+            $menuLetter = $this->prepareMenuLetter($seedTerm, $firstFile['language_id']);
+            $userId = 1;
+            
+            // First check if the term already exists in the database.
+            $term = $this->tryToGetTerm($seedTerm, $firstFile['language_id'], $seedPartOfSpeech->id, $scientificField->id);
+            
+            if(is_null($term)){
+                // Create term and definition.
+                $concept = Concept::create();
+                // Prepare slug
+                $slug = $this->prepareSlugForSeededTerms(
+                        $seedTerm,
+                        $firstFile['language'],
+                        $seedPartOfSpeech->part_of_speech,
+                        $scientificField->scientific_field
                     );
-            // Get menu letter
-            $menuLetter = $this->prepareMenuLetter($term, $firstFile['language_id']);
-            // Create term
-            $concept->terms()->create([
-                'term' => $term,
-                'slug' => $slug,
-                'menu_letter' => $menuLetter,
-                'user_id' => 1,
-                'language_id' => $firstFile['language_id'],
-                'part_of_speech_id' => $partOfSpeech->id,
-                'scientific_field_id' => $scientificField->id,
-                'is_abbreviation' => false,
-            ]);
+                // Create term
+                $concept->terms()->create([
+                    'term' => $seedTerm,
+                    'slug' => $slug,
+                    'menu_letter' => $menuLetter,
+                    'user_id' => $userId,
+                    'language_id' => $firstFile['language_id'],
+                    'part_of_speech_id' => $seedPartOfSpeech->id,
+                    'scientific_field_id' => $scientificField->id,
+                    'is_abbreviation' => false,
+                ]);
+                // Create definition
+                $definition = new Definition;
+                $definition->user_id = $userId;
+                $definition->concept_id = $concept->id;
+                $definition->definition = $seedDefinition;
+                $definition->term_entry_id = $seedTermEntryId;
+                $definition->language_id = $firstFile['language_id'];
+                $definition->source ='Entry from the Microsoft Language Portal. © 2015 Microsoft Corporation. All rights reserved.';
+                $definition->link = 'http://www.microsoft.com/Language/en-US/Terminology.aspx';
+                $definition->save();
+            }
+            else {
+                // Term exist
+                // If definition does not exist, create it. Use concept_id from term
+                if ( ! Definition::where('term_entry_id', $seedTermEntryId)->exists()) {
+                    $definition = new Definition;
+                    $definition->user_id = $userId;
+                    $definition->concept_id = $term->concept_id;
+                    $definition->definition = $seedDefinition;
+                    $definition->term_entry_id = $seedTermEntryId;
+                    $definition->language_id = $firstFile['language_id'];
+                    $definition->source ='Entry from the Microsoft Language Portal. © 2015 Microsoft Corporation. All rights reserved.';
+                    $definition->link = 'http://www.microsoft.com/Language/en-US/Terminology.aspx';
+                    $definition->save();
+                }
+            }
+            
             $reader->next('termEntry');
         }
         $reader->close();
@@ -138,6 +165,26 @@ class TermTableSeeder extends Seeder
             // Close reader
             $reader->close();
         }
+    }
+
+    protected function tryToGetTerm($term, $languageId, $partOfSpeechId, $scientificFieldId)
+    {
+        return Term::where('term', $term)
+                ->where('language_id', $languageId)
+                ->where('part_of_speech_id', $partOfSpeechId)
+                ->where('scientific_field_id', $scientificFieldId)
+                ->first();
+    }
+
+    public function prepareSlugForSeededTerms($term, $language, $partOfSpeech, $scientificField)
+    {
+        return str_slug(
+                    $term . '-'
+                    . $language . '-'
+                    . $partOfSpeech . '-'
+                    . $scientificField . '-'
+                    . str_random()
+                );
     }
 
 }

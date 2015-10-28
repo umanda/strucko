@@ -19,9 +19,15 @@ class TermTableSeeder extends Seeder
     {
         // Dummy data
         // factory(App\Term::class, 50)->create();
-        // Real data from XML sources
+        // 
         // http://stackoverflow.com/questions/1835177/how-to-use-xmlreader-in-php
+        // http://www.codeproject.com/Articles/582953/Working-with-XML-in-PHP
+        // http://www.ibm.com/developerworks/library/x-xmlphp2/
+        // http://www.ibm.com/developerworks/library/x-pullparsingphp/
+        // 
+        // Real data from XML sources
         // Source of XML files: http://www.microsoft.com/Language/en-US/Terminology.aspx
+        // 
         // Path where we have stored XML files
         $path = 'database/seeds/data/term_collections/';
         $scientificField = ScientificField::where('scientific_field', 'Computing')->first();

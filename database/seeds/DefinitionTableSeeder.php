@@ -11,6 +11,7 @@ class DefinitionTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Definition::class, 5)->create();
+        // Dummy data
+        //factory(App\Definition::class, 5)->create();
     }
 }

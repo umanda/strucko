@@ -7,6 +7,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -68,5 +69,37 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+    
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postRegister(Request $request, AppMailer $mailer)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        
+        // Create the user
+        $user = $this->create($request->all());
+        // Ok, we need to set the token. We could do this easily here and save the user,
+        // but we'll use Model events for this to learn how that works. Check the 
+        // boot() method on User model.
+        
+        // Send mail to the user
+        $mailer->sendEmailConfirmationTo($user);
+        // Flash the message
+        return redirect('auth/login')->with([
+                    'alert' => 'Check your mailbox and confirm your email...',
+                    'alert_class' => 'alert alert-warning'
+        ]);
+
     }
 }

@@ -51,3 +51,8 @@ function is_last($collection, $currentKey)
     // Return true if the current key is the same as the end key on the array.
     return $endKey == $currentKey;
 }
+
+function flash($message)
+{
+    sesssion()->flash('message', $message);
+}

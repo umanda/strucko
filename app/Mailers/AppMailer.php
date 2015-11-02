@@ -39,7 +39,7 @@ class AppMailer {
     public function sendEmailConfirmationTo(User $user)
     {
         $this->to = $user->email;
-        $this->view = 'email.confirm';
+        $this->view = 'emails.confirm';
         $this->data = compact('user');
         
         $this->deliver();

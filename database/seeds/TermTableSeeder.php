@@ -36,13 +36,27 @@ class TermTableSeeder extends Seeder
         
         $firstFile = ['name' => 'en.xml', 'language_id' => 'eng', 'language' => 'English'];
         
-        // $this->seedFirstFile($firstFile, $path, $scientificField);
+        $this->seedFirstFile($firstFile, $path, $scientificField);
         
         // Ok, now use other files for other languages
         $files = [
-            ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
             ['name' => 'af.xml', 'language_id' => 'afr', 'language' => 'Afrikaans'],
             ['name' => 'sq.xml', 'language_id' => 'sqi', 'language' => 'Albanian'],
+            ['name' => 'am.xml', 'language_id' => 'amh', 'language' => 'Amharic'],
+            ['name' => 'ar.xml', 'language_id' => 'ara', 'language' => 'Arabic'],
+            ['name' => 'hy.xml', 'language_id' => 'hye', 'language' => 'Armenian'],
+            ['name' => 'as.xml', 'language_id' => 'asm', 'language' => 'Assamese'],
+            ['name' => 'az.xml', 'language_id' => 'aze', 'language' => 'Azerbaijani'],
+            ['name' => 'eu.xml', 'language_id' => 'eus', 'language' => 'Basque'],
+            ['name' => 'be.xml', 'language_id' => 'bel', 'language' => 'Belarusian'],
+            ['name' => 'bs.xml', 'language_id' => 'bos', 'language' => 'Bosnian'],
+            ['name' => 'bg.xml', 'language_id' => 'bul', 'language' => 'Bulgarian'],
+            ['name' => 'ca.xml', 'language_id' => 'cat', 'language' => 'Catalan'],
+            ['name' => 'ku.xml', 'language_id' => 'kur', 'language' => 'Kurdish'],
+            ['name' => 'zh.xml', 'language_id' => 'zho', 'language' => 'Chinese'],
+            
+            
+            ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
             
         ];
 
@@ -236,8 +250,9 @@ class TermTableSeeder extends Seeder
                     
                     $translationTerm = $this->tryToGetTerm($translationSeedTerm, $file['language_id'], $seedPartOfSpeech->id, $scientificField->id);
                     
+                   
                     if(is_null($translationTerm)) {
-                       
+                        
                         $translationSlug = $this->prepareSlugForSeededTerms(
                             $translationSeedTerm,
                             $file['language'],
@@ -245,7 +260,8 @@ class TermTableSeeder extends Seeder
                             $scientificField->scientific_field
                         );
                         $translationMenuLetter = $this->prepareMenuLetter($translationSeedTerm, $file['language_id']);
-                        $originalTerm->concept->create([
+                        
+                        $originalTerm->concept->terms()->create([
                             'term' => $translationSeedTerm,
                             'slug' => $translationSlug,
                             'menu_letter' => $translationMenuLetter,

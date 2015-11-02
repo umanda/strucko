@@ -22,6 +22,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Strucko Admin',
             'email' => 'admin@strucko.com',
             'password' => bcrypt(str_random()),
+            'verified' => true,
             'role_id' => 1000
         ]);
         

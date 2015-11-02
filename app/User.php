@@ -37,6 +37,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
     
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($user){
+            $user->token = str_random(30);
+        });
+    }
+    
     /**
      * A user may have many terms.
      * 

@@ -70,6 +70,7 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 // Registration routes...
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::get('auth/confirm/{token}', 'Auth\AuthController@getConfirm');
 
 // Password reset link request routes...
 Route::get('password/email', 'Auth\PasswordController@getEmail');

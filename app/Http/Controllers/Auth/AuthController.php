@@ -7,6 +7,9 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use App\Mailers\AppMailer;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -68,5 +71,108 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+    
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postRegister(Request $request, AppMailer $mailer)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        
+        // Create the user
+        $user = $this->create($request->all());
+        // Ok, we need to set the token. We could do this easily here and save the user,
+        // but we'll use Model events for this to learn how that works. Check the 
+        // boot() method on User model.
+        
+        // Send mail to the user
+        $mailer->sendEmailConfirmationTo($user);
+        // Flash the message
+        return redirect('auth/login')->with([
+                    'alert' => 'Check your mailbox and confirm your email before you log in.',
+                    'alert_class' => 'alert alert-warning'
+        ]);
+
+    }
+    /**
+     * Confirm user email.
+     * 
+     * @param type $token
+     * @return type
+     */
+    public function getConfirm($token)
+    {
+        $user = User::where('token', $token)->firstOrFail();
+        $user->verified = true;
+        $user->token = null;
+        $user->save();
+        
+        return redirect('auth/login')->with([
+                    'alert' => 'Email confirmed! You may log in.',
+                    'alert_class' => 'alert alert-warning'
+        ]);
+    }
+    
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, [
+            $this->loginUsername() => 'required', 'password' => 'required',
+        ]);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+
+        if ($throttles && $this->hasTooManyLoginAttempts($request)) {
+            return $this->sendLockoutResponse($request);
+        }
+
+        $credentials = $this->getCredentials($request);
+
+        if (Auth::attempt($credentials, $request->has('remember'))) {
+            return $this->handleUserWasAuthenticated($request, $throttles);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        if ($throttles) {
+            $this->incrementLoginAttempts($request);
+        }
+
+        return redirect($this->loginPath())
+            ->withInput($request->only($this->loginUsername(), 'remember'))
+            ->withErrors([
+                $this->loginUsername() => $this->getFailedLoginMessage(),
+            ]);
+    }
+    
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function getCredentials(Request $request)
+    {
+        return $request->only($this->loginUsername(), 'password')
+            + ['verified' => true];
     }
 }

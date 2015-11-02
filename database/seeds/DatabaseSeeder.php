@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         'merge_suggestion_votes',
         'merge_suggestions',
         'term_votes',
+        'definition_votes',
         'definitions',
         'terms',
         'concepts',
@@ -48,13 +49,13 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleTableSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(StatusTableSeeder::class);
-        $this->call(LanguageTableSeeder::class);
+        // $this->call(LanguageTableSeeder::class);
         $this->call(PartOfSpeechTableSeeder::class);
         $this->call(ScientificAreaTableSeeder::class);
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
         $this->call(ConceptTableSeeder::class);        
-        $this->call(TermTableSeeder::class);
+        // $this->call(TermTableSeeder::class);
         $this->call(DefinitionTableSeeder::class);
         
         Model::reguard();

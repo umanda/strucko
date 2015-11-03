@@ -13,13 +13,13 @@ class PagesController extends Controller
     public function getHome()
     {
         $categories = Term::approved()
-                ->select(DB::raw('count(*) as count', 'language_id', 'scientific_field_id'))
+                ->select(DB::raw('count(*) as count'), 'language_id', 'scientific_field_id')
                 ->groupBy('language_id', 'scientific_field_id')
                 ->orderBy('count', 'DESC')
-                ->take(5)
+                ->take(4)
+                ->with('language', 'scientificField')
                 ->get();
                 
-        dd($categories);
-        return view('pages.home');
+        return view('pages.home', compact('categories'));
     }
 }

@@ -10,9 +10,18 @@
 
 </head>
 <body>
-    <h1>Thanks for signing up!</h1>
+    <h3>Hello <?php echo $user->name; ?>, thanks for signing up!</h3>
     <p>
         We just need you to <a href='{{ url("auth/confirm/{$user->token}") }}' target="_blank">confirm your email</a> real quick!
+    </p>
+    <p>
+        As a registered user you can now vote for existing terms and also suggest 
+        new terms and definitions.
+    </p>
+    <p>
+        Thanks,
+        <br>
+        Strucko Team
     </p>
 </body>
 </html>

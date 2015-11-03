@@ -20,7 +20,9 @@ class AppMailer {
     
     protected $mailer;
     protected $from = 'admin@strucko.com';
+    protected $fromName = 'Strucko Admin';
     protected $to;
+    protected $subject;
     protected $view;
     protected $data = [];
     
@@ -31,8 +33,9 @@ class AppMailer {
     public function deliver()
     {
         $this->mailer->send($this->view, $this->data, function($message){
-            $message->from($this->from, 'Strucko Admin')
-                    ->to($this->to);
+            $message->from($this->from, $this->fromName)
+                    ->to($this->to)
+                    ->subject($this->subject);
         });
     }
     
@@ -41,7 +44,7 @@ class AppMailer {
         $this->to = $user->email;
         $this->view = 'emails.confirm';
         $this->data = compact('user');
-        
+        $this->subject = 'Verify your email';
         $this->deliver();
     }
 }

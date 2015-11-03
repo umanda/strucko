@@ -99,7 +99,7 @@ class AuthController extends Controller
         $mailer->sendEmailConfirmationTo($user);
         // Flash the message
         return redirect('auth/login')->with([
-                    'alert' => 'Check your mailbox and confirm your email before you log in.',
+                    'alert' => 'Check your mailbox and verify your email before you log in.',
                     'alert_class' => 'alert alert-warning'
         ]);
 
@@ -118,7 +118,7 @@ class AuthController extends Controller
         $user->save();
         
         return redirect('auth/login')->with([
-                    'alert' => 'Email confirmed! You may log in.',
+                    'alert' => 'Email verified! You may log in.',
                     'alert_class' => 'alert alert-warning'
         ]);
     }

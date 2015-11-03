@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleTableSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(StatusTableSeeder::class);
-        // $this->call(LanguageTableSeeder::class);
+        $this->call(LanguageTableSeeder::class);
         $this->call(PartOfSpeechTableSeeder::class);
         $this->call(ScientificAreaTableSeeder::class);
         $this->call(ScientificFieldTableSeeder::class);

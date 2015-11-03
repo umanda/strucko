@@ -94,21 +94,21 @@
             </tbody>
         </table>
         
-            {!! $terms->appends($allFilters)->render() !!}
-        
-            {{-- Terms are empty --}}
-            @else
-                {{-- Messages for the user if there are no terms to display --}}
-                {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try some other letter</p>' : '' !!}
-                {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try something else</p>' : '' !!}
-                
-                {{-- If letter or search is not set, but we have menu letters displayed... --}}
-                {!! !(isset($allFilters['menu_letter']))
-                && !(isset($allFilters['search']))
-                && isset($menuLetters) 
-                && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select a letter or search for specific term</p>' : '' !!}
-        
-            @endif
+        {!! $terms->appends($allFilters)->render() !!}
+
+        {{-- Terms are empty --}}
+        @else
+            {{-- Messages for the user if there are no terms to display --}}
+            {!! isset($allFilters['menu_letter']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try some other letter</p>' : '' !!}
+            {!! isset($allFilters['search']) && $terms->isEmpty() ? '<p class="btn-lg btn-info">No results, try something else</p>' : '' !!}
+
+            {{-- If letter or search is not set, but we have menu letters displayed... --}}
+            {!! !(isset($allFilters['menu_letter']))
+            && !(isset($allFilters['search']))
+            && isset($menuLetters) 
+            && !($menuLetters->isEmpty()) ? '<p class="btn-lg btn-info">Select a letter or search for specific term</p>' : '' !!}
+
+        @endif
     </div>
 </div>
 @endsection

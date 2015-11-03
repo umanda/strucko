@@ -11,8 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages.home');
+// Pages...
+Route::get('/', 'PagesController@getHome');
+get('home', function () {
+   return view('pages.user');
+});
+get('contact', function () {
+   return view('pages.contact');
 });
 
 // Terms routes.
@@ -53,14 +58,6 @@ post('suggestions/merges/{id}/vote/down', 'MergeSuggestionsController@voteDown')
 post('suggestions/merges/{id}/approveMerge', 'MergeSuggestionsController@voteDown');
 
 get('suggestions/definitions', 'SuggestionsController@definitions');
-
-// Pages...
-get('home', function () {
-   return view('pages.user');
-});
-get('contact', function () {
-   return view('pages.contact');
-});
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');

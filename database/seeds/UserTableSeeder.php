@@ -21,7 +21,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'Strucko Admin',
             'email' => 'admin@strucko.com',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt('admin'),
             'verified' => true,
             'role_id' => 1000
         ]);

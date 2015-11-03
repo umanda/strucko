@@ -3,7 +3,7 @@
 <div class="form-group">
     <label for="term">Term:</label>
     <input type="text" id="term" name="term" maxlength="255" required="required"
-           placeholder="Term" class="form-control"
+           placeholder="Term" class="form-control" autocomplete="off"
            value="{{ isset($term) ? $term->term : old('term') }}">
 </div>
 <div class="checkbox">

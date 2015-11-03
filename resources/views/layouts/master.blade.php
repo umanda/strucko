@@ -20,7 +20,7 @@
             
             @include('layouts.navbar')
             
-            <div class="row">
+            <div class="row margin-top-10">
                 @include('shared.alert')
             </div>
             <div class="row">

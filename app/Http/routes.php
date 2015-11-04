@@ -45,8 +45,8 @@ post('terms', 'TermsController@store');
 post('definitions', 'DefinitionsController@store');
 post('definitions/{id}/vote/up', 'DefinitionVotesController@voteUp');
 post('definitions/{id}/vote/down', 'DefinitionVotesController@voteDown');
-post('terms/{id}/status/approve', 'DefinitionsController@approveTerm');
-post('terms/{id}/status/reject', 'DefinitionsController@rejectTerm');
+post('definitions/{id}/status/approve', 'DefinitionsController@approve');
+post('definitions/{id}/status/reject', 'DefinitionsController@reject');
 
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');

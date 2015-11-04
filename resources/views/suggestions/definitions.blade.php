@@ -55,10 +55,14 @@
 
                                                 @if (Auth::check() && ! (Auth::user()->role_id < 1000))
                                                 <td class="text-center vertical-center-cell">
-                                                    todo
+                                                    <form method="POST" action="{{ action('DefinitionsController@approve', [$definition->id]) }}">
+                                                        @include('suggestions.forms.approve')
+                                                    </form>
                                                 </td>
                                                 <td class="text-center vertical-center-cell">
-                                                    todo
+                                                    <form method="POST" action="{{ action('DefinitionsController@reject', [$definition->id]) }}">
+                                                        @include('suggestions.forms.reject')
+                                                    </form>
                                                 </td>
                                                 @endif
                                             </tr>

@@ -36,10 +36,14 @@
             </div>
 
             <div class="row">
+                @include('layouts.footer')
                 @yield('footer')
             </div>
         </div> <!-- /container -->
 
         <script src="/js/all.js"></script>
+        @if(getenv('APP_ENV')=='production')
+            @include('layouts.antiblock')
+        @endif
     </body>
 </html>

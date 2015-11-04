@@ -17,9 +17,9 @@
             <div class="row">
                 @include('layouts.header')
             </div>
-            
+
             @include('layouts.navbar')
-            
+
             <div class="row margin-top-10">
                 @include('shared.alert')
             </div>
@@ -34,16 +34,14 @@
             <div class="row">
                 @include('errors.list')
             </div>
-
-            <div class="row">
-                @include('layouts.footer')
-                @yield('footer')
-            </div>
+            <hr>
+            @include('layouts.footer')
         </div> <!-- /container -->
+        
 
         <script src="/js/all.js"></script>
         @if(getenv('APP_ENV')=='production')
-            @include('layouts.antiblock')
+        @include('layouts.antiblock')
         @endif
     </body>
 </html>

@@ -226,7 +226,8 @@ class TermsController extends Controller
             $definitionFilters['language_id'] = $languageId;
             Auth::check() ? '' : $definitionFilters['status_id'] = 1000;
                         
-            $query->where($definitionFilters)
+            $query->greaterThanRejected()
+                    ->where($definitionFilters)
                     ->with(['status',
                         'votes' => function($query) {
                             $query->where('user_id', Auth::id());

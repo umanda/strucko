@@ -119,7 +119,7 @@ trait ManagesTerms
         // Get areas including their fileds.
         $areas = ScientificArea::active()
                 ->with(['scientificFields' => function ($query) {
-                        $query->where('active', 1)->orderBy('scientific_field');
+                        $query->where('active', 1)->orderBy('mark');
                     }])
                 ->orderBy('scientific_area')
                 ->get();

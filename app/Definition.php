@@ -19,6 +19,11 @@ class Definition extends Model
         $query->where('status_id', 500);
     }
     
+    public function scopeGreaterThanRejected($query)
+    {
+        $query->where('status_id', '>', 250);
+    }
+    
     /**
      * Definition belongs to concept.
      *

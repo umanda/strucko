@@ -18,7 +18,7 @@
                     <a href="{{ action('TermsController@index') }}">Terms</a>
                     @endif
                 </li>
-                <li class="{{ set_active('terms/create') }}"><a href="/terms/create">Create</a></li>
+                <li class="{{ set_active('terms/create') }}"><a href="/terms/create">New Term</a></li>
                 <li><a href="/contact">Contact</a></li>
                 
                 {{--Admin menu--}}

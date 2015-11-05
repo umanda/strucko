@@ -22,4 +22,24 @@ class PagesController extends Controller
                 
         return view('pages.home', compact('categories'));
     }
+    
+    public function getPrivacyPolicy()
+    {                
+        return view('pages.privacy_policy');
+    }
+    
+    public function getDisclaimer()
+    {                
+        return view('pages.disclaimer');
+    }
+    
+    public function getAbout()
+    {                
+        return view('pages.about');
+    }
+    
+    public function getTermsOfUse()
+    {                
+        return view('pages.terms_of_use');
+    }
 }

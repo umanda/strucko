@@ -13,6 +13,10 @@
 
 // Pages...
 Route::get('/', 'PagesController@getHome');
+Route::get('/privacy-policy', 'PagesController@getPrivacyPolicy');
+Route::get('/terms-of-use', 'PagesController@getTermsOfUse');
+Route::get('/disclaimer', 'PagesController@getDisclaimer');
+Route::get('/about', 'PagesController@getAbout');
 get('home', function () {
    return view('pages.user');
 });

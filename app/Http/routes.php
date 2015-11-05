@@ -14,6 +14,7 @@
 // Pages...
 Route::get('/', 'PagesController@getHome');
 Route::get('/privacy-policy', 'PagesController@getPrivacyPolicy');
+Route::get('/cookie-policy', 'PagesController@getCookiePolicy');
 Route::get('/terms-of-use', 'PagesController@getTermsOfUse');
 Route::get('/disclaimer', 'PagesController@getDisclaimer');
 Route::get('/about', 'PagesController@getAbout');

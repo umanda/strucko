@@ -54,9 +54,56 @@ class TermTableSeeder extends Seeder
             ['name' => 'ca.xml', 'language_id' => 'cat', 'language' => 'Catalan'],
             ['name' => 'ku.xml', 'language_id' => 'kur', 'language' => 'Kurdish'],
             ['name' => 'zh.xml', 'language_id' => 'zho', 'language' => 'Chinese'],
-            
-            
             ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
+            ['name' => 'cs.xml', 'language_id' => 'ces', 'language' => 'Czech'],
+            ['name' => 'da.xml', 'language_id' => 'dan', 'language' => 'Danish'],
+            ['name' => 'nl.xml', 'language_id' => 'nld', 'language' => 'Dutch'],
+            ['name' => 'et.xml', 'language_id' => 'est', 'language' => 'Estonian'],
+            ['name' => 'fil.xml', 'language_id' => 'fil', 'language' => 'Filipino'],
+            ['name' => 'fi.xml', 'language_id' => 'fin', 'language' => 'Finnish'],
+            ['name' => 'fr.xml', 'language_id' => 'fra', 'language' => 'French'],            
+            ['name' => 'gl.xml', 'language_id' => 'glg', 'language' => 'Galician'],
+            ['name' => 'ka.xml', 'language_id' => 'kat', 'language' => 'Georgian'],
+            ['name' => 'de.xml', 'language_id' => 'deu', 'language' => 'German'],
+            ['name' => 'el.xml', 'language_id' => 'ell', 'language' => 'Greek'],
+            ['name' => 'gu.xml', 'language_id' => 'guj', 'language' => 'Gujarati'],
+            ['name' => 'ha.xml', 'language_id' => 'hau', 'language' => 'Hausa'],
+            ['name' => 'he.xml', 'language_id' => 'heb', 'language' => 'Hebrew'],
+            ['name' => 'hi.xml', 'language_id' => 'hin', 'language' => 'Hindi'],
+            ['name' => 'hu.xml', 'language_id' => 'hun', 'language' => 'Hungarian'],
+            ['name' => 'is.xml', 'language_id' => 'isl', 'language' => 'Icelandic'],
+            ['name' => 'ig.xml', 'language_id' => 'ibo', 'language' => 'Igbo'],
+            ['name' => 'id.xml', 'language_id' => 'ind', 'language' => 'Indonesian'],
+            ['name' => 'iu.xml', 'language_id' => 'iku', 'language' => 'Inuktitut'],
+            ['name' => 'ga.xml', 'language_id' => 'gle', 'language' => 'Irish'],
+            ['name' => 'xh.xml', 'language_id' => 'xho', 'language' => 'Xhosa'],
+            ['name' => 'zu.xml', 'language_id' => 'zul', 'language' => 'Zulu'],
+            ['name' => 'it.xml', 'language_id' => 'ita', 'language' => 'Italian'],
+            ['name' => 'ja.xml', 'language_id' => 'jpn', 'language' => 'Japanese'],
+            ['name' => 'kn.xml', 'language_id' => 'kan', 'language' => 'Kannada'],
+            ['name' => 'kk.xml', 'language_id' => 'kaz', 'language' => 'Kazakh'],
+            ['name' => 'km.xml', 'language_id' => 'khm', 'language' => 'Central Khmer'],
+            ['name' => 'rw.xml', 'language_id' => 'kin', 'language' => 'Kinyarwanda'],
+            ['name' => 'kok.xml', 'language_id' => 'kok', 'language' => 'Konkani (macrolanguage)'],
+            ['name' => 'ko.xml', 'language_id' => 'kor', 'language' => 'Korean'],
+            ['name' => 'ky.xml', 'language_id' => 'kir', 'language' => 'Kirghiz'],
+            ['name' => 'lo.xml', 'language_id' => 'lao', 'language' => 'Lao'],
+            ['name' => 'lv.xml', 'language_id' => 'lav', 'language' => 'Latvian'],
+            ['name' => 'lt.xml', 'language_id' => 'lit', 'language' => 'Lithuanian'],
+            ['name' => 'mk.xml', 'language_id' => 'mkd', 'language' => 'Macedonian'],
+            ['name' => 'ms.xml', 'language_id' => 'msa', 'language' => 'Malay (macrolanguage)'],
+            ['name' => 'ml.xml', 'language_id' => 'mal', 'language' => 'Malayalam'],
+            ['name' => 'mt.xml', 'language_id' => 'mlt', 'language' => 'Maltese'],
+            ['name' => 'mi.xml', 'language_id' => 'mri', 'language' => 'Maori'],
+            ['name' => 'mr.xml', 'language_id' => 'mar', 'language' => 'Marathi'],
+            ['name' => 'ne.xml', 'language_id' => 'nep', 'language' => 'Nepali (macrolanguage)'],
+            ['name' => 'nb.xml', 'language_id' => 'nob', 'language' => 'Norwegian Bokmål'],
+            ['name' => 'nn.xml', 'language_id' => 'nno', 'language' => 'Norwegian Nynorsk'],
+            ['name' => 'or.xml', 'language_id' => 'ori', 'language' => 'Oriya (macrolanguage)'],
+            ['name' => 'ps.xml', 'language_id' => 'pus', 'language' => 'Pushto'],
+            ['name' => 'fa.xml', 'language_id' => 'fas', 'language' => 'Persian'],
+            
+            
             
         ];
 
@@ -64,8 +111,8 @@ class TermTableSeeder extends Seeder
         $this->seedOtherFiles($files, $firstFile, $path, $scientificField);
 
     }
-    /** I have to rewrite this, I can have miltiple terms with different
-     * deffinitions.
+    /** 
+     * Seed the english file first.
      * 
      * @param type $firstFile
      * @param type $path
@@ -290,7 +337,7 @@ class TermTableSeeder extends Seeder
                 ->first();
     }
 
-    public function prepareSlugForSeededTerms($term, $language, $partOfSpeech, $scientificField)
+    protected function prepareSlugForSeededTerms($term, $language, $partOfSpeech, $scientificField)
     {
         return str_slug(
                     $term . '-'

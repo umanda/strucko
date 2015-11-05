@@ -10,7 +10,8 @@
         <title>Strucko - @yield('title')</title>
 
         <link rel="stylesheet" href="/css/app.css">
-
+        
+        @include('layouts.cookie_consent')
     </head>
     <body>
         <div class="container">
@@ -41,7 +42,7 @@
 
         <script src="/js/all.js"></script>
         @if(getenv('APP_ENV')=='production')
-        @include('layouts.antiblock')
+            @include('layouts.antiblock')
         @endif
     </body>
 </html>

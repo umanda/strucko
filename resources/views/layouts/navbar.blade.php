@@ -19,7 +19,8 @@
                     @endif
                 </li>
                 <li class="{{ set_active('terms/create') }}"><a href="/terms/create">New Term</a></li>
-                <li><a href="/contact">Contact</a></li>
+                <li class="{{ set_active('contact*') }}"><a href="/contact">Contact</a></li>
+                <li class="{{ set_active('about*') }}"><a href="/about">About</a></li>
                 
                 {{--Admin menu--}}
                 @if (Auth::check() && ! (Auth::user()->role_id < 1000))

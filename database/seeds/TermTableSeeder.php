@@ -54,9 +54,35 @@ class TermTableSeeder extends Seeder
             ['name' => 'ca.xml', 'language_id' => 'cat', 'language' => 'Catalan'],
             ['name' => 'ku.xml', 'language_id' => 'kur', 'language' => 'Kurdish'],
             ['name' => 'zh.xml', 'language_id' => 'zho', 'language' => 'Chinese'],
-            
-            
             ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
+            ['name' => 'cs.xml', 'language_id' => 'ces', 'language' => 'Czech'],
+            ['name' => 'da.xml', 'language_id' => 'dan', 'language' => 'Danish'],
+            ['name' => 'nl.xml', 'language_id' => 'nld', 'language' => 'Dutch'],
+            ['name' => 'et.xml', 'language_id' => 'est', 'language' => 'Estonian'],
+            ['name' => 'fil.xml', 'language_id' => 'fil', 'language' => 'Filipino'],
+            ['name' => 'fi.xml', 'language_id' => 'fin', 'language' => 'Finnish'],
+            ['name' => 'fr.xml', 'language_id' => 'fra', 'language' => 'French'],            
+            ['name' => 'gl.xml', 'language_id' => 'glg', 'language' => 'Galician'],
+            ['name' => 'ka.xml', 'language_id' => 'kat', 'language' => 'Georgian'],
+            ['name' => 'de.xml', 'language_id' => 'deu', 'language' => 'German'],
+            ['name' => 'el.xml', 'language_id' => 'ell', 'language' => 'Greek'],
+            ['name' => 'gu.xml', 'language_id' => 'guj', 'language' => 'Gujarati'],
+            ['name' => 'ha.xml', 'language_id' => 'hau', 'language' => 'Hausa'],
+            ['name' => 'he.xml', 'language_id' => 'heb', 'language' => 'Hebrew'],
+            ['name' => 'hi.xml', 'language_id' => 'hin', 'language' => 'Hindi'],
+            ['name' => 'hu.xml', 'language_id' => 'hun', 'language' => 'Hungarian'],
+            ['name' => 'is.xml', 'language_id' => 'isl', 'language' => 'Icelandic'],
+            ['name' => 'ig.xml', 'language_id' => 'ibo', 'language' => 'Igbo'],
+            ['name' => 'id.xml', 'language_id' => 'ind', 'language' => 'Indonesian'],
+            ['name' => 'iu.xml', 'language_id' => 'iku', 'language' => 'Inuktitut'],
+            ['name' => 'ga.xml', 'language_id' => 'gle', 'language' => 'Irish'],
+            ['name' => 'xh.xml', 'language_id' => 'xho', 'language' => 'Xhosa'],
+            ['name' => 'zu.xml', 'language_id' => 'zul', 'language' => 'Zulu'],
+            ['name' => 'it.xml', 'language_id' => 'ita', 'language' => 'Italian'],
+            ['name' => 'ja.xml', 'language_id' => 'jpn', 'language' => 'Japanese'],
+            
+            
+            
             
         ];
 
@@ -64,8 +90,8 @@ class TermTableSeeder extends Seeder
         $this->seedOtherFiles($files, $firstFile, $path, $scientificField);
 
     }
-    /** I have to rewrite this, I can have miltiple terms with different
-     * deffinitions.
+    /** 
+     * Seed the english file first.
      * 
      * @param type $firstFile
      * @param type $path
@@ -290,7 +316,7 @@ class TermTableSeeder extends Seeder
                 ->first();
     }
 
-    public function prepareSlugForSeededTerms($term, $language, $partOfSpeech, $scientificField)
+    protected function prepareSlugForSeededTerms($term, $language, $partOfSpeech, $scientificField)
     {
         return str_slug(
                     $term . '-'

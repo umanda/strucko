@@ -138,6 +138,7 @@
     <p>
         Marko I.
     </p>
+    <p>Last edited on Thu 5 Nov, 17:58 CET</p>
 </article>
 @endsection
 

@@ -3,10 +3,10 @@
         <a href="#" class="pull-right">Back to top</a>
         
         <ul class="nav nav-pills">
-            <li role="presentation"><a href="/privacy-policy" class="text-muted">Privacy Policy</a></li>
             <li role="presentation"><a href="/terms-of-use" class="text-muted">Terms Of Use</a></li>
+            <li role="presentation"><a href="/privacy-policy" class="text-muted">Privacy Policy</a></li>
+            <li role="presentation"><a href="/cookie-policy" class="text-muted">Cookie Policy</a></li>
             <li role="presentation"><a href="/disclaimer" class="text-muted">Disclaimer</a></li>
-            <li role="presentation"><a href="/about" class="text-muted">About</a></li>
         </ul>
         
         <p class="text-muted text-center">

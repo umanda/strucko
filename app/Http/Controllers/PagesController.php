@@ -28,6 +28,11 @@ class PagesController extends Controller
         return view('pages.privacy_policy');
     }
     
+    public function getCookiePolicy()
+    {                
+        return view('pages.cookie_policy');
+    }
+    
     public function getDisclaimer()
     {                
         return view('pages.disclaimer');

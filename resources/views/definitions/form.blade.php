@@ -5,7 +5,10 @@
     <label for="definition">Definition</label>
     <textarea id="definition" name="definition" 
               placeholder="Definition {{ isset($term) ? 'for ' . $term->term . ' in ' . $term->language->ref_name . ' language': '' }}"
-              rows="3" class="form-control">{{ old('definition') }}</textarea>
+              aria-describedby="definitionHelp" rows="3" class="form-control">{{ old('definition') }}</textarea>
+    <span id="definitionHelp" class="help-block">
+        The definition must be in the same language as the term.
+    </span>
 </div>
 
 <div class="form-group">
@@ -14,8 +17,9 @@
               aria-describedby="sourceHelp" rows="2"
               class="form-control">{{ old('source') }}</textarea>
     <span id="sourceHelp" class="help-block">
-        If quoting, you are required to indicate the source from which you quoted 
-        the definition. Be sure to respect the copyright of the source. 
+        You can name the source of the definition here. 
+        Be sure to respect the copyright of the source. 
+        Do not copy definitions from sources with all rights reserved.
         If you don't specify the source, we will assume that you are 
         the author of the definition.
     </span>

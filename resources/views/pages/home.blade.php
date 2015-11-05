@@ -61,6 +61,15 @@
                 Marko I.
             </p>
         </article>
+        @if(getenv('APP_ENV')=='production')
+            <hr>
+            <section>
+                @include('layouts.disqus', [
+                    'url' => action('PagesController@getHome'),
+                    'identifier' => ''
+                ])
+            </section>
+        @endif
     </div>
 </div>
 @endsection

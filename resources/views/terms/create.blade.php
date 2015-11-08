@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Suggest a new term in the Strucko Expert Dictionary')
+@section('meta-description', 'Suggest a new term in Strucko The Expert Dictionary')
 
 @section('title', 'Suggest a new term')
 

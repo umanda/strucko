@@ -13,17 +13,13 @@
         about the accuracy, completeness, or adequacy of the contents of this site, 
         and expressly disclaim liability for errors and omissions in the contents of this site.
         <br>
-        STRUCKO SERVICES AND MATERIALS ARE LICENSED “AS-IS.” YOU BEAR THE RISK OF 
-        USING IT. STRUCKO GIVES NO EXPRESS WARRANTIES, GUARANTEES OR CONDITIONS.
-        YOU MAY HAVE ADDITIONAL CONSUMER RIGHTS UNDER YOUR LOCAL LAWS WHICH 
-        THIS AGREEMENT CANNOT CHANGE. TO THE EXTENT PERMITTED UNDER YOUR LOCAL LAWS,
-        STRUCKO EXCLUDES THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR 
-        A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
-        <br>
-        <b>LIMITATION ON AND EXCLUSION OF REMEDIES AND DAMAGES.</b>
-        <br>
-        YOU CANNOT RECOVER ANY DAMAGES, INCLUDING CONSEQUENTIAL, LOST PROFITS,
-        SPECIAL, DIRECT, INDIRECT OR INCIDENTAL DAMAGES. 
+        Strucko services and materials are licensed “as-is.” You bear the risk of using it.
+        Strucko gives no express warranties, guarantees or conditions. You may have
+        additional consumer rights under your local laws which this agreement cannot
+        change. To the extent permitted under your local laws, strucko excludes the
+        implied warranties of merchantability, fitness for a particular purpose and
+        non-infringement. You cannot recover any damages, including consequential,
+        lost profits, special, direct, indirect or incidental damages. 
         <br>
         This limitation applies to anything related to the Strucko Services and
         Materials (including code), and services and content on third party Internet sites, 

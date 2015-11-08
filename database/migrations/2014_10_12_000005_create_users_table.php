@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             // User has to verify it's email
             $table->boolean('verified')->default(false);
+            // User can be banned
+            $table->boolean('banned')->default(false);
             // Token used to verify email
             $table->string('token')->nullable();
             $table->rememberToken();

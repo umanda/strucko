@@ -10,6 +10,7 @@ use App\PartOfSpeech;
 use App\Language;
 use App\Concept;
 use App\Status;
+use App\ScientificField;
 use Auth;
 use App\Http\Requests\EditTermRequest;
 use App\Http\Requests\ShowTermRequest;
@@ -57,22 +58,23 @@ class TermsController extends Controller
 
         // Check appropriate query parameters and variables.
         if ($this->filters->isSetLanguageAndField()) {
+            // Make sure selected language and field exist.
+            Language::active()->findOrFail($allFilters['language_id']);
+            ScientificField::active()->findOrFail($allFilters['scientific_field_id']);
+            
             // Get available letters for selected language and filed.
             $menuLetters = $this->getMenuLettersForLanguageAndField($allFilters);
-            // I will send the language and filed to the view.
-            $languageId = $allFilters['language_id'];
-            $scientificFieldId = $allFilters['scientific_field_id'];
-
+            
             // Check if the menu_letter is set. If so, get terms with that letter
             // and other term filters.
             if ($this->filters->isSetMenuLetter()) {
                 $terms = Term::greaterThanRejected()
                         ->where($termFilters)
-                        ->with('partOfSpeech')
+                        ->with('partOfSpeech', 'language', 'status')
                         ->orderBy('term')
                         ->paginate();
                 
-                // If the translate_to is set, get approved translations.
+                // If the translate_to is set, get translations.
                 if ($this->filters->isSetTranslateTo()) {
                     $terms->load(['concept.terms' => function ($query) use ($allFilters) {
                         $translateFilters = [];
@@ -81,7 +83,7 @@ class TermsController extends Controller
                         
                         $query->greaterThanRejected()
                                 ->where($translateFilters)
-                                ->with('status')
+                                ->with('language', 'status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
                     }]);
@@ -98,7 +100,7 @@ class TermsController extends Controller
                 $terms = Term::greaterThanRejected()
                         ->where('term', 'like', '%' . $allFilters['search'] . '%')
                         ->where($searchFilters)
-                        ->with('partOfSpeech')
+                        ->with('partOfSpeech', 'language', 'status')
                         ->orderBy('term')
                         ->paginate();
                 
@@ -111,20 +113,32 @@ class TermsController extends Controller
                         
                         $query->greaterThanRejected()
                                 ->where($translateFilters)
-                                ->with('status')
+                                ->with('language', 'status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum');
                     }]);
                 }
             }
         }
-
-        // Prepare languages and fields for filtering
+        
+        // Prepare other data used in view.
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
-
+        // Get current values for language, field and menu letter.
+        $language = isset($allFilters['language_id']) ? $languages->lists('ref_name', 'id')->get($allFilters['language_id']) : '';
+        $scientificField = isset($allFilters['scientific_field_id']) ? collect(call_user_func_array('array_replace', $scientificFields))->get($allFilters['scientific_field_id']) : '';
+        $menuLetter = isset($allFilters['menu_letter']) ? htmlspecialchars($allFilters['menu_letter']) : '';
+        $search = isset($allFilters['search']) ? htmlspecialchars($allFilters['search']) : '';
+        $translateToLanguage = isset($allFilters['translate_to']) ? Language::active()->findOrFail($allFilters['translate_to'])->ref_name : '';
+                
+        // Get metadata like description, title.
+        $indexMeta = $this->prepareIndexMeta($allFilters, $language, 
+                $scientificField, $menuLetter, $translateToLanguage, $search);
+        
         return view('terms.index',
-                compact('terms', 'menuLetters', 'languageId', 'scientificFieldId', 'languages', 'scientificFields', 'menuLetterFilters'));
+                compact('terms', 'menuLetters', 'language', 'scientificField',
+                        'languages', 'scientificFields', 'menuLetterFilters',
+                        'indexMeta', 'translateToLanguage', 'search', 'menuLetter'));
     }
 
     /**

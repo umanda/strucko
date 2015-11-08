@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Strucko - About us')
+@section('meta-description', 'Strucko - About')
 
-@section('title', 'Strucko -About us')
+@section('title', 'Strucko -About')
 
 @section('content')
 <article>

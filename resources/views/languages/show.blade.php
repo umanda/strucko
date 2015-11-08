@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('meta-description', 'About ' . $language->ref_name)
+@section('meta-description', 'About ' . {{ $language->ref_name }})
 
 @section('title', $language->ref_name . ' - description')
 

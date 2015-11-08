@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('meta-description', 'All terms in the Strucko Expert Dictionary.')
+@section('meta-description', $indexMeta['description'])
 
-@section('title', 'All terms')
+@section('title', $indexMeta['title'])
 
 @section('content')
 
@@ -24,6 +24,9 @@
 <div class="row">
     <div class="col-sm-12">
         <p class="btn-lg btn-info">Sorry, no terms in selected language and field</p>
+        <p class="text-center">
+            <a class="btn btn-success" href="/terms/create">Suggest a new term</a>
+        </p>
     </div>
 </div>
 @else
@@ -37,14 +40,16 @@
 
 <div class="row">
     <div class="col-sm-12">
-        @if(isset($terms) && !($terms->isEmpty()))
-        <h2 class="text-right">{{ $languages->lists('ref_name', 'id')->get($allFilters['language_id']) }}, 
-            {{ collect(call_user_func_array('array_replace', $scientificFields))->get($allFilters['scientific_field_id']) }}
-            {{ isset($allFilters['translate_to']) ? '- translated to ' . $languages->lists('ref_name', 'id')->get($allFilters['translate_to']) : '' }}
-            {{ isset($allFilters['search']) ? '- results for ' . $allFilters['search']  : '' }}
+        @if (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
+        <h2 class="text-right">{{ $language }}, 
+            {{ $scientificField }}            
+            {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}
+            {{ isset($allFilters['translate_to']) ? '- translated to ' . $translateToLanguage : '' }}
+            {{ isset($allFilters['search']) ? '- results for ' . $search  : '' }}
             
         </h2>
-        
+        @endif
+        @if(isset($terms) && !($terms->isEmpty()))
         <table class="table table-condensed table-striped">
             <thead>
                 <tr>
@@ -60,7 +65,8 @@
                 <td class="vertical-center-cell">
                     @if (isset($allFilters['translate_to']))
                         <small>{{ $term->partOfSpeech->part_of_speech }}</small><br>
-                        <a class="btn-link btn-lg" href="{{ action('TermsController@show', ['slug' =>
+                        <a class="btn-link btn-lg" lang="{{ $term->language->part1 }}"
+                           href="{{ action('TermsController@show', ['slug' =>
                             $term->slug, 'translate_to' => $allFilters['translate_to'] ]) }}">
                         {{ $term->term }}</a>
                         {!! $term->status->id < 1000 ? status_warning($term->status->status) : '' !!}
@@ -73,15 +79,21 @@
                 @if (isset($allFilters['translate_to']))
                     <td class="vertical-center-cell">
                         @unless ($term->concept->terms->isEmpty())
+                        
                             @foreach ($term->concept->terms as $key => $translationTerm)
                                 @if (is_last($term->concept->terms, $key))
+                                <span lang="{{ $translationTerm->language->part1 }}">
                                     {{ $translationTerm->term }}
+                                </span>
                                     {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!}
                                 @else
+                                <span lang="{{ $translationTerm->language->part1 }}">
                                     {{ $translationTerm->term }}
+                                </span>
                                     {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!},
                                 @endif
                             @endforeach
+                        
                         @else
                         <span>...no translation</span>
                         @endunless

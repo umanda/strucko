@@ -5,15 +5,19 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="@yield('meta-description')">
+                
         <meta name="author" content="">
 
         <title>Strucko - @yield('title')</title>
 
         <link rel="stylesheet" href="/css/app.css">
-        
+
         @include('layouts.cookie_consent')
     </head>
     <body>
+        @if(getenv('APP_ENV')=='production')
+            @include('layouts.analytics')
+        @endif
         <div class="container">
             <div class="row">
                 @include('layouts.header')
@@ -29,7 +33,7 @@
                     @yield('content')
                 </div>
                 <div class="col-sm-4">
-                    <img src="http://lorempixel.com/300/300/technics/google-ad" class="img-responsive" alt="Temp for ad" title="Temp for ad" />
+                    @include('layouts.right')
                 </div>
             </div>
             <div class="row">
@@ -38,11 +42,11 @@
             <hr>
             @include('layouts.footer')
         </div> <!-- /container -->
-        
+
 
         <script src="/js/all.js"></script>
         @if(getenv('APP_ENV')=='production')
-            @include('layouts.antiblock')
+        @include('layouts.antiblock')
         @endif
     </body>
 </html>

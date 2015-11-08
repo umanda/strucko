@@ -7,5 +7,12 @@
     </div>
 </div>
 <div class="col-md-6">
-    <img src="http://lorempixel.com/450/177/technics/google-ad" class="img-responsive strucko-header" alt="Temp for ad" title="Temp for ad" />
+    @if(getenv('APP_ENV')=='production')
+            @include('ads.adsense_header')
+    @else
+        <img src="http://lorempixel.com/450/177/technics/google-ad"
+             class="img-responsive strucko-header"
+             alt="Temp for ad" title="Temp for ad" />
+    @endif
+    
 </div>

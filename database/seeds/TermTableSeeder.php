@@ -102,8 +102,37 @@ class TermTableSeeder extends Seeder
             ['name' => 'or.xml', 'language_id' => 'ori', 'language' => 'Oriya (macrolanguage)'],
             ['name' => 'ps.xml', 'language_id' => 'pus', 'language' => 'Pushto'],
             ['name' => 'fa.xml', 'language_id' => 'fas', 'language' => 'Persian'],
-            
-            
+            ['name' => 'pl.xml', 'language_id' => 'pol', 'language' => 'Polish'],
+            ['name' => 'pt.xml', 'language_id' => 'por', 'language' => 'Portuguese'],
+            ['name' => 'pa.xml', 'language_id' => 'pan', 'language' => 'Panjabi'],
+            ['name' => 'ro.xml', 'language_id' => 'ron', 'language' => 'Romanian'],
+            ['name' => 'ru.xml', 'language_id' => 'rus', 'language' => 'Russian'],
+            ['name' => 'gd.xml', 'language_id' => 'gla', 'language' => 'Scottish Gaelic'],
+            ['name' => 'sr.xml', 'language_id' => 'srp', 'language' => 'Serbian'],
+            ['name' => 'nso.xml', 'language_id' => 'nso', 'language' => 'Pedi'],
+            ['name' => 'tn.xml', 'language_id' => 'tsn', 'language' => 'Tswana'],
+            ['name' => 'sd.xml', 'language_id' => 'snd', 'language' => 'Sindhi'],
+            ['name' => 'si.xml', 'language_id' => 'sin', 'language' => 'Sinhala'],
+            ['name' => 'sk.xml', 'language_id' => 'slk', 'language' => 'Slovak'],
+            ['name' => 'sl.xml', 'language_id' => 'slv', 'language' => 'Slovenian'],
+            ['name' => 'es.xml', 'language_id' => 'spa', 'language' => 'Spanish'],
+            ['name' => 'sv.xml', 'language_id' => 'swe', 'language' => 'Swedish'],
+            ['name' => 'tg.xml', 'language_id' => 'tgk', 'language' => 'Tajik'],
+            ['name' => 'ta.xml', 'language_id' => 'tam', 'language' => 'Tamil'],
+            ['name' => 'tt.xml', 'language_id' => 'tat', 'language' => 'Tatar'],
+            ['name' => 'te.xml', 'language_id' => 'tel', 'language' => 'Telugu'],
+            ['name' => 'th.xml', 'language_id' => 'tha', 'language' => 'Thai'],
+            ['name' => 'ti.xml', 'language_id' => 'tir', 'language' => 'Tigrinya'],
+            ['name' => 'tr.xml', 'language_id' => 'tur', 'language' => 'Turkish'],
+            ['name' => 'tk.xml', 'language_id' => 'tuk', 'language' => 'Turkmen'],
+            ['name' => 'uk.xml', 'language_id' => 'ukr', 'language' => 'Ukrainian'],
+            ['name' => 'ur.xml', 'language_id' => 'urd', 'language' => 'Urdu'],
+            ['name' => 'ug.xml', 'language_id' => 'uig', 'language' => 'Uighur'],
+            ['name' => 'uz.xml', 'language_id' => 'uzb', 'language' => 'Uzbek'],
+            ['name' => 'vi.xml', 'language_id' => 'vie', 'language' => 'Vietnamese'],
+            ['name' => 'cy.xml', 'language_id' => 'cym', 'language' => 'Welsh'],
+            ['name' => 'wo.xml', 'language_id' => 'wol', 'language' => 'Wolof'],
+            ['name' => 'yo.xml', 'language_id' => 'yor', 'language' => 'Yoruba'],
             
         ];
 
@@ -130,8 +159,8 @@ class TermTableSeeder extends Seeder
             $termEntry = new SimpleXMLElement($reader->readOuterXML());
             
             $seedTermEntryId = (string)$termEntry['id'];
-            $seedDefinition = (string)$termEntry->langSet->descripGrp->descrip;
-            $seedTerm = (string)$termEntry->langSet->ntig->termGrp->term;
+            $seedDefinition = trim((string)$termEntry->langSet->descripGrp->descrip);
+            $seedTerm = trim((string)$termEntry->langSet->ntig->termGrp->term);
             $seedPartOfSpeech = PartOfSpeech::firstOrCreate([
                     'part_of_speech' => (string)$termEntry->langSet->ntig->termGrp->termNote
                 ]);
@@ -202,16 +231,15 @@ class TermTableSeeder extends Seeder
             // Move to the first termEntry
             while ($reader->read() && $reader->name != 'termEntry') {}
             // Iterate over each termEntry and store data in database
-            $count = 0;
-            
+                        
             while ($reader->name == 'termEntry') {
                 
                 // Use SimpleXML to work with current entry.
                 $termEntry = new SimpleXMLElement($reader->readOuterXML());
 
                 $seedTermEntryId = (string)$termEntry['id'];
-                $seedDefinition = (string)$termEntry->langSet->descripGrp->descrip;
-                $seedTerm = (string)$termEntry->langSet->ntig->termGrp->term;
+                $seedDefinition = trim((string)$termEntry->langSet->descripGrp->descrip);
+                $seedTerm = trim((string)$termEntry->langSet->ntig->termGrp->term);
                 $seedPartOfSpeech = PartOfSpeech::firstOrCreate([
                         'part_of_speech' => (string)$termEntry->langSet->ntig->termGrp->termNote
                     ]);
@@ -253,9 +281,11 @@ class TermTableSeeder extends Seeder
                     $definition->source ='Entry from the Microsoft Language Portal. © 2015 Microsoft Corporation. All rights reserved.';
                     $definition->link = 'http://www.microsoft.com/Language/en-US/Terminology.aspx';
                     $definition->save();
+                    
                     // Create translation
-                    $translationSeedTerm = (string)$termEntry->langSet[1]->ntig->termGrp->term;
+                    $translationSeedTerm = trim((string)$termEntry->langSet[1]->ntig->termGrp->term);
                     $translationTerm = $this->tryToGetTerm($translationSeedTerm, $file['language_id'], $seedPartOfSpeech->id, $scientificField->id);
+                    
                     if(is_null($translationTerm)) {
                         
                         $translationSlug = $this->prepareSlugForSeededTerms(
@@ -278,7 +308,6 @@ class TermTableSeeder extends Seeder
                     }
                 }
                 else {
-                    
                     // Term exist
                     // If definition does not exist, create it. Use concept_id from term
                     if ( ! Definition::where('term_entry_id', $seedTermEntryId)->exists()) {
@@ -292,12 +321,11 @@ class TermTableSeeder extends Seeder
                         $definition->link = 'http://www.microsoft.com/Language/en-US/Terminology.aspx';
                         $definition->save();
                     }
-                    // Create translation term if it does not exist. Use concept_id from original term
-                    $translationSeedTerm = (string)$termEntry->langSet[1]->ntig->termGrp->term;
                     
+                    // Create translation term if it does not exist. Use concept_id from original term
+                    $translationSeedTerm = trim((string)$termEntry->langSet[1]->ntig->termGrp->term);
                     $translationTerm = $this->tryToGetTerm($translationSeedTerm, $file['language_id'], $seedPartOfSpeech->id, $scientificField->id);
                     
-                   
                     if(is_null($translationTerm)) {
                         
                         $translationSlug = $this->prepareSlugForSeededTerms(

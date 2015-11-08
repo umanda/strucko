@@ -23,6 +23,12 @@ class CreateDefinitionRequest extends Request
      */
     public function rules()
     {
+        // Remove spaces from definition.
+        $input = $this->all();
+        $input['definition'] = trim($input['definition']);
+        $input['source'] = trim($input['source']);
+        $this->replace($input);
+        
         return [
             'definition' => 'required',
             'concept_id' => 'required|integer|min:1',

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('meta-description', 'About ' . $area->scientific_area)
+@section('meta-description', 'About ' . $area->scientific_area )
 
 @section('title', $area->scientific_area . ' - description')
 

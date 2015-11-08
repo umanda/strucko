@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
         $this->call(ConceptTableSeeder::class);        
-        // $this->call(TermTableSeeder::class);
+        $this->call(TermTableSeeder::class);
         $this->call(DefinitionTableSeeder::class);
         
         Model::reguard();

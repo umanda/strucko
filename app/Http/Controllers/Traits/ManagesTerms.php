@@ -139,7 +139,6 @@ trait ManagesTerms
 
     protected function prepareMenuLetter($term, $languageId)
     {
-
         // Get locale for the language and then set locale.
         $locale = Language::where('id', $languageId)->value('locale');
         setlocale(LC_CTYPE, $locale);
@@ -155,7 +154,7 @@ trait ManagesTerms
         }
 
         // The letter is not alpha, so return default string.
-        return urlencode('0');
+        return '0';
     }
 
     /**
@@ -222,6 +221,84 @@ trait ManagesTerms
                         ->where('part_of_speech_id', $input['part_of_speech_id'])
                         ->where('scientific_field_id', $input['scientific_field_id'])
                         ->value('concept_id');
+    }
+    
+    
+    protected function prepareIndexMeta($allFilters, $language, $scientificField, $menuLetter, $translateToLanguage, $search)
+    {
+        $meta = [];
+                
+        if(isset($allFilters['language_id']) && isset($allFilters['scientific_field_id'])) {
+            if(isset($allFilters['menu_letter'])) {
+                if(isset($allFilters['translate_to'])) {
+                    $meta['description'] = 'Terms in ' . $language . ' language, in '
+                            . $scientificField . ' scientific field, starting with letter '
+                            . $menuLetter . ', translated to ' . $translateToLanguage
+                            . ' language.';
+                    $meta['title'] = $language . ' | ' . $scientificField . ' | '
+                            . $menuLetter . ' | ' . $translateToLanguage;
+                }
+                else {
+                    $meta['description'] = 'Terms in ' . $language
+                            . ' language, in '
+                            . $scientificField
+                            . ' scientific field, starting with letter '
+                            . $menuLetter
+                            . '.';
+                    $meta['title'] = $language . ' | ' . $scientificField . ' | '
+                            . $menuLetter;
+                }
+            }
+            elseif (isset($allFilters['search'])) {
+                if(isset($allFilters['translate_to'])) {
+                    $meta['description'] = 'Terms in ' . $language
+                            . ' language, in '
+                            . $scientificField
+                            . ' scientific field, searching for '
+                            . $search
+                            . ', translated to '
+                            . $translateToLanguage
+                            . ' language.';
+                    $meta['title'] = $language . ' | ' . $scientificField . ' | '
+                            . $search . ' | ' . $translateToLanguage;
+                }
+                else {
+                    $meta['description'] = 'Terms in ' . $language
+                            . ' language, in '
+                            . $scientificField
+                            . ' scientific field, searching for '
+                            . $search
+                            . '.';
+                    $meta['title'] = $language . ' | ' . $scientificField . ' | '
+                            . $search;
+                }
+            }
+            else {
+                if(isset($allFilters['translate_to'])) {
+                    $meta['description'] = 'Terms in ' . $language
+                            . ' language, in '
+                            . $scientificField
+                            . ' scientific field, translated to '
+                            . $translateToLanguage
+                            . '. Select letter or search for term.';
+                    $meta['title'] = $language . ' | ' . $scientificField . ' | '
+                            . $translateToLanguage;
+                }
+                else {
+                $meta['description'] = 'Terms in ' . $language
+                            . ' language, in '
+                            . $scientificField
+                            . ' scientific field. Select letter or search for term.';
+                $meta['title'] = $language . ' | ' . $scientificField;
+                }
+            }
+        }
+        else {
+            $meta['description'] = 'Search for terms in specific language and scientific field.';
+            $meta['title'] = 'Search for terms';
+        }
+        
+        return $meta;
     }
 
 }

@@ -20,12 +20,16 @@ class EditTermRequest extends Request
 
     /**
      * Get the validation rules that apply to the request.
-     * TODO: check validation rules: language should be 3 chars
      * 
      * @return array
      */
     public function rules()
     {
+        // First make sure that the term input has no spaces
+        $input = $this->all();
+        $input['term'] = trim($input['term']);
+        $this->replace($input);
+        
         return [
             'term' => 'required|min:2|max:255',
             'language_id' => 'required|alpha|min:1|max:3',

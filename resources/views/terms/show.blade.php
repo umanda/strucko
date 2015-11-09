@@ -28,7 +28,7 @@
     </div>
     <div class="col-xs-10 vertical-center">
         <h1>
-            {{ $term->term }} 
+            <span lang="{{ $term->language->part1 }}">{{ $term->term }}</span> 
             <small>
                 {{ $term->partOfSpeech->part_of_speech }}
             </small>
@@ -46,9 +46,10 @@ translations and synonyms.
 --}}
 @if ($term->status_id < 1000)
 <p class="text-info">
-    <strong>Note:</strong> you can vote for the term <i>{{ $term->term }}</i> (if you haven't); however, since this therm
-    is not yet approved, you can't vote for its definitions, translations and
-    synonyms.
+    <strong>Note:</strong> you can vote for the term 
+    <i lang="{{ $term->language->part1 }}">{{ $term->term }}</i> (if you haven't); 
+    however, since this therm is not yet approved, you can't vote for its 
+    definitions, translations and synonyms.
 </p>
 @endif
 <!-- Definitions -->
@@ -68,7 +69,7 @@ translations and synonyms.
                     @foreach ($term->concept->definitions as $definition)
                         <tr>
                             <td class="vertical-center-cell">
-                                {{ $definition->definition }}
+                                <span lang="{{ $definition->language->part1 }}">{{ $definition->definition }}</span>
                                 {!! $definition->status->id < 1000 ? status_warning($definition->status->status) : '' !!}
                                 @if($definition->source)
                                     @if($definition->link)
@@ -129,14 +130,17 @@ translations and synonyms.
                                 show the appropriate link with translate_to--}}
                                 @if(Session::has('termShowFilters'))
                                     @if(null !== Session::get('termShowFilters.translate_to'))
-                                        <a href="{{ action('TermsController@show', [
+                                    <a lang="{{ $translation->language->part1 }}"
+                                       href="{{ action('TermsController@show', [
                                             'slug' => $translation->slug,
                                             'translate_to' => $term->language_id
                                         ])}}">
                                             {{ $translation->term }}</a>
                                     @endif
                                 @else
-                                <a href="{{ action('TermsController@show', $translation->slug) }}">
+                                {{--I think this part is no longer necesary--}}
+                                <a lang="{{ $translation->language->part1 }}"
+                                    href="{{ action('TermsController@show', $translation->slug) }}">
                                     {{ $translation->term }}</a>
                                 @endif
                                 {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}  
@@ -178,13 +182,15 @@ translations and synonyms.
                                 show the appropriate link with translate_to--}}
                             @if(Session::has('termShowFilters')
                                 && (null !== Session::get('termShowFilters.translate_to')))
-                                <a href="{{ action('TermsController@show', [
+                                <a lang="{{ $synonym->language->part1 }}"
+                                    href="{{ action('TermsController@show', [
                                     'slug' => $synonym->slug,
                                     'translate_to' => Session::get('termShowFilters.translate_to')
                                 ])}}">
                                     {{ $synonym->term }}</a>
                             @else
-                            <a href="{{ action('TermsController@show', $synonym->slug) }}">
+                            <a lang="{{ $synonym->language->part1 }}"
+                                href="{{ action('TermsController@show', $synonym->slug) }}">
                                 {{ $synonym->term }}</a>
                             @endif
                             {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}
@@ -216,7 +222,11 @@ translations and synonyms.
         </caption>
         <thead>
             <tr>
-                <th class="col-xs-9">Merge suggestions for {{ $term->term }}</th>
+                <th class="col-xs-9"> 
+                    <i lang="{{ $term->language->part1 }}">{{ $term->term }}</i>
+                    is suggested to be merged with
+                
+                </th>
                 <th class="col-xs-1"></th>
                 <th class="col-xs-1 text-center">Votes</th>
                 <th class="col-xs-1"></th>
@@ -228,9 +238,33 @@ translations and synonyms.
                     <td class="vertical-center-cell">
                         @foreach($mergeSuggestion->concept->terms as $key => $mergeTerm)
                             @if(is_last($mergeSuggestion->concept->terms, $key))
-                                {{ $mergeTerm->term }}
+                                @if(Session::has('termShowFilters')
+                                    && (null !== Session::get('termShowFilters.translate_to')))
+                                    <a lang="{{ $mergeTerm->language->part1 }}"
+                                        href="{{ action('TermsController@show', [
+                                        'slug' => $mergeTerm->slug,
+                                        'translate_to' => Session::get('termShowFilters.translate_to')
+                                    ])}}">
+                                        {{ $mergeTerm->term }}</a>
+                                @else
+                                <a lang="{{ $mergeTerm->language->part1 }}"
+                                    href="{{ action('TermsController@show', $mergeTerm->slug) }}">
+                                    {{ $mergeTerm->term }}</a>
+                                @endif
                             @else
-                                {{ $mergeTerm->term }},
+                                @if(Session::has('termShowFilters')
+                                    && (null !== Session::get('termShowFilters.translate_to')))
+                                    <a lang="{{ $mergeTerm->language->part1 }}"
+                                        href="{{ action('TermsController@show', [
+                                        'slug' => $mergeTerm->slug,
+                                        'translate_to' => Session::get('termShowFilters.translate_to')
+                                    ])}}">
+                                        {{ $mergeTerm->term }},</a>
+                                @else
+                                <a lang="{{ $mergeTerm->language->part1 }}"
+                                    href="{{ action('TermsController@show', $mergeTerm->slug) }}">
+                                    {{ $mergeTerm->term }},</a>
+                                @endif
                             @endif
                         @endforeach
                         <br><small>by <i>{{ $mergeSuggestion->user->name }}</i></small>

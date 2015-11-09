@@ -149,7 +149,7 @@ class TermsController extends Controller
     public function create()
     {
         // Prepare data for the form.
-        $partOfSpeeches = PartOfSpeech::active()->orderBy('part_of_speech')->get();
+        $partOfSpeeches = PartOfSpeech::active()->get();
         $scientificFields = $this->prepareScientificFields();
         $languages = Language::active()->orderBy('ref_name')->get();
 
@@ -226,7 +226,7 @@ class TermsController extends Controller
                     'votes' => function($query) {
                         $query->where('user_id', Auth::id());
                     },
-                    'user'
+                    'user', 'language'
                     ])
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
@@ -246,7 +246,7 @@ class TermsController extends Controller
                         'votes' => function($query) {
                             $query->where('user_id', Auth::id());
                         },
-                        'user'
+                        'user', 'language'
                         ])
                     ->orderBy('status_id', 'DESC')
                     ->orderBy('votes_sum', 'DESC');
@@ -273,7 +273,7 @@ class TermsController extends Controller
                         'votes' => function($query) {
                             $query->where('user_id', Auth::id());
                         },
-                        'user'
+                        'user', 'language'
                         ])
                     ->orderBy('votes_sum', 'DESC')
                     ->get();
@@ -289,6 +289,7 @@ class TermsController extends Controller
                         'mergeSuggestions.concept.terms' => function($query) use ($languageId) {
                             $query->greaterThanRejected()
                                     ->where('language_id', $languageId)
+                                    ->with('language')
                                     ->orderBy('votes_sum');
                         },
                         'mergeSuggestions.votes' => function($query) {

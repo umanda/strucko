@@ -35,6 +35,16 @@ class Definition extends Model
     }
     
     /**
+     * Definition belongs to language.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function language()
+    {
+        return $this->belongsTo('App\Language');
+    }
+    
+    /**
      * Definition belongs to user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

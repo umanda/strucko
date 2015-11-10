@@ -18,6 +18,8 @@ class CreateRolesTable extends Migration
             $table->string('role');
             // The weight of the vote for the user role. 
             $table->smallInteger('vote_weight');
+            // The thershold used to stop users suggesting too many terms and definitions.
+            $table->integer('spam_threshold');
             // Is the status active
             $table->boolean('active')->default(1);
             $table->timestamps();

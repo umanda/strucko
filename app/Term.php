@@ -89,6 +89,16 @@ class Term extends Model
     }
     
     /**
+     * Term can have many synonym votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function synonymVotes()
+    {
+        return $this->hasMany('App\SynonymVote');
+    }
+    
+    /**
      * Terms is in a language.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

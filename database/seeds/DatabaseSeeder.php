@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      * @var array 
      */
     protected $toTruncate = [
+        'synonym_votes',
         'merge_suggestion_votes',
         'merge_suggestions',
         'term_votes',
@@ -55,7 +56,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ScientificFieldTableSeeder::class);
         $this->call(ScientificBranchTableSeeder::class);
         $this->call(ConceptTableSeeder::class);        
-        $this->call(TermTableSeeder::class);
+        // $this->call(TermTableSeeder::class);
         $this->call(DefinitionTableSeeder::class);
         
         Model::reguard();

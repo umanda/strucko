@@ -17,6 +17,7 @@ use App\Http\Requests\ShowTermRequest;
 use App\Repositories\TermsFilterRepository;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Repositories\TermShowFilterRepository;
+use DB;
 
 class TermsController extends Controller
 {
@@ -223,15 +224,21 @@ class TermsController extends Controller
                 ->where($synonymFilters)
                 ->without($term->id)
                 ->with(['status',
-                    'votes' => function($query) {
-                        $query->where('user_id', Auth::id());
+                    'synonymVotes' => function($query) {
+                        $query->select('term_id', DB::raw('SUM(vote) as votes'))
+                              ->groupBy('term_id')
+                              ->get();
+                    },
+                    'synonymUserVote' => function($query) use ($term) {
+                        $query->where('synonym_id', $term->id)
+                              ->where('user_id', Auth::id());
                     },
                     'user', 'language'
                     ])
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
                 ->get();
-        
+        dd($synonyms->push(['proba' => 1]));
         // Load definitions in the appropriate language.
         // Only load votes for current user.
         $languageId = $term->language_id;

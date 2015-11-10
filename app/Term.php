@@ -99,6 +99,18 @@ class Term extends Model
     }
     
     /**
+     * Term can have many synonym votes. This is the 
+     * same as synonymVotes, except that I use it to retreive 
+     * votes for specific user when defining the $query.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function synonymUserVote()
+    {
+        return $this->hasMany('App\SynonymVote');
+    }
+    
+    /**
      * Terms is in a language.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Synonym;
 use App\MergeSuggestion;
 
+/**
+ * Deprecated Class, no longer used.
+ */
 class Synonym extends Model
 {
         protected $fillable = [

@@ -9,11 +9,12 @@ use App\Http\Controllers\Traits\ManagesTerms;
 use Auth;
 use App\Term;
 use App\MergeSuggestion;
+use App\SynonymVote;
 
 class ConceptsController extends Controller
 {
-
     use ManagesTerms;
+    
     public function __construct()
     {
         // User has to be authenticated.
@@ -162,6 +163,68 @@ class ConceptsController extends Controller
                     'alert' => 'New term suggested as synoynm...',
                     'alert_class' => 'alert alert-success'
         ]);
+        
+    }
+    /**
+     * Vote for synonym up or down.
+     * 
+     * @param \App\Http\Requests\SynonymVoteRequest $request
+     */
+    public function voteForSynonym(Requests\SynonymVoteRequest $request)
+    {
+        $input = $request->all();    
+        
+        // Try to get the term and synonym from slugs.
+        $term = Term::where('slug', $input['term_slug'])->firstOrFail();
+        // Get the synonym, but make sure that it has the same concept and language
+        // and different ID.
+        $synonym = Term::where('slug', $input['synonym_slug'])
+                ->where('concept_id', $term->concept_id)
+                ->where('language_id', $term->language_id)
+                ->whereNotIn('id', [$term->id])
+                ->firstOrFail();
+        
+        // Prepare is_positive value.
+        $isPositive = isset($input['is_positive']) ? 1 : -1;
+        
+        // Prepare vote based on user role and its weight,
+        // and make it positive or negative based on up or down type of vote.
+        $vote = Auth::user()->role->vote_weight * $isPositive;
+        
+        // Make sure that the user didn't already vote.
+        $exists = SynonymVote::where('term_id', $term->id)
+                ->where('synonym_id', $synonym->id)
+                ->where('user_id', Auth::id())
+                ->exists();
+        if($exists){
+            return back()->with([
+                    'alert' => 'You have already voted for this synonym...',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+        }
+        // Vote in both ways.
+        SynonymVote::create([
+            'term_id' => $term->id,
+            'synonym_id' => $synonym->id,
+            'user_id' => Auth::id(),
+            'vote' => $vote
+        ]);
+        SynonymVote::create([
+            'term_id' => $synonym->id,
+            'synonym_id' => $term->id,
+            'user_id' => Auth::id(),
+            'vote' => $vote
+        ]);
+        return back()->with([
+                    'alert' => 'Vote stored!',
+                    'alert_class' => 'alert alert-success'
+                ]);
+        
+    }
+    
+
+    public function detachTerm()
+    {
         
     }
 }

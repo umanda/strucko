@@ -238,7 +238,7 @@ class TermsController extends Controller
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('votes_sum', 'DESC')
                 ->get();
-        dd($synonyms->push(['proba' => 1]));
+        // dd($synonyms);
         // Load definitions in the appropriate language.
         // Only load votes for current user.
         $languageId = $term->language_id;

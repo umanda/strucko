@@ -162,6 +162,7 @@ translations and synonyms.
         </table>
         
     </div>
+    
     <!-- Synonyms -->
     <div class="col-sm-6">
         <table class="table table-condensed">
@@ -197,7 +198,7 @@ translations and synonyms.
                             <br><small>by <i>{{ $synonym->user->name }}</i></small>
                         </td>
                         {{-- Votes for translations --}}
-                        @include('votes.form_term_table', ['workingTerm' => $synonym])
+                        @include('votes.form_synonym_table')
                     </tr>
                     @endforeach
                 @else

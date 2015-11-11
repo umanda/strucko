@@ -220,25 +220,44 @@ class TermsController extends Controller
 
         // Get the terms with the same concept_id and the same language_id (synonyms).
         // Get votes only for logged in user.
-        $synonyms = Term::greaterThanRejected()
+        // This is the old query, however I couldn't sort this based on sum of synonym votes.
+//        $synonyms = Term::greaterThanRejected()
+//                ->where($synonymFilters)
+//                ->without($term->id)
+//                ->with(['status',
+//                    'synonymVotes' => function($query) {
+//                        $query->select('term_id', DB::raw('SUM(vote) as votes'))
+//                              ->groupBy('term_id')
+//                              ->get();
+//                    },
+//                    'synonymUserVote' => function($query) use ($term) {
+//                        $query->where('synonym_id', $term->id)
+//                              ->where('user_id', Auth::id());
+//                    },
+//                    'user', 'language'
+//                    ])
+//                ->orderBy('status_id', 'DESC')
+//                ->orderBy('votes_sum', 'DESC')
+//                ->get();
+            
+        // I need to join tables to get summed votes and votes for the current user, and
+        // in order to order synonyms based on sum of votes.
+        $synonyms = Term::select('terms.*', 'synonym_votes_sum', 'synonym_user_vote')
+                ->leftJoin(\DB::raw('(SELECT s_v1.term_id, SUM(s_v1.vote) as synonym_votes_sum'
+                    . ' FROM synonym_votes AS s_v1'
+                    . ' GROUP BY s_v1.term_id) as s_v1'), 'terms.id', '=', 's_v1.term_id')
+                ->leftJoin(\DB::raw('(SELECT s_v2.term_id, s_v2.vote as synonym_user_vote'
+                    . ' FROM synonym_votes AS s_v2'
+                    . ' WHERE s_v2.synonym_id = ? AND s_v2.user_id = ?) as s_v2'), 'terms.id', '=', 's_v2.term_id')
+                ->setBindings([$term->id, Auth::id()])
+                ->greaterThanRejected()
                 ->where($synonymFilters)
                 ->without($term->id)
-                ->with(['status',
-                    'synonymVotes' => function($query) {
-                        $query->select('term_id', DB::raw('SUM(vote) as votes'))
-                              ->groupBy('term_id')
-                              ->get();
-                    },
-                    'synonymUserVote' => function($query) use ($term) {
-                        $query->where('synonym_id', $term->id)
-                              ->where('user_id', Auth::id());
-                    },
-                    'user', 'language'
-                    ])
+                ->with('status', 'user', 'language')
                 ->orderBy('status_id', 'DESC')
-                ->orderBy('votes_sum', 'DESC')
+                ->orderBy('synonym_votes_sum', 'DESC')
                 ->get();
-        // dd($synonyms);
+        //dd($synonyms);
         // Load definitions in the appropriate language.
         // Only load votes for current user.
         $languageId = $term->language_id;
@@ -257,10 +276,6 @@ class TermsController extends Controller
                         ])
                     ->orderBy('status_id', 'DESC')
                     ->orderBy('votes_sum', 'DESC');
-        }]);
-        // Load votes from the user on the term. Auth::id() returns null if guest.
-        $term->load(['votes' => function ($query) {
-            $query->where('user_id', Auth::id());
         }]);
         
         // If the translate_to is set, get the translations.

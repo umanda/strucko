@@ -18,6 +18,7 @@ Route::get('/cookie-policy', 'PagesController@getCookiePolicy');
 Route::get('/terms-of-use', 'PagesController@getTermsOfUse');
 Route::get('/disclaimer', 'PagesController@getDisclaimer');
 Route::get('/about', 'PagesController@getAbout');
+Route::get('/test', 'PagesController@getTest');
 get('home', function () {
    return view('pages.user');
 });

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Auth;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -31,7 +32,11 @@ class RouteServiceProvider extends ServiceProvider
                             'status',
                             'language',
                             'scientificField',
-                            'partOfSpeech'])
+                            'partOfSpeech',
+                            'votes' => function ($query) {
+                                $query->where('user_id', Auth::id());
+                            },
+                        ])
                     ->firstOrFail();
         });
 

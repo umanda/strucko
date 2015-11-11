@@ -245,11 +245,12 @@ class TermsController extends Controller
         $synonyms = Term::select('terms.*', 'synonym_votes_sum', 'synonym_user_vote')
                 ->leftJoin(\DB::raw('(SELECT s_v1.term_id, SUM(s_v1.vote) as synonym_votes_sum'
                     . ' FROM synonym_votes AS s_v1'
+                    . ' WHERE s_v1.synonym_id = ?'
                     . ' GROUP BY s_v1.term_id) as s_v1'), 'terms.id', '=', 's_v1.term_id')
                 ->leftJoin(\DB::raw('(SELECT s_v2.term_id, s_v2.vote as synonym_user_vote'
                     . ' FROM synonym_votes AS s_v2'
                     . ' WHERE s_v2.synonym_id = ? AND s_v2.user_id = ?) as s_v2'), 'terms.id', '=', 's_v2.term_id')
-                ->setBindings([$term->id, Auth::id()])
+                ->setBindings([$term->id, $term->id, Auth::id()])
                 ->greaterThanRejected()
                 ->where($synonymFilters)
                 ->without($term->id)

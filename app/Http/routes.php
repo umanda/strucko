@@ -35,6 +35,8 @@ get('terms/{slugUnique}/edit', [
     ]);
 post('terms/{slugUnique}/translations', 'ConceptsController@addTranslation');
 post('terms/{slugUnique}/synonyms', 'ConceptsController@addSynonym');
+post('terms/{slugUnique}/synonyms/voteForSynonym', 'ConceptsController@voteForSynonym');
+post('terms/{slugUnique}/synonyms/voteForTranslation', 'ConceptsController@voteForTranslation');
 post('terms/{slugUnique}/vote/up', 'TermVotesController@voteUp');
 post('terms/{slugUnique}/vote/down', 'TermVotesController@voteDown');
 post('terms/{slugUnique}/status/approve', 'TermsController@approveTerm');

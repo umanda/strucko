@@ -258,7 +258,7 @@ class TermsController extends Controller
                 ->orderBy('status_id', 'DESC')
                 ->orderBy('synonym_votes_sum', 'DESC')
                 ->get();
-        //dd($synonyms);
+        
         // Load definitions in the appropriate language.
         // Only load votes for current user.
         $languageId = $term->language_id;
@@ -289,17 +289,24 @@ class TermsController extends Controller
             Auth::check() ? '' : $translationFilters['status_id'] = 1000;
 
             // Get the terms with the same concept_id but with different language_id (translations)
-            // Get votes for the current user
-            $translations = Term::greaterThanRejected()
-                    ->where($translationFilters)
-                    ->with(['status',
-                        'votes' => function($query) {
-                            $query->where('user_id', Auth::id());
-                        },
-                        'user', 'language'
-                        ])
-                    ->orderBy('votes_sum', 'DESC')
-                    ->get();
+            $translations = Term::select('terms.*', 'translation_votes_sum', 'translation_user_vote')
+                ->leftJoin(\DB::raw('(SELECT t_v1.term_id, SUM(t_v1.vote) as translation_votes_sum'
+                    . ' FROM translation_votes AS t_v1'
+                    . ' WHERE t_v1.translation_id = ?'
+                    . ' GROUP BY t_v1.term_id) as t_v1'), 'terms.id', '=', 't_v1.term_id')
+                ->leftJoin(\DB::raw('(SELECT t_v2.term_id, t_v2.vote as translation_user_vote'
+                    . ' FROM translation_votes AS t_v2'
+                    . ' WHERE t_v2.translation_id = ? AND t_v2.user_id = ?) as t_v2'), 'terms.id', '=', 't_v2.term_id')
+                ->setBindings([$term->id, $term->id, Auth::id()])
+                ->greaterThanRejected()
+                ->where($translationFilters)
+                ->where('language_id', '<>', $term->language_id)
+                ->with('status', 'user', 'language')
+                ->orderBy('status_id', 'DESC')
+                ->orderBy('translation_votes_sum', 'DESC')
+                ->get();
+            
+            //dd($translations);
         }
         
         // Load merge suggestions if user is logged in.

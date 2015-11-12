@@ -26,6 +26,15 @@ class UserTableSeeder extends Seeder
             'role_id' => 1000
         ]);
         
+        // Create demo user - for testing.
+        User::create([
+            'name' => 'Strucko Demo',
+            'email' => 'demo@strucko.com',
+            'password' => bcrypt('demo'),
+            'verified' => true,
+            'role_id' => 500
+        ]);
+        
         
         
         

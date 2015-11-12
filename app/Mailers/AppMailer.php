@@ -30,7 +30,7 @@ class AppMailer {
         $this->mailer = $mailer;
     }
     
-    public function deliver()
+    protected function deliver()
     {
         $this->mailer->send($this->view, $this->data, function($message){
             $message->from($this->from, $this->fromName)
@@ -45,6 +45,15 @@ class AppMailer {
         $this->view = 'emails.confirm';
         $this->data = compact('user');
         $this->subject = 'Verify your email';
+        $this->deliver();
+    }
+    
+    public function sendEmailResetLinkTo (User $user, $token)
+    {
+        $this->to = $user->email;
+        $this->view = 'emails.password2';
+        $this->data = compact('user', 'token');
+        $this->subject = 'Password reset link';
         $this->deliver();
     }
 }

@@ -147,7 +147,7 @@ translations and synonyms.
                                 <br><small>by <i>{{ $translation->user->name }}</i></small>
                             </td>
                             {{-- Votes for translations --}}
-                            @include('votes.form_term_table', ['workingTerm' => $translation])
+                            @include('votes.form_translation_table')
                             
                         </tr>
                         @endforeach

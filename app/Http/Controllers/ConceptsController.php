@@ -10,6 +10,7 @@ use Auth;
 use App\Term;
 use App\MergeSuggestion;
 use App\SynonymVote;
+use App\TranslationVote;
 
 class ConceptsController extends Controller
 {
@@ -170,12 +171,12 @@ class ConceptsController extends Controller
      * 
      * @param \App\Http\Requests\SynonymVoteRequest $request
      */
-    public function voteForSynonym(Requests\SynonymVoteRequest $request)
+    public function voteForSynonym(Requests\SynonymVoteRequest $request, $slug)
     {
         $input = $request->all();    
         
         // Try to get the term and synonym from slugs.
-        $term = Term::where('slug', $input['term_slug'])->firstOrFail();
+        $term = Term::where('slug', $slug)->firstOrFail();
         // Get the synonym, but make sure that it has the same concept and language
         // and different ID.
         $synonym = Term::where('slug', $input['synonym_slug'])
@@ -196,6 +197,7 @@ class ConceptsController extends Controller
                 ->where('synonym_id', $synonym->id)
                 ->where('user_id', Auth::id())
                 ->exists();
+        
         if($exists){
             return back()->with([
                     'alert' => 'You have already voted for this synonym...',
@@ -219,7 +221,62 @@ class ConceptsController extends Controller
                     'alert' => 'Vote stored!',
                     'alert_class' => 'alert alert-success'
                 ]);
+    }
+    
+     /**
+     * Vote for translation up or down.
+     * 
+     * @param \App\Http\Requests\TranslationVoteRequest $request
+     */
+    public function voteForTranslation(Requests\TranslationVoteRequest $request, $slug)
+    {
+        $input = $request->all();    
         
+        // Try to get the term and translation from slugs.
+        $term = Term::where('slug', $slug)->firstOrFail();
+        // Get the translation, but make sure that it has the same concept and 
+        // different language.
+        $translation = Term::where('slug', $input['translation_slug'])
+                ->where('concept_id', $term->concept_id)
+                ->where('language_id', '<>', $term->language_id)
+                ->firstOrFail();
+        
+        // Prepare is_positive value.
+        $isPositive = isset($input['is_positive']) ? 1 : -1;
+        
+        // Prepare vote based on user role and its weight,
+        // and make it positive or negative based on up or down type of vote.
+        $vote = Auth::user()->role->vote_weight * $isPositive;
+        
+        // Make sure that the user didn't already vote.
+        $exists = TranslationVote::where('term_id', $term->id)
+                ->where('translation_id', $translation->id)
+                ->where('user_id', Auth::id())
+                ->exists();
+        
+        if($exists){
+            return back()->with([
+                    'alert' => 'You have already voted for this translation...',
+                    'alert_class' => 'alert alert-warning'
+                ]);
+        }
+        // Vote in both ways.
+        TranslationVote::create([
+            'term_id' => $term->id,
+            'translation_id' => $translation->id,
+            'user_id' => Auth::id(),
+            'vote' => $vote
+        ]);
+        TranslationVote::create([
+            'term_id' => $translation->id,
+            'translation_id' => $term->id,
+            'user_id' => Auth::id(),
+            'vote' => $vote
+        ]);
+        return back()->with([
+                    'alert' => 'Vote stored!',
+                    'alert_class' => 'alert alert-success'
+                ]);
     }
     
 

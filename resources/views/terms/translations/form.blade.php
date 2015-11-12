@@ -8,7 +8,7 @@
 <div class="form-group">
     <label for="language_id">Language to translate to:</label>
     {!! Form::select('language_id', array_merge(['' => 'Choose language'], $languages->lists('ref_name', 'id')->toArray()),
-    Input::has('translation_id') ? Input::get('translation_id') : old('language_id'), 
+    Input::has('translate_to') ? Input::get('translate_to') : old('language_id'), 
     ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
 </div>
 

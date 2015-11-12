@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Term;
 use DB;
+use Auth;
 
 class PagesController extends Controller
 {
@@ -19,11 +20,14 @@ class PagesController extends Controller
     
     public function getHome()
     {
-        $categories = Term::approved()
+        $categoryFilters = [];
+        Auth::check() ? '' : $categoryFilters['status_id'] = 1000;
+        
+        $categories = Term::where($categoryFilters)
                 ->select(DB::raw('count(*) as count'), 'language_id', 'scientific_field_id')
                 ->groupBy('language_id', 'scientific_field_id')
                 ->orderBy('count', 'DESC')
-                ->take(4)
+                ->take(8)
                 ->with('language', 'scientificField')
                 ->get();
                 

@@ -134,7 +134,7 @@ class ConceptsController extends Controller
                 ]);
             }
             
-            // Check if the suggestion already exist
+            // Check if the merge suggestion already exist
             $mergeSuggestion = MergeSuggestion::where('term_id', $synonymTerm->id)
                     ->where('concept_id', $term->concept_id)
                     ->with('status')
@@ -158,6 +158,7 @@ class ConceptsController extends Controller
         }
         
         // The term doesn't exist, we can create it with the same concept_id
+        // trough relationship.
         $term->concept->terms()->create($input);
 
         return back()->with([

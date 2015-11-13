@@ -15,7 +15,7 @@
 <div class="form-group">
     <label for="language_id">Language:</label>
 
-    {!! Form::select('language_id', $languages->lists('ref_name', 'id'),
+    {!! Form::select('language_id', array_merge(['' => 'Choose language'], $languages->lists('ref_name', 'id')->toArray()),
     isset($term) ? $term->language_id : old('language_id'), 
     ['id' => 'language_id', 'required' => 'required', 'class' => 'form-control']) !!}
 
@@ -24,6 +24,7 @@
 <div class="form-group">
     <label for="part_of_speech_id">Part of Speech:</label>
     <select id="part_of_speech_id" name="part_of_speech_id" required="required" class="form-control" >
+        <option value="">Choose part of speech</option>
         @if (isset($term))
         <option value="{{ $term->part_of_speech_id }}" selected="selected">{{ $term->partOfSpeech->part_of_speech }}</option>
         @endif
@@ -35,7 +36,7 @@
 
 <div class="form-group">
     <label for="scientific_field_id">Scientific field (category):</label>
-    {!! Form::select('scientific_field_id', $scientificFields,
+    {!! Form::select('scientific_field_id', array_merge(['' => 'Choose field'], $scientificFields),
     isset($term) ? $term->scientific_field_id : old('scientific_field_id'), 
     ['id' => 'scientific_field_id', 'required' => 'required', 'class' => 'form-control']) !!}
 

@@ -8,6 +8,16 @@
 
 <div class="row">
     @include('layouts.filter')
+    @if (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
+    <h2 class="text-right">
+        {{ $language }}, 
+        {{ $scientificField }}            
+        {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}
+        {{ isset($allFilters['translate_to']) ? '- translated to ' . $translateToLanguage : '' }}
+        {{ isset($allFilters['search']) ? '- results for ' . $search  : '' }}
+    </h2>
+    @endif
+    <hr>
 </div>
 @if(isset($menuLetters) && ! ($menuLetters->isEmpty()))
 <div class="row">
@@ -18,9 +28,7 @@
         @include('layouts.search')
     </div>
 </div>
-
 @elseif (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
-<hr>
 <div class="row">
     <div class="col-sm-12">
         <p class="btn-lg btn-info">Sorry, no terms in selected language and field</p>
@@ -30,7 +38,6 @@
     </div>
 </div>
 @else
-<hr>
 <div class="row">
     <div class="col-sm-12">
         <p class="btn-lg btn-info">Select language and field</p>
@@ -40,15 +47,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        @if (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
-        <h2 class="text-right">{{ $language }}, 
-            {{ $scientificField }}            
-            {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}
-            {{ isset($allFilters['translate_to']) ? '- translated to ' . $translateToLanguage : '' }}
-            {{ isset($allFilters['search']) ? '- results for ' . $search  : '' }}
-            
-        </h2>
-        @endif
+        
         @if(isset($terms) && !($terms->isEmpty()))
         <table class="table table-condensed table-striped">
             <thead>

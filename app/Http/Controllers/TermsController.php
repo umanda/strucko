@@ -36,7 +36,7 @@ class TermsController extends Controller
     {
         // User has to be authenticated, except for specified methods.
         $this->middleware('auth', ['except' => ['index', 'show']]);
-        // Check if user has Administrator role for specified methods.
+        // Check if user has Administrator role, except for specified methods.
         $this->middleware('role:1000', ['except' => [
             'index',
             'create',
@@ -160,7 +160,7 @@ class TermsController extends Controller
     }
 
     /**
-     * TODO Make sure that only active language, part of speech and category can be set (implement guarding - trough request?).
+     * Persist suggested term.
      * TODO Consider making this a transaction.
      * 
      * @return type

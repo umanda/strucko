@@ -59,23 +59,22 @@ class PagesController extends Controller
         return view('pages.terms_of_use');
     }
     
-    public function getTest()
+    public function getTest(Request $request)
     {
-//        return $votes = \DB::select(\DB::raw('(SELECT SV.term_id, SV.user_id, SV.vote as synonym_user_vote'
-//                        . ' FROM synonym_votes AS SV'
-//                        . ' WHERE SV.term_id = ? AND SV.user_id = ?)'), [2, 1]);
-        
-        return $synonyms = \App\Term::select('terms.*', 'synonym_votes_sum', 'SV.synonym_user_vote')
-                ->leftJoin(\DB::raw('(SELECT prva.term_id, SUM(prva.vote) as synonym_votes_sum'
-                        . ' FROM synonym_votes AS prva'
-                        . ' WHERE prva.term_id = ?'
-                        . ' GROUP BY prva.term_id) as prva'), 'terms.id', '=', 'prva.term_id')
-                ->leftJoin(\DB::raw('(SELECT SV.term_id, SV.user_id, SV.vote as synonym_user_vote'
-                        . ' FROM synonym_votes AS SV'
-                        . ' WHERE SV.term_id = ? AND SV.user_id = ?) as SV'), 'terms.id', '=', 'SV.term_id')
-                ->setBindings([2,2,1])
-                ->groupBy('terms.id')
-                ->orderBy('synonym_votes_sum', 'DESC')
-                ->get();
+        DB::connection()->enableQueryLog();
+        $total = DB::table('terms')->select('terms.user_id', DB::raw('COUNT(term) + def_sum as total')  )
+                ->leftJoin(DB::raw('(SELECT def.user_id, COUNT(def.definition) as def_sum'
+                    . ' FROM definitions AS def'
+                    . ' WHERE def.user_id = ? AND def.status_id < 1000'
+                    . ' GROUP BY def.user_id) as def'), 'terms.user_id', '=', 'def.user_id')
+                ->setBindings([3])
+                ->where('terms.status_id','<', 1000)
+                ->where('terms.user_id', 3)
+                ->groupBy('terms.user_id')
+                ->value('total');
+        $query = DB::getQueryLog();
+        DB::connection()->disableQueryLog();
+        //var_dump($query);
+       var_dump((int)$total < 10);
     }
 }

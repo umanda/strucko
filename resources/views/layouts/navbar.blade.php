@@ -42,7 +42,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::check())
-                    <li><a href="/home">{{ Auth::user()->name }}</a></li>
+                    <li><a href="/users">{{ Auth::user()->name }}</a></li>
                     <li><a href="/auth/logout">Log out</a></li>
                 @else
                     <li class="{{ set_active('auth/login') }}"><a href="/auth/login">Log in</a></li>

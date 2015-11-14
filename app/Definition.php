@@ -19,6 +19,21 @@ class Definition extends Model
         $query->where('status_id', 500);
     }
     
+    public function scopeRejected($query)
+    {
+        $query->where('status_id', 250);
+    }
+    
+    public function scopeApproved($query)
+    {
+        $query->where('status_id', 1000);
+    }
+    
+    public function scopeLessThanApproved($query)
+    {
+        $query->where('status_id', '<', 1000);
+    }
+    
     public function scopeGreaterThanRejected($query)
     {
         $query->where('status_id', '>', 250);

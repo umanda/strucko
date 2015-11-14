@@ -17,6 +17,8 @@ class DefinitionsController extends Controller
         $this->middleware('role:1000', ['except' => [
             'store',
             ]]);
+        // Check spam threshold.
+        $this->middleware('spam', ['only' => ['store']]);
     }
 
     /**

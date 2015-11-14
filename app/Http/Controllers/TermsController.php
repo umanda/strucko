@@ -21,7 +21,6 @@ use DB;
 
 class TermsController extends Controller
 {
-
     // Trait with common functions related to Terms.
     use ManagesTerms;
 
@@ -43,6 +42,8 @@ class TermsController extends Controller
             'store',
             'show',
             ]]);
+        // Check spam threshold.
+        $this->middleware('spam', ['only' => ['store']]);
     }
 
     /**

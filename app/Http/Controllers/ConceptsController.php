@@ -20,6 +20,11 @@ class ConceptsController extends Controller
     {
         // User has to be authenticated.
         $this->middleware('auth');
+        // Check if user has Administrator role, except for specified methods.
+        $this->middleware('role:1000', ['except' => ['addTranslation', 'addSynonym',
+            'store', 'show']]);
+        // Check spam threshold.
+        $this->middleware('spam', ['only' => ['addTranslation', 'addSynonym']]);
     }
 
     public function addTranslation(Requests\EditTranslationRequest $request, $slug)

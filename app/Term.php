@@ -28,6 +28,16 @@ class Term extends Model
         $query->where('status_id', 1000);
     }
     
+    public function scopeRejected($query)
+    {
+        $query->where('status_id', 250);
+    }
+    
+    public function scopeLessThanApproved($query)
+    {
+        $query->where('status_id', '<', 1000);
+    }
+    
     public function scopeSuggested($query)
     {
         $query->where('status_id', 500);

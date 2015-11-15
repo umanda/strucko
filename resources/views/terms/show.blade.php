@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
-@section('meta-description', 'All about ' . $term->term)
+@section('meta-description', $showMeta['description'])
 
-@section('title', $term->term . ' - definitions and translations')
+@section('title', $showMeta['title'])
 
 @section('content')
 
@@ -278,19 +278,18 @@ translations and synonyms.
     </table>
 @endif
 
-
-
 @if (Auth::check() && ! (Auth::user()->role_id < 1000))
 
     <a class="btn btn-default" href="{{ action('TermsController@edit', ['slug' =>
                     $term->slug]) }}">Edit</a>
 
     @include('terms.suggestions')
-
+    @include('shared.disqus_show_term_user')
 @elseif(Auth::check())
-
     @include('terms.suggestions')
-
+    @include('shared.disqus_show_term_user')    
 @endif
-
+@if (Auth::guest())
+    @include('shared.disqus_show_term_guest')
+@endif
 @endsection

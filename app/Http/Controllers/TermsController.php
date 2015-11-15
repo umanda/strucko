@@ -329,8 +329,11 @@ class TermsController extends Controller
                         'user'
                         ]);
         }
+        // Prepare meta data.
+        $translateToLanguage = isset($termShowFilters['translate_to']) ? Language::active()->findOrFail($termShowFilters['translate_to'])->ref_name : '';
+        $showMeta = $this->prepareShowMeta($filters, $term, $translateToLanguage);
 
-        return view('terms.show', compact('term', 'synonyms', 'languages', 'translations'));
+        return view('terms.show', compact('term', 'synonyms', 'languages', 'translations', 'showMeta'));
     }
 
     /**

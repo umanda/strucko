@@ -45,11 +45,11 @@ class CreateTermsTable extends Migration
             $table->unique(['term', 'language_id', 'part_of_speech_id', 'scientific_field_id'], 'terms_unique');
         });
         
-        // Set the appropriate collation for menu_letter column.
-        // We use utf_8 collation becasue we need to group_by menu_letter
-        DB::statement('ALTER TABLE strucko.terms '
-                . 'CHANGE COLUMN menu_letter menu_letter VARCHAR(30) '
-                . 'CHARACTER SET utf8 COLLATE utf8_bin NOT NULL');
+//        // Set the appropriate collation for menu_letter column.
+//        // We use utf_8 collation becasue we need to group_by menu_letter
+//        DB::statement('ALTER TABLE strucko.terms '
+//                . 'CHANGE COLUMN menu_letter menu_letter VARCHAR(30) '
+//                . 'CHARACTER SET utf8 COLLATE utf8_bin NOT NULL');
         
     }
 

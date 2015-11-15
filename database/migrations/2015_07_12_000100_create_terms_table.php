@@ -13,7 +13,7 @@ class CreateTermsTable extends Migration
     public function up()
     {
         Schema::create('terms', function (Blueprint $table) {
-            
+            $table->engine = 'InnoDB';
             // Attributes
             $table->increments('id');
             $table->string('term');

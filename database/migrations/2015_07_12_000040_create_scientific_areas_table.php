@@ -13,6 +13,7 @@ class CreateScientificAreasTable extends Migration
     public function up()
     {
         Schema::create('scientific_areas', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('scientific_area');
             $table->char('mark', 2);

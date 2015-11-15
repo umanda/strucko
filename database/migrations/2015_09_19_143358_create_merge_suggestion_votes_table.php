@@ -13,6 +13,7 @@ class CreateMergeSuggestionVotesTable extends Migration
     public function up()
     {
         Schema::create('merge_suggestion_votes', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('merge_suggestion_id')->unsigned();
             $table->integer('user_id')->unsigned();

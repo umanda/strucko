@@ -13,6 +13,7 @@ class CreateConceptsTable extends Migration
     public function up()
     {
         Schema::create('concepts', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->timestamps();
         });

@@ -13,6 +13,7 @@ class CreateScientificBranchesTable extends Migration
     public function up()
     {
         Schema::create('scientific_branches', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('scientific_branch');
             $table->char('mark', 2);

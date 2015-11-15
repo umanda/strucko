@@ -13,6 +13,7 @@ class CreateTranslationVotesTable extends Migration
     public function up()
     {
         Schema::create('translation_votes', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('term_id')->unsigned();
             $table->integer('translation_id')->unsigned();

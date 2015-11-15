@@ -13,7 +13,7 @@ class CreateLanguagesTable extends Migration
     public function up()
     {
         Schema::create('languages', function (Blueprint $table) {
-            
+            $table->engine = 'InnoDB';
             // The three-letter 639-3 identifier
             $table->char('id', 3);
             // Equivalent 639-2 identifier of the bibliographic applications code set, if there is one

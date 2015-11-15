@@ -13,6 +13,7 @@ class CreatePartOfSpeechesTable extends Migration
     public function up()
     {
         Schema::create('part_of_speeches', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('part_of_speech');
             $table->boolean('active')->default(1);

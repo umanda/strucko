@@ -13,6 +13,7 @@ class CreateUserSettingsTable extends Migration
     public function up()
     {
         Schema::create('user_settings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->timestamps();
         });

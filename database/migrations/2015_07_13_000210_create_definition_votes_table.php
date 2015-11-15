@@ -13,6 +13,7 @@ class CreateDefinitionVotesTable extends Migration
     public function up()
     {
         Schema::create('definition_votes', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('definition_id')->unsigned();
             $table->integer('user_id')->unsigned();

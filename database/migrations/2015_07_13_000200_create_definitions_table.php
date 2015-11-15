@@ -13,6 +13,7 @@ class CreateDefinitionsTable extends Migration
     public function up()
     {
         Schema::create('definitions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->text('definition');
             $table->text('source')->nullable();

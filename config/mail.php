@@ -126,9 +126,9 @@ return [
      * your application will be sent to a specific address, instead of the 
      * address actually specified when sending the message.
      */
-    'to' => [
-        'address' => 'admin@strucko.com',
-        'name' => 'Strucko Admin'
-    ]
+//    'to' => [
+//        'address' => 'admin@strucko.com',
+//        'name' => 'Strucko Admin'
+//    ]
 
 ];

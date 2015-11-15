@@ -48,7 +48,15 @@
                 it shows us the opinion of the community!
             </p>
             <p>
-                Feel free to contact us if you have any suggestion.
+                To get us started we've seeded our database with terms and definitions
+                for several languages in Computing scientific field using
+                <a href="http://www.microsoft.com/Language/en-US/Terminology.aspx">
+                    Microsoft© Language Portal Terminology Collection.</a> 
+                We will try to add more terms and definitions from different sources with open
+                access. If you know one, let us know.
+            </p>
+            <p>
+                Feel free to contact us if you have any other suggestion.
                 <br>
                 Marko I.
             </p>
@@ -56,9 +64,9 @@
         @if(getenv('APP_ENV')=='production')
             <hr>
             <section>
-                @include('layouts.disqus', [
+                @include('shared.disqus', [
                     'url' => action('PagesController@getHome'),
-                    'identifier' => ''
+                    'identifier' => 'home'
                 ])
             </section>
         @endif

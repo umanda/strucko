@@ -18,6 +18,14 @@
         to enable MVVM architectural pattern for software development.
     </p>
     <p>
+        To get us started we have seeded our database with terms and definitions
+        for several languages from
+        <a href="http://www.microsoft.com/Language/en-US/Terminology.aspx">
+            Microsoft© Language Portal Terminology Collection.</a> 
+        We've put those to the Computing scientific field.
+        
+    </p>
+    <p>
         The complete strucko.com source code is available on GitHub: 
         <a href="https://github.com/cicnavi/strucko">https://github.com/cicnavi/strucko</a>
     </p>

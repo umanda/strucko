@@ -300,5 +300,24 @@ trait ManagesTerms
         
         return $meta;
     }
+    
+    protected function prepareShowMeta($filters, $term, $translateToLanguage)
+    {
+        $meta = [];
+        
+        $meta['description'] = 'Definitions and translations for ' . $term->term 
+                . ' in ' . $term->language->ref_name
+                . ' language, in ' . $term->scientificField->scientific_field . ' field.';
+        $meta['title'] = $term->term . ' | ' . $term->language->ref_name
+                . ' | ' . $term->scientificField->scientific_field;
+        
+        if($filters->isSetTranslateTo())
+        {
+            $meta['description'] .= ' Translated to ' . $translateToLanguage . 'language.';
+            $meta['title'] .= ' | ' . $translateToLanguage;
+        }
+        
+        return $meta;
+    }
 
 }

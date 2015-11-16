@@ -42,24 +42,12 @@ class TermTableSeeder extends Seeder
         $files = [
             ['name' => 'af.xml', 'language_id' => 'afr', 'language' => 'Afrikaans'],
             ['name' => 'sq.xml', 'language_id' => 'sqi', 'language' => 'Albanian'],
-            // Amharic - slugs and menu letters don't work
-            // ['name' => 'am.xml', 'language_id' => 'amh', 'language' => 'Amharic'],
-            // Arabic - seems to work, check right-to-left mark and how it works
-            ['name' => 'ar.xml', 'language_id' => 'ara', 'language' => 'Arabic'],
-            // Armenian - slugs and menu letters don't work
-            // ['name' => 'hy.xml', 'language_id' => 'hye', 'language' => 'Armenian'],
-            // Assamese - slugs and menu letters don't work
-            // ['name' => 'as.xml', 'language_id' => 'asm', 'language' => 'Assamese'],
             ['name' => 'az.xml', 'language_id' => 'aze', 'language' => 'Azerbaijani'],
             ['name' => 'eu.xml', 'language_id' => 'eus', 'language' => 'Basque'],
             ['name' => 'be.xml', 'language_id' => 'bel', 'language' => 'Belarusian'],
             ['name' => 'bs.xml', 'language_id' => 'bos', 'language' => 'Bosnian'],
             ['name' => 'bg.xml', 'language_id' => 'bul', 'language' => 'Bulgarian'],
             ['name' => 'ca.xml', 'language_id' => 'cat', 'language' => 'Catalan'],
-            // Kurdish - seems to work, check right-to-left mark and how it works
-            ['name' => 'ku.xml', 'language_id' => 'kur', 'language' => 'Kurdish'],
-            // Chinese - slugs and menu letters don't work
-            // ['name' => 'zh.xml', 'language_id' => 'zho', 'language' => 'Chinese'],
             ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
             ['name' => 'cs.xml', 'language_id' => 'ces', 'language' => 'Czech'],
             ['name' => 'da.xml', 'language_id' => 'dan', 'language' => 'Danish'],
@@ -69,17 +57,9 @@ class TermTableSeeder extends Seeder
             ['name' => 'fi.xml', 'language_id' => 'fin', 'language' => 'Finnish'],
             ['name' => 'fr.xml', 'language_id' => 'fra', 'language' => 'French'],            
             ['name' => 'gl.xml', 'language_id' => 'glg', 'language' => 'Galician'],
-            // Georgian - slugs don't work, however menu letters do...
-            // ['name' => 'ka.xml', 'language_id' => 'kat', 'language' => 'Georgian'],
             ['name' => 'de.xml', 'language_id' => 'deu', 'language' => 'German'],
             ['name' => 'el.xml', 'language_id' => 'ell', 'language' => 'Greek'],
-            // Gujarati - slugs and menu letters don't work
-            // ['name' => 'gu.xml', 'language_id' => 'guj', 'language' => 'Gujarati'],
             ['name' => 'ha.xml', 'language_id' => 'hau', 'language' => 'Hausa'],
-            // Gujarati - slugs and menu letters don't work
-            // ['name' => 'he.xml', 'language_id' => 'heb', 'language' => 'Hebrew'],
-            // Hindi - slugs and menu letters don't work
-            // ['name' => 'hi.xml', 'language_id' => 'hin', 'language' => 'Hindi'],
             ['name' => 'hu.xml', 'language_id' => 'hun', 'language' => 'Hungarian'],
             ['name' => 'is.xml', 'language_id' => 'isl', 'language' => 'Icelandic'],
             ['name' => 'ig.xml', 'language_id' => 'ibo', 'language' => 'Igbo'],
@@ -89,18 +69,8 @@ class TermTableSeeder extends Seeder
             ['name' => 'xh.xml', 'language_id' => 'xho', 'language' => 'Xhosa'],
             ['name' => 'zu.xml', 'language_id' => 'zul', 'language' => 'Zulu'],
             ['name' => 'it.xml', 'language_id' => 'ita', 'language' => 'Italian'],
-            // Japanese - slugs and menu letters don't work
-            // ['name' => 'ja.xml', 'language_id' => 'jpn', 'language' => 'Japanese'],
-            // Kannada - slugs and menu letters don't work
-            // ['name' => 'kn.xml', 'language_id' => 'kan', 'language' => 'Kannada'],
             ['name' => 'kk.xml', 'language_id' => 'kaz', 'language' => 'Kazakh'],
-            // Central Khmer - slugs and menu letters don't work
-            // ['name' => 'km.xml', 'language_id' => 'khm', 'language' => 'Central Khmer'],
             ['name' => 'rw.xml', 'language_id' => 'kin', 'language' => 'Kinyarwanda'],
-            // Konkani - slugs and menu letters don't work
-            // ['name' => 'kok.xml', 'language_id' => 'kok', 'language' => 'Konkani (macrolanguage)'],
-            // Korean - slugs and menu letters don't work
-            // ['name' => 'ko.xml', 'language_id' => 'kor', 'language' => 'Korean'],
             ['name' => 'ky.xml', 'language_id' => 'kir', 'language' => 'Kirghiz'],
             ['name' => 'lo.xml', 'language_id' => 'lao', 'language' => 'Lao'],
             ['name' => 'lv.xml', 'language_id' => 'lav', 'language' => 'Latvian'],

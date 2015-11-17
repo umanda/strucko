@@ -42,24 +42,12 @@ class TermTableSeeder extends Seeder
         $files = [
             ['name' => 'af.xml', 'language_id' => 'afr', 'language' => 'Afrikaans'],
             ['name' => 'sq.xml', 'language_id' => 'sqi', 'language' => 'Albanian'],
-            // Amharic - slugs and menu letters don't work
-            // ['name' => 'am.xml', 'language_id' => 'amh', 'language' => 'Amharic'],
-            // Arabic - seems to work, check right-to-left mark and how it works
-            ['name' => 'ar.xml', 'language_id' => 'ara', 'language' => 'Arabic'],
-            // Armenian - slugs and menu letters don't work
-            // ['name' => 'hy.xml', 'language_id' => 'hye', 'language' => 'Armenian'],
-            // Assamese - slugs and menu letters don't work
-            // ['name' => 'as.xml', 'language_id' => 'asm', 'language' => 'Assamese'],
             ['name' => 'az.xml', 'language_id' => 'aze', 'language' => 'Azerbaijani'],
             ['name' => 'eu.xml', 'language_id' => 'eus', 'language' => 'Basque'],
             ['name' => 'be.xml', 'language_id' => 'bel', 'language' => 'Belarusian'],
             ['name' => 'bs.xml', 'language_id' => 'bos', 'language' => 'Bosnian'],
             ['name' => 'bg.xml', 'language_id' => 'bul', 'language' => 'Bulgarian'],
             ['name' => 'ca.xml', 'language_id' => 'cat', 'language' => 'Catalan'],
-            // Kurdish - seems to work, check right-to-left mark and how it works
-            ['name' => 'ku.xml', 'language_id' => 'kur', 'language' => 'Kurdish'],
-            // Chinese - slugs and menu letters don't work
-            // ['name' => 'zh.xml', 'language_id' => 'zho', 'language' => 'Chinese'],
             ['name' => 'hr.xml', 'language_id' => 'hrv', 'language' => 'Croatian'],
             ['name' => 'cs.xml', 'language_id' => 'ces', 'language' => 'Czech'],
             ['name' => 'da.xml', 'language_id' => 'dan', 'language' => 'Danish'],
@@ -69,17 +57,9 @@ class TermTableSeeder extends Seeder
             ['name' => 'fi.xml', 'language_id' => 'fin', 'language' => 'Finnish'],
             ['name' => 'fr.xml', 'language_id' => 'fra', 'language' => 'French'],            
             ['name' => 'gl.xml', 'language_id' => 'glg', 'language' => 'Galician'],
-            // Georgian - slugs don't work, however menu letters do...
-            // ['name' => 'ka.xml', 'language_id' => 'kat', 'language' => 'Georgian'],
             ['name' => 'de.xml', 'language_id' => 'deu', 'language' => 'German'],
             ['name' => 'el.xml', 'language_id' => 'ell', 'language' => 'Greek'],
-            // Gujarati - slugs and menu letters don't work
-            // ['name' => 'gu.xml', 'language_id' => 'guj', 'language' => 'Gujarati'],
             ['name' => 'ha.xml', 'language_id' => 'hau', 'language' => 'Hausa'],
-            // Gujarati - slugs and menu letters don't work
-            // ['name' => 'he.xml', 'language_id' => 'heb', 'language' => 'Hebrew'],
-            // Hindi - slugs and menu letters don't work
-            // ['name' => 'hi.xml', 'language_id' => 'hin', 'language' => 'Hindi'],
             ['name' => 'hu.xml', 'language_id' => 'hun', 'language' => 'Hungarian'],
             ['name' => 'is.xml', 'language_id' => 'isl', 'language' => 'Icelandic'],
             ['name' => 'ig.xml', 'language_id' => 'ibo', 'language' => 'Igbo'],
@@ -89,65 +69,38 @@ class TermTableSeeder extends Seeder
             ['name' => 'xh.xml', 'language_id' => 'xho', 'language' => 'Xhosa'],
             ['name' => 'zu.xml', 'language_id' => 'zul', 'language' => 'Zulu'],
             ['name' => 'it.xml', 'language_id' => 'ita', 'language' => 'Italian'],
-            // Japanese - slugs and menu letters don't work
-            // ['name' => 'ja.xml', 'language_id' => 'jpn', 'language' => 'Japanese'],
-            // Kannada - slugs and menu letters don't work
-            // ['name' => 'kn.xml', 'language_id' => 'kan', 'language' => 'Kannada'],
             ['name' => 'kk.xml', 'language_id' => 'kaz', 'language' => 'Kazakh'],
-            // Central Khmer - slugs and menu letters don't work
-            // ['name' => 'km.xml', 'language_id' => 'khm', 'language' => 'Central Khmer'],
             ['name' => 'rw.xml', 'language_id' => 'kin', 'language' => 'Kinyarwanda'],
-            // Konkani - slugs and menu letters don't work
-            // ['name' => 'kok.xml', 'language_id' => 'kok', 'language' => 'Konkani (macrolanguage)'],
-            // Korean - slugs and menu letters don't work
-            // ['name' => 'ko.xml', 'language_id' => 'kor', 'language' => 'Korean'],
             ['name' => 'ky.xml', 'language_id' => 'kir', 'language' => 'Kirghiz'],
-            ['name' => 'lo.xml', 'language_id' => 'lao', 'language' => 'Lao'],
             ['name' => 'lv.xml', 'language_id' => 'lav', 'language' => 'Latvian'],
             ['name' => 'lt.xml', 'language_id' => 'lit', 'language' => 'Lithuanian'],
             ['name' => 'mk.xml', 'language_id' => 'mkd', 'language' => 'Macedonian'],
             ['name' => 'ms.xml', 'language_id' => 'msa', 'language' => 'Malay (macrolanguage)'],
-            ['name' => 'ml.xml', 'language_id' => 'mal', 'language' => 'Malayalam'],
             ['name' => 'mt.xml', 'language_id' => 'mlt', 'language' => 'Maltese'],
             ['name' => 'mi.xml', 'language_id' => 'mri', 'language' => 'Maori'],
-            ['name' => 'mr.xml', 'language_id' => 'mar', 'language' => 'Marathi'],
-            ['name' => 'ne.xml', 'language_id' => 'nep', 'language' => 'Nepali (macrolanguage)'],
             ['name' => 'nb.xml', 'language_id' => 'nob', 'language' => 'Norwegian Bokmål'],
             ['name' => 'nn.xml', 'language_id' => 'nno', 'language' => 'Norwegian Nynorsk'],
-            ['name' => 'or.xml', 'language_id' => 'ori', 'language' => 'Oriya (macrolanguage)'],
-            ['name' => 'ps.xml', 'language_id' => 'pus', 'language' => 'Pushto'],
-            ['name' => 'fa.xml', 'language_id' => 'fas', 'language' => 'Persian'],
             ['name' => 'pl.xml', 'language_id' => 'pol', 'language' => 'Polish'],
             ['name' => 'pt.xml', 'language_id' => 'por', 'language' => 'Portuguese'],
-            ['name' => 'pa.xml', 'language_id' => 'pan', 'language' => 'Panjabi'],
             ['name' => 'ro.xml', 'language_id' => 'ron', 'language' => 'Romanian'],
             ['name' => 'ru.xml', 'language_id' => 'rus', 'language' => 'Russian'],
             ['name' => 'gd.xml', 'language_id' => 'gla', 'language' => 'Scottish Gaelic'],
             ['name' => 'sr.xml', 'language_id' => 'srp', 'language' => 'Serbian'],
             ['name' => 'nso.xml', 'language_id' => 'nso', 'language' => 'Pedi'],
             ['name' => 'tn.xml', 'language_id' => 'tsn', 'language' => 'Tswana'],
-            ['name' => 'sd.xml', 'language_id' => 'snd', 'language' => 'Sindhi'],
-            ['name' => 'si.xml', 'language_id' => 'sin', 'language' => 'Sinhala'],
             ['name' => 'sk.xml', 'language_id' => 'slk', 'language' => 'Slovak'],
             ['name' => 'sl.xml', 'language_id' => 'slv', 'language' => 'Slovenian'],
             ['name' => 'es.xml', 'language_id' => 'spa', 'language' => 'Spanish'],
             ['name' => 'sv.xml', 'language_id' => 'swe', 'language' => 'Swedish'],
             ['name' => 'tg.xml', 'language_id' => 'tgk', 'language' => 'Tajik'],
-            ['name' => 'ta.xml', 'language_id' => 'tam', 'language' => 'Tamil'],
             ['name' => 'tt.xml', 'language_id' => 'tat', 'language' => 'Tatar'],
-            ['name' => 'te.xml', 'language_id' => 'tel', 'language' => 'Telugu'],
-            ['name' => 'th.xml', 'language_id' => 'tha', 'language' => 'Thai'],
-            ['name' => 'ti.xml', 'language_id' => 'tir', 'language' => 'Tigrinya'],
             ['name' => 'tr.xml', 'language_id' => 'tur', 'language' => 'Turkish'],
             ['name' => 'tk.xml', 'language_id' => 'tuk', 'language' => 'Turkmen'],
             ['name' => 'uk.xml', 'language_id' => 'ukr', 'language' => 'Ukrainian'],
-            ['name' => 'ur.xml', 'language_id' => 'urd', 'language' => 'Urdu'],
-            ['name' => 'ug.xml', 'language_id' => 'uig', 'language' => 'Uighur'],
             ['name' => 'uz.xml', 'language_id' => 'uzb', 'language' => 'Uzbek'],
             ['name' => 'vi.xml', 'language_id' => 'vie', 'language' => 'Vietnamese'],
             ['name' => 'cy.xml', 'language_id' => 'cym', 'language' => 'Welsh'],
             ['name' => 'wo.xml', 'language_id' => 'wol', 'language' => 'Wolof'],
-            ['name' => 'yo.xml', 'language_id' => 'yor', 'language' => 'Yoruba'],
             
         ];
 

@@ -15,8 +15,13 @@
         @include('layouts.cookie_consent')
     </head>
     <body>
+        
         @if(getenv('APP_ENV')=='production')
             @include('layouts.analytics')
+        @endif
+      
+        @if(getenv('APP_ENV')=='production')
+        @include('layouts.antiblock')
         @endif
         <div class="container">
             <div class="row">
@@ -45,8 +50,6 @@
 
 
         <script src="/js/all.js"></script>
-        @if(getenv('APP_ENV')=='production')
-        @include('layouts.antiblock')
-        @endif
+        
     </body>
 </html>

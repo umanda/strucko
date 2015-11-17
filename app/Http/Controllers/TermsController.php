@@ -319,7 +319,6 @@ class TermsController extends Controller
                         },
                         'mergeSuggestions.concept.terms' => function($query) use ($languageId) {
                             $query->greaterThanRejected()
-                                    ->where('language_id', $languageId)
                                     ->with('language')
                                     ->orderBy('votes_sum');
                         },

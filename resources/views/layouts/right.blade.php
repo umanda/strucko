@@ -8,7 +8,8 @@
              alt="Temp for ad" title="Temp for ad" />
         @endif
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12 text-center">
+        <br>
         @if(getenv('APP_ENV')=='production')
         @include('ads.contributor')
         @endif

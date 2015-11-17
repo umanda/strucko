@@ -246,7 +246,7 @@ translations and synonyms.
                                         'slug' => $mergeTerm->slug,
                                         'translate_to' => Session::get('termShowFilters.translate_to')
                                     ])}}">
-                                        {{ $mergeTerm->term }}</a>
+                                        {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }})</a>
                                 @else
                                 <a lang="{{ $mergeTerm->language->part1 }}"
                                     href="{{ action('TermsController@show', $mergeTerm->slug) }}">
@@ -260,11 +260,11 @@ translations and synonyms.
                                         'slug' => $mergeTerm->slug,
                                         'translate_to' => Session::get('termShowFilters.translate_to')
                                     ])}}">
-                                        {{ $mergeTerm->term }},</a>
+                                        {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }}),</a>
                                 @else
                                 <a lang="{{ $mergeTerm->language->part1 }}"
                                     href="{{ action('TermsController@show', $mergeTerm->slug) }}">
-                                    {{ $mergeTerm->term }},</a>
+                                    {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }}),</a>
                                 @endif
                             @endif
                         @endforeach

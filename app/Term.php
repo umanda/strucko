@@ -159,4 +159,14 @@ class Term extends Model
     {
         return $this->hasMany('App\MergeSuggestion');
     }
+    
+    /**
+     * Term can have many translations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function translations()
+    {
+        return $this->hasMany('App\Translation');
+    }
 }

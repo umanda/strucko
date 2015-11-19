@@ -33,14 +33,15 @@ class ConceptsController extends Controller
     {
         $input = $request->all();
         
-        // Get the existing term to be used to add translation trough concept relationship.
+        // Get the existing term to be used to add translation trough translation relationship.
         $term = Term::where('slug', $slug)->with('concept')->firstOrFail();
         // Get the user suggesting the translation
         $input['user_id'] = Auth::id();
         // Set the other required fields in case we need a new term.
         $input['scientific_field_id'] = $term->scientific_field_id;
         $input['part_of_speech_id'] = $term->part_of_speech_id;
-        // Get all input from the request. Also prepare input values in case we need to create a new term.
+        // Get all input from the request. 
+        // Also prepare input values in case we need to create a new term.
         $input = $this->prepareInputValues($input);
         
         // Make sure that languages are not the same
@@ -53,51 +54,43 @@ class ConceptsController extends Controller
 
         // If the term exists, suggest to merge it to Concept
         if ($this->termExists($input)) {
-            // Check if concept_id is different to check if it's already a translation.
+            // Check if it's already a translation.
             // We will get the existing term first.
             $translationTerm = Term::where('term', $input['term'])
                     ->where('language_id', $input['language_id'])
                     ->where('part_of_speech_id', $input['part_of_speech_id'])
                     ->where('scientific_field_id', $input['scientific_field_id'])
                     ->first();
-
-            if ($term->concept_id == $translationTerm->concept_id) {
+            // Try to get a translation.
+            $translation = Translation::where('term_id', $term->id)
+                    ->where('translation_id', $translationTerm->id)
+                    ->with('status')
+                    ->first();
+            if ( ! is_null($translation)) {
                 return back()->with([
-                            'alert' => 'This term is already a translation...',
+                            'alert' => 'This was already ' . strtolower($translation->status->status) . '...',
                             'alert_class' => 'alert alert-warning'
                 ]);
             }
-
-            // Concept_id is different, so suggest merge...
-            // Check if the suggestion already exists
-            $mergeSuggestion = MergeSuggestion::where('term_id', $translationTerm->id)
-                    ->where('concept_id', $term->concept_id)
-                    ->with('status')
-                    ->first();
-            // Suggest the merge if it doesn't exist.
-            if (is_null($mergeSuggestion)) {
-                Auth::user()->mergeSuggestions()
-                        ->create(['term_id' => $translationTerm->id, 'concept_id' => $term->concept_id]);
-                return back()->with([
-                            'alert' => 'The term already exists and we have made a merge suggestion...',
-                            'alert_class' => 'alert alert-success'
-                ]);
-            }
-
-            // The suggestion already exists so output the status of the suggestion.
+            
+            // Translation doesn't exist, so create it in both ways.
+            $this->createTranslation($term, $translationTerm);
+            
+            // Translation was suggested
             return back()->with([
-                        'alert' => 'This was already ' . strtolower($mergeSuggestion->status->status) . '...',
-                        'alert_class' => 'alert alert-warning'
-            ]);
+                    'alert' => 'Existing term suggested as translation...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+            
+        } // End if term exists
 
-        }
-
-        // The term doesn't exist, so we will simply suggest it as a new term 
-        // with the same concept_id.
-        $term->concept->terms()->create($input);
-
+        // The term doesn't exist, so we will create a new one and create
+        // a translation with it.
+        $newTerm = $term->concept->terms()->create($input);
+        
+        $this->createTranslation($term, $newTerm);
         return back()->with([
-                    'alert' => 'New term added as translation...',
+                    'alert' => 'New term suggested as translation...',
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -308,4 +301,19 @@ class ConceptsController extends Controller
     {
         
     }
+
+    protected function createTranslation($term, $translationTerm)
+    {
+        Translation::create([
+                'term_id' => $term->id,
+                'translation_id' => $translationTerm->id,
+                'user_id' => Auth::id()
+            ]);
+        Translation::create([
+                'term_id' => $translationTerm->id,
+                'translation_id' => $term->id,
+                'user_id' => Auth::id()
+            ]);
+    }
+
 }

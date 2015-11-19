@@ -89,6 +89,7 @@ class TermsController extends Controller
                                     $query->where('language_id', $allFilters['translate_to']);
                                 })
                                 ->with('translation', 'translation.language', 'status')
+                                ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum', 'DESC')
                                 ->get();
                     },
@@ -133,6 +134,7 @@ class TermsController extends Controller
                                     $query->where('language_id', $allFilters['translate_to']);
                                 })
                                 ->with('translation', 'translation.language', 'status')
+                                ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum', 'DESC')
                                 ->get();
                     },

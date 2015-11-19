@@ -77,19 +77,19 @@
                 </td>
                 @if (isset($allFilters['translate_to']))
                     <td class="vertical-center-cell">
-                        @unless ($term->concept->terms->isEmpty())
+                        @unless ($term->translations->isEmpty())
                         
-                            @foreach ($term->concept->terms as $key => $translationTerm)
-                                @if (is_last($term->concept->terms, $key))
-                                <span lang="{{ $translationTerm->language->part1 }}">
-                                    {{ $translationTerm->term }}
+                            @foreach ($term->translations as $key => $translation)
+                                @if (is_last($term->translations, $key))
+                                <span lang="{{ $translation->translation->language->part1 }}">
+                                    {{ $translation->translation->term }}
                                 </span>
-                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!}
+                                    {!! $translation->translation->status->id < 1000 ? status_warning($translation->translation->status->status) : '' !!}
                                 @else
-                                <span lang="{{ $translationTerm->language->part1 }}">
-                                    {{ $translationTerm->term }}
+                                <span lang="{{ $translation->translation->language->part1 }}">
+                                    {{ $translation->translation->term }}
                                 </span>
-                                    {!! $translationTerm->status->id < 1000 ? status_warning($translationTerm->status->status) : '' !!},
+                                    {!! $translation->translation->status->id < 1000 ? status_warning($translation->translation->status->status) : '' !!},
                                 @endif
                             @endforeach
                         

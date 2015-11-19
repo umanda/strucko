@@ -12,6 +12,11 @@ class Translation extends Model
         'user_id',
     ];
     
+    public function scopeGreaterThanRejected($query)
+    {
+        $query->where('status_id', '>', 250);
+    }
+    
     /**
      * Translation is owned by user.
      *
@@ -50,5 +55,15 @@ class Translation extends Model
     public function status()
     {
         return $this->belongsTo('App\Status');
+    }
+    
+    /**
+     * Translation can have many votes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\TranslationVote');
     }
 }

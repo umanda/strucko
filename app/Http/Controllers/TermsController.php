@@ -18,6 +18,7 @@ use App\Repositories\TermsFilterRepository;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Repositories\TermShowFilterRepository;
 use DB;
+use App\Translation;
 
 class TermsController extends Controller
 {
@@ -78,17 +79,31 @@ class TermsController extends Controller
                 
                 // If the translate_to is set, get translations.
                 if ($this->filters->isSetTranslateTo()) {
-                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
+                    $terms->load(['translations' => function ($query) use ($allFilters) {
                         $translateFilters = [];
-                        $translateFilters['language_id'] = $allFilters['translate_to'];
                         Auth::check() ? '' : $translateFilters['status_id'] = 1000;
-                        
+                          
                         $query->greaterThanRejected()
                                 ->where($translateFilters)
-                                ->with('language', 'status')
-                                ->orderBy('status_id', 'DESC')
-                                ->orderBy('votes_sum');
-                    }]);
+                                ->whereHas('translation', function ($query) use ($allFilters){
+                                    $query->where('language_id', $allFilters['translate_to']);
+                                })
+                                ->with('translation', 'translation.language', 'status')
+                                ->orderBy('votes_sum', 'DESC')
+                                ->get();
+                    },
+                    ]);
+//                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
+//                        $translateFilters = [];
+//                        $translateFilters['language_id'] = $allFilters['translate_to'];
+//                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
+//                        
+//                        $query->greaterThanRejected()
+//                                ->where($translateFilters)
+//                                ->with('language', 'status')
+//                                ->orderBy('status_id', 'DESC')
+//                                ->orderBy('votes_sum');
+//                    }]);
                 }
             }
 
@@ -108,17 +123,20 @@ class TermsController extends Controller
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
-                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
+                    $terms->load(['translations' => function ($query) use ($allFilters) {
                         $translateFilters = [];
-                        $translateFilters['language_id'] = $allFilters['translate_to'];
                         Auth::check() ? '' : $translateFilters['status_id'] = 1000;
-                        
+                          
                         $query->greaterThanRejected()
                                 ->where($translateFilters)
-                                ->with('language', 'status')
-                                ->orderBy('status_id', 'DESC')
-                                ->orderBy('votes_sum');
-                    }]);
+                                ->whereHas('translation', function ($query) use ($allFilters){
+                                    $query->where('language_id', $allFilters['translate_to']);
+                                })
+                                ->with('translation', 'translation.language', 'status')
+                                ->orderBy('votes_sum', 'DESC')
+                                ->get();
+                    },
+                    ]);
                 }
             }
         }
@@ -282,30 +300,50 @@ class TermsController extends Controller
         
         // If the translate_to is set, get the translations.
         if ($filters->isSetTranslateTo()) {
-            // Prepare filters needed for translation
-            $translationFilters = [];
-            $translationFilters['concept_id'] = $term->concept_id;
-            $translationFilters['language_id'] = $termShowFilters['translate_to'];
-            // For guests we will only show approved translations
-            Auth::check() ? '' : $translationFilters['status_id'] = 1000;
-
-            // Get the terms with the same concept_id but with different language_id (translations)
-            $translations = Term::select('terms.*', 'translation_votes_sum', 'translation_user_vote')
-                ->leftJoin(\DB::raw('(SELECT t_v1.term_id, SUM(t_v1.vote) as translation_votes_sum'
-                    . ' FROM translation_votes AS t_v1'
-                    . ' WHERE t_v1.translation_id = ?'
-                    . ' GROUP BY t_v1.term_id) as t_v1'), 'terms.id', '=', 't_v1.term_id')
-                ->leftJoin(\DB::raw('(SELECT t_v2.term_id, t_v2.vote as translation_user_vote'
-                    . ' FROM translation_votes AS t_v2'
-                    . ' WHERE t_v2.translation_id = ? AND t_v2.user_id = ?) as t_v2'), 'terms.id', '=', 't_v2.term_id')
-                ->setBindings([$term->id, $term->id, Auth::id()])
-                ->greaterThanRejected()
-                ->where($translationFilters)
-                ->where('language_id', '<>', $term->language_id)
-                ->with('status', 'user', 'language')
-                ->orderBy('status_id', 'DESC')
-                ->orderBy('translation_votes_sum', 'DESC')
-                ->get();
+            
+            $term->load(['translations' => function ($query) use ($termShowFilters) {
+                        // Prepare filters
+                        $translateFilters = [];
+                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
+                          
+                        $query->greaterThanRejected()
+                                ->where($translateFilters)
+                                ->whereHas('translation', function ($query) use ($termShowFilters){
+                                    $query->where('language_id', $termShowFilters['translate_to']);
+                                })
+                                ->with('translation', 'translation.language', 'status')
+                                ->orderBy('votes_sum', 'DESC')
+                                ->get();
+                    },
+                    'votes' => function ($query) {
+                        $query->where('user_id', Auth::id());
+                    },
+                    'status', 'user'
+                    ]);
+//            // Prepare filters needed for translation
+//            $translationFilters = [];
+//            $translationFilters['concept_id'] = $term->concept_id;
+//            $translationFilters['language_id'] = $termShowFilters['translate_to'];
+//            // For guests we will only show approved translations
+//            Auth::check() ? '' : $translationFilters['status_id'] = 1000;
+//            
+//            // Get the terms with the same concept_id but with different language_id (translations)
+//            $translations = Term::select('terms.*', 'translation_votes_sum', 'translation_user_vote')
+//                ->leftJoin(\DB::raw('(SELECT t_v1.term_id, SUM(t_v1.vote) as translation_votes_sum'
+//                    . ' FROM translation_votes AS t_v1'
+//                    . ' WHERE t_v1.translation_id = ?'
+//                    . ' GROUP BY t_v1.term_id) as t_v1'), 'terms.id', '=', 't_v1.term_id')
+//                ->leftJoin(\DB::raw('(SELECT t_v2.term_id, t_v2.vote as translation_user_vote'
+//                    . ' FROM translation_votes AS t_v2'
+//                    . ' WHERE t_v2.translation_id = ? AND t_v2.user_id = ?) as t_v2'), 'terms.id', '=', 't_v2.term_id')
+//                ->setBindings([$term->id, $term->id, Auth::id()])
+//                ->greaterThanRejected()
+//                ->where($translationFilters)
+//                ->where('language_id', '<>', $term->language_id)
+//                ->with('status', 'user', 'language')
+//                ->orderBy('status_id', 'DESC')
+//                ->orderBy('translation_votes_sum', 'DESC')
+//                ->get();
             
             //dd($translations);
         }

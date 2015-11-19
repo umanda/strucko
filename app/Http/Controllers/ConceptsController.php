@@ -10,7 +10,9 @@ use Auth;
 use App\Term;
 use App\MergeSuggestion;
 use App\SynonymVote;
+use App\Translation;
 use App\TranslationVote;
+
 
 class ConceptsController extends Controller
 {
@@ -236,49 +238,65 @@ class ConceptsController extends Controller
      */
     public function voteForTranslation(Requests\TranslationVoteRequest $request, $slug)
     {
-        $input = $request->all();    
+        $input = $request->all();
         
         // Try to get the term and translation from slugs.
         $term = Term::where('slug', $slug)->firstOrFail();
-        // Get the translation, but make sure that it has the same concept and 
+        // Get the translation, but make sure that it has the same PoS and SF but 
         // different language.
-        $translation = Term::where('slug', $input['translation_slug'])
-                ->where('concept_id', $term->concept_id)
+        $translationTerm = Term::where('slug', $input['translation_slug'])
+                ->where('part_of_speech_id', $term->part_of_speech_id)
+                ->where('scientific_field_id', $term->scientific_field_id)
                 ->where('language_id', '<>', $term->language_id)
                 ->firstOrFail();
-        
-        // Prepare is_positive value.
-        $isPositive = isset($input['is_positive']) ? 1 : -1;
-        
-        // Prepare vote based on user role and its weight,
-        // and make it positive or negative based on up or down type of vote.
-        $vote = Auth::user()->role->vote_weight * $isPositive;
-        
-        // Make sure that the user didn't already vote.
-        $exists = TranslationVote::where('term_id', $term->id)
-                ->where('translation_id', $translation->id)
-                ->where('user_id', Auth::id())
-                ->exists();
-        
-        if($exists){
+        // Get the translation so I can check if the user already voted
+        $translation1 = Translation::where('term_id', $term->id)
+                ->where('translation_id', $translationTerm->id)
+                ->with(['votes' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                }])
+                ->firstOrFail();
+        // Get the translation in the oposite way
+        $translation2 = Translation::where('term_id', $translationTerm->id)
+                ->where('translation_id', $term->id)
+                ->with(['votes' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                }])
+                ->firstOrFail();
+        // If user voted, return
+        if (! $translation1->votes->isEmpty()){
             return back()->with([
                     'alert' => 'You have already voted for this translation...',
                     'alert_class' => 'alert alert-warning'
                 ]);
         }
+        // Prepare is_positive value.
+        $isPositive = isset($input['is_positive']) ? true : false;
+        
+        // Prepare vote based on user role and its weight,
+        // and make it positive or negative based on up or down type of vote.
+        if ($isPositive) {
+            $vote = Auth::user()->role->vote_weight;
+        } 
+        else {
+            $vote = Auth::user()->role->vote_weight * (-1);
+        }
+        
         // Vote in both ways.
         TranslationVote::create([
-            'term_id' => $term->id,
-            'translation_id' => $translation->id,
+            'translation_id' => $translation1->id,
             'user_id' => Auth::id(),
-            'vote' => $vote
+            'is_positive' => $isPositive
         ]);
         TranslationVote::create([
-            'term_id' => $translation->id,
-            'translation_id' => $term->id,
+            'translation_id' => $translation2->id,
             'user_id' => Auth::id(),
-            'vote' => $vote
+            'is_positive' => $isPositive
         ]);
+        // Add vote to vote_sum on both translations.
+        $translation1->increment('votes_sum', $vote);
+        $translation2->increment('votes_sum', $vote);
+        
         return back()->with([
                     'alert' => 'Vote stored!',
                     'alert_class' => 'alert alert-success'

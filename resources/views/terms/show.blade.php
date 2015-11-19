@@ -121,27 +121,27 @@ translations and synonyms.
                     <tr><td><span class="text-warning">Select language to translate to</span></td></tr>
                     @endif
                 @endif
-                @if (isset($translations))
-                    @unless($translations->isEmpty())
-                        @foreach($translations as $translation)
+                @if ($term->relationLoaded('translations'))
+                    @unless($term->translations->isEmpty())
+                        @foreach($term->translations as $translation)
                         <tr>
                             <td class="vertical-center-cell">
                                 {{--Depending on the translate_to query,
                                 show the appropriate link with translate_to--}}
                                 @if(Session::has('termShowFilters'))
                                     @if(null !== Session::get('termShowFilters.translate_to'))
-                                    <a lang="{{ $translation->language->part1 }}"
+                                    <a lang="{{ $translation->translation->language->part1 }}"
                                        href="{{ action('TermsController@show', [
-                                            'slug' => $translation->slug,
+                                            'slug' => $translation->translation->slug,
                                             'translate_to' => $term->language_id
                                         ])}}">
-                                            {{ $translation->term }}</a>
+                                            {{ $translation->translation->term }}</a>
                                     @endif
                                 @else
                                 {{--I think this part is no longer necesary--}}
-                                <a lang="{{ $translation->language->part1 }}"
-                                    href="{{ action('TermsController@show', $translation->slug) }}">
-                                    {{ $translation->term }}</a>
+                                <a lang="{{ $translation->translation->language->part1 }}"
+                                    href="{{ action('TermsController@show', $translation->translation->slug) }}">
+                                    {{ $translation->translation->term }}</a>
                                 @endif
                                 {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}  
                                 <br><small>by <i>{{ $translation->user->name }}</i></small>
@@ -205,7 +205,9 @@ translations and synonyms.
                     {{-- No translations, translations is empty --}}
                     <tr><td><span class="text-warning">
                                     No synonyms
-                            </span></td></tr>
+                            </span></td>
+                            <td></td><td></td><td></td>
+                    </tr>
                 @endif
             </tbody>
         </table>

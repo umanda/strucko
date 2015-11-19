@@ -84,12 +84,12 @@
                                 <span lang="{{ $translation->translation->language->part1 }}">
                                     {{ $translation->translation->term }}
                                 </span>
-                                    {!! $translation->translation->status->id < 1000 ? status_warning($translation->translation->status->status) : '' !!}
+                                    {!! $translation->status->id < 1000 ? status_warning($translation->status->status) : '' !!}
                                 @else
                                 <span lang="{{ $translation->translation->language->part1 }}">
-                                    {{ $translation->translation->term }}{!! $translation->translation->status->id < 1000 ? '' : ',' !!}
+                                    {{ $translation->translation->term }}{!! $translation->status->id < 1000 ? '' : ',' !!}
                                 </span>
-                                {!! $translation->translation->status->id < 1000 ? status_warning($translation->translation->status->status) . ',' : '' !!}
+                                {!! $translation->status->id < 1000 ? status_warning($translation->status->status) . ',' : '' !!}
                                 @endif
                             @endforeach
                         

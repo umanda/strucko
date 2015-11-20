@@ -169,4 +169,14 @@ class Term extends Model
     {
         return $this->hasMany('App\Translation');
     }
+    
+    /**
+     * Term can have many synonyms.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function synonyms()
+    {
+        return $this->hasMany('App\Synonym');
+    }
 }

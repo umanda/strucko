@@ -1,5 +1,4 @@
 {{-- If user is logged in, he can vote unless already voted --}}
-{{-- If the original term is not approved, user can not vote for translation --}}
 @if(Auth::check())
     {{-- If the user didnt vote, show the form. --}}
     @if($translation->votes->isEmpty())

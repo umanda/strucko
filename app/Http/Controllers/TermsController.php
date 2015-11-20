@@ -88,23 +88,12 @@ class TermsController extends Controller
                                 ->whereHas('translation', function ($query) use ($allFilters){
                                     $query->where('language_id', $allFilters['translate_to']);
                                 })
-                                ->with('translation', 'translation.language', 'status')
+                                ->with('translation', 'translation.language', 'translation.status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum', 'DESC')
                                 ->get();
                     },
                     ]);
-//                    $terms->load(['concept.terms' => function ($query) use ($allFilters) {
-//                        $translateFilters = [];
-//                        $translateFilters['language_id'] = $allFilters['translate_to'];
-//                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
-//                        
-//                        $query->greaterThanRejected()
-//                                ->where($translateFilters)
-//                                ->with('language', 'status')
-//                                ->orderBy('status_id', 'DESC')
-//                                ->orderBy('votes_sum');
-//                    }]);
                 }
             }
 
@@ -133,7 +122,7 @@ class TermsController extends Controller
                                 ->whereHas('translation', function ($query) use ($allFilters){
                                     $query->where('language_id', $allFilters['translate_to']);
                                 })
-                                ->with('translation', 'translation.language', 'status')
+                                ->with('translation', 'translation.language', 'translation.status')
                                 ->orderBy('status_id', 'DESC')
                                 ->orderBy('votes_sum', 'DESC')
                                 ->get();
@@ -226,60 +215,35 @@ class TermsController extends Controller
         // Prepare all filters from request
         $termShowFilters = $filters->allFilters();
 
-        //$term = Term::where('slug', $slug)->firstOrFail();
         // Get languages for translation options in suggest translation section.
         $languages = Language::active()
                 ->without($term->language_id)
                 ->orderBy('ref_name')
                 ->get();
-        // Prepare filters for synonyms. Suggested ones are only for authenticated users.
-        $synonymFilters = [];
-        $synonymFilters['concept_id'] = $term->concept_id;
-        $synonymFilters['language_id'] = $term->language_id;
-        // For guests we will set the filter to get only approved terms.
-        Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
-
-        // Get the terms with the same concept_id and the same language_id (synonyms).
-        // Get votes only for logged in user.
-        // This is the old query, however I couldn't sort this based on sum of synonym votes.
-//        $synonyms = Term::greaterThanRejected()
-//                ->where($synonymFilters)
-//                ->without($term->id)
-//                ->with(['status',
-//                    'synonymVotes' => function($query) {
-//                        $query->select('term_id', DB::raw('SUM(vote) as votes'))
-//                              ->groupBy('term_id')
-//                              ->get();
-//                    },
-//                    'synonymUserVote' => function($query) use ($term) {
-//                        $query->where('synonym_id', $term->id)
-//                              ->where('user_id', Auth::id());
-//                    },
-//                    'user', 'language'
-//                    ])
-//                ->orderBy('status_id', 'DESC')
-//                ->orderBy('votes_sum', 'DESC')
-//                ->get();
-            
-        // I need to join tables to get summed votes and votes for the current user, and
-        // in order to order synonyms based on sum of votes.
-        $synonyms = Term::select('terms.*', 'synonym_votes_sum', 'synonym_user_vote')
-                ->leftJoin(\DB::raw('(SELECT s_v1.term_id, SUM(s_v1.vote) as synonym_votes_sum'
-                    . ' FROM synonym_votes AS s_v1'
-                    . ' WHERE s_v1.synonym_id = ?'
-                    . ' GROUP BY s_v1.term_id) as s_v1'), 'terms.id', '=', 's_v1.term_id')
-                ->leftJoin(\DB::raw('(SELECT s_v2.term_id, s_v2.vote as synonym_user_vote'
-                    . ' FROM synonym_votes AS s_v2'
-                    . ' WHERE s_v2.synonym_id = ? AND s_v2.user_id = ?) as s_v2'), 'terms.id', '=', 's_v2.term_id')
-                ->setBindings([$term->id, $term->id, Auth::id()])
-                ->greaterThanRejected()
-                ->where($synonymFilters)
-                ->without($term->id)
-                ->with('status', 'user', 'language')
-                ->orderBy('status_id', 'DESC')
-                ->orderBy('synonym_votes_sum', 'DESC')
-                ->get();
         
+        // Load synonyms
+        $term->load(['synonyms' => function ($query) use ($term) {
+                    $synonymFilters = [];
+                    Auth::check() ? '' : $synonymFilters['status_id'] = 1000;
+
+                    $query->greaterThanRejected()
+                            ->where($synonymFilters)
+                            ->whereHas('synonym', function ($query) use ($term){
+                                $query->where('language_id', $term->language_id)
+                                        ->where('scientific_field_id', $term->scientific_field_id)
+                                        ->where('part_of_speech_id', $term->part_of_speech_id);
+                            })
+                            ->with('synonym', 'synonym.language', 'synonym.status')
+                            ->orderBy('status_id', 'DESC')
+                            ->orderBy('votes_sum', 'DESC')
+                            ->get();
+                    },
+                    'votes' => function ($query) {
+                        $query->where('user_id', Auth::id());
+                    },
+                    'status', 'user'
+            ]);
+                    
         // Load definitions in the appropriate language.
         // Only load votes for current user.
         $languageId = $term->language_id;
@@ -313,7 +277,7 @@ class TermsController extends Controller
                                 ->whereHas('translation', function ($query) use ($termShowFilters){
                                     $query->where('language_id', $termShowFilters['translate_to']);
                                 })
-                                ->with('translation', 'translation.language', 'status')
+                                ->with('translation', 'translation.language', 'translation.status')
                                 ->orderBy('votes_sum', 'DESC')
                                 ->get();
                     },
@@ -322,57 +286,13 @@ class TermsController extends Controller
                     },
                     'status', 'user'
                     ]);
-//            // Prepare filters needed for translation
-//            $translationFilters = [];
-//            $translationFilters['concept_id'] = $term->concept_id;
-//            $translationFilters['language_id'] = $termShowFilters['translate_to'];
-//            // For guests we will only show approved translations
-//            Auth::check() ? '' : $translationFilters['status_id'] = 1000;
-//            
-//            // Get the terms with the same concept_id but with different language_id (translations)
-//            $translations = Term::select('terms.*', 'translation_votes_sum', 'translation_user_vote')
-//                ->leftJoin(\DB::raw('(SELECT t_v1.term_id, SUM(t_v1.vote) as translation_votes_sum'
-//                    . ' FROM translation_votes AS t_v1'
-//                    . ' WHERE t_v1.translation_id = ?'
-//                    . ' GROUP BY t_v1.term_id) as t_v1'), 'terms.id', '=', 't_v1.term_id')
-//                ->leftJoin(\DB::raw('(SELECT t_v2.term_id, t_v2.vote as translation_user_vote'
-//                    . ' FROM translation_votes AS t_v2'
-//                    . ' WHERE t_v2.translation_id = ? AND t_v2.user_id = ?) as t_v2'), 'terms.id', '=', 't_v2.term_id')
-//                ->setBindings([$term->id, $term->id, Auth::id()])
-//                ->greaterThanRejected()
-//                ->where($translationFilters)
-//                ->where('language_id', '<>', $term->language_id)
-//                ->with('status', 'user', 'language')
-//                ->orderBy('status_id', 'DESC')
-//                ->orderBy('translation_votes_sum', 'DESC')
-//                ->get();
-            
-            //dd($translations);
         }
         
-        // Load merge suggestions if user is logged in.
-        // Only load votes for the current user.
-        if (Auth::check()) {
-            $term->load(['mergeSuggestions' => function($query) {
-                            $query->greaterThanRejected()
-                                    ->orderBy('votes_sum');
-                        },
-                        'mergeSuggestions.concept.terms' => function($query) use ($languageId) {
-                            $query->greaterThanRejected()
-                                    ->with('language')
-                                    ->orderBy('votes_sum');
-                        },
-                        'mergeSuggestions.votes' => function($query) {
-                            $query->where('user_id', Auth::id());
-                        },
-                        'user'
-                        ]);
-        }
         // Prepare meta data.
         $translateToLanguage = isset($termShowFilters['translate_to']) ? Language::active()->findOrFail($termShowFilters['translate_to'])->ref_name : '';
         $showMeta = $this->prepareShowMeta($filters, $term, $translateToLanguage);
 
-        return view('terms.show', compact('term', 'synonyms', 'languages', 'translations', 'showMeta'));
+        return view('terms.show', compact('term', 'languages', 'showMeta'));
     }
 
     /**

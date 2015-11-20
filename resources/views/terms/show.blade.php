@@ -175,34 +175,34 @@ translations and synonyms.
                 </tr>
             </thead>
             <tbody>
-                @if( ! $synonyms->isEmpty())
-                    @foreach($synonyms as $synonym)
+                @if( ! $term->synonyms->isEmpty())
+                    @foreach($term->synonyms as $synonym)
                     <tr>
                         <td class="vertical-center-cell">
                             {{--Depending on the translate_to query,
                                 show the appropriate link with translate_to--}}
                             @if(Session::has('termShowFilters')
                                 && (null !== Session::get('termShowFilters.translate_to')))
-                                <a lang="{{ $synonym->language->part1 }}"
+                                <a lang="{{ $synonym->synonym->language->part1 }}"
                                     href="{{ action('TermsController@show', [
-                                    'slug' => $synonym->slug,
+                                    'slug' => $synonym->synonym->slug,
                                     'translate_to' => Session::get('termShowFilters.translate_to')
                                 ])}}">
-                                    {{ $synonym->term }}</a>
+                                    {{ $synonym->synonym->term }}</a>
                             @else
-                            <a lang="{{ $synonym->language->part1 }}"
-                                href="{{ action('TermsController@show', $synonym->slug) }}">
-                                {{ $synonym->term }}</a>
+                            <a lang="{{ $synonym->synonym->language->part1 }}"
+                                href="{{ action('TermsController@show', $synonym->synonym->slug) }}">
+                                {{ $synonym->synonym->term }}</a>
                             @endif
                             {!! $synonym->status->id < 1000 ? status_warning($synonym->status->status) : '' !!}
                             <br><small>by <i>{{ $synonym->user->name }}</i></small>
                         </td>
-                        {{-- Votes for translations --}}
+                        {{-- Votes for synonyms --}}
                         @include('votes.form_synonym_table')
                     </tr>
                     @endforeach
                 @else
-                    {{-- No translations, translations is empty --}}
+                    {{-- No synonyms --}}
                     <tr><td><span class="text-warning">
                                     No synonyms
                             </span></td>
@@ -214,77 +214,9 @@ translations and synonyms.
     </div>
 </div>
 
-{{--Check if merge suggestions exist--}}
-@if(Auth::check() && $term->mergeSuggestions()->exists())
-    <table class="table table-condensed">
-        <caption>
-            Merge suggestions are used to link synonyms that are (by mistake) added
-            separately to the database. For example, if we separately enter
-            terms <i>Honest</i> and <i>Sincere</i>, we can merge them and in that way
-            relate them as synonyms.
-        </caption>
-        <thead>
-            <tr>
-                <th class="col-xs-9"> 
-                    <i lang="{{ $term->language->part1 }}">{{ $term->term }}</i>
-                    is suggested to be merged with
-                
-                </th>
-                <th class="col-xs-1"></th>
-                <th class="col-xs-1 text-center">Votes</th>
-                <th class="col-xs-1"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($term->mergeSuggestions as $mergeSuggestion)
-                <tr>
-                    <td class="vertical-center-cell">
-                        @foreach($mergeSuggestion->concept->terms as $key => $mergeTerm)
-                            @if(is_last($mergeSuggestion->concept->terms, $key))
-                                @if(Session::has('termShowFilters')
-                                    && (null !== Session::get('termShowFilters.translate_to')))
-                                    <a lang="{{ $mergeTerm->language->part1 }}"
-                                        href="{{ action('TermsController@show', [
-                                        'slug' => $mergeTerm->slug,
-                                        'translate_to' => Session::get('termShowFilters.translate_to')
-                                    ])}}">
-                                        {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }})</a>
-                                @else
-                                <a lang="{{ $mergeTerm->language->part1 }}"
-                                    href="{{ action('TermsController@show', $mergeTerm->slug) }}">
-                                    {{ $mergeTerm->term }}</a>
-                                @endif
-                            @else
-                                @if(Session::has('termShowFilters')
-                                    && (null !== Session::get('termShowFilters.translate_to')))
-                                    <a lang="{{ $mergeTerm->language->part1 }}"
-                                        href="{{ action('TermsController@show', [
-                                        'slug' => $mergeTerm->slug,
-                                        'translate_to' => Session::get('termShowFilters.translate_to')
-                                    ])}}">
-                                        {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }}),</a>
-                                @else
-                                <a lang="{{ $mergeTerm->language->part1 }}"
-                                    href="{{ action('TermsController@show', $mergeTerm->slug) }}">
-                                    {{ $mergeTerm->term }} ({{ $mergeTerm->language_id }}),</a>
-                                @endif
-                            @endif
-                        @endforeach
-                        <br><small>by <i>{{ $mergeSuggestion->user->name }}</i></small>
-                    </td>
-                    {{-- Votes for merge suggestions --}}
-                    @include('votes.form_merge_suggestion_table')
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endif
-
 @if (Auth::check() && ! (Auth::user()->role_id < 1000))
-
     <a class="btn btn-default" href="{{ action('TermsController@edit', ['slug' =>
                     $term->slug]) }}">Edit</a>
-
     @include('terms.suggestions')
     @include('shared.disqus_show_term_user')
 @elseif(Auth::check())
@@ -294,4 +226,5 @@ translations and synonyms.
 @if (Auth::guest())
     @include('shared.disqus_show_term_guest')
 @endif
+
 @endsection

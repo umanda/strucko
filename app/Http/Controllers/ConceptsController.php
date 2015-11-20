@@ -9,9 +9,10 @@ use App\Http\Controllers\Traits\ManagesTerms;
 use Auth;
 use App\Term;
 use App\MergeSuggestion;
-use App\SynonymVote;
 use App\Translation;
 use App\TranslationVote;
+use App\Synonym;
+use App\SynonymVote;
 
 
 class ConceptsController extends Controller
@@ -99,73 +100,64 @@ class ConceptsController extends Controller
     {
         $input = $request->all();
         
-        // Get the existing term to be used to add translation trough concept relationship.
+        // Get the existing term to be used to add synonym trough synonym relationship.
         $term = Term::where('slug', $slug)->with('concept')->firstOrFail();
-        // Get the user suggesting the translation
+        // Get the user suggesting the synonym
         $input['user_id'] = Auth::id();
-        // Set the other required fields in case we need a new term.
+        // Set the other required fields in case we need a new term and make
+        // sure they are the same as original term.
         $input['language_id'] = $term->language_id;
         $input['scientific_field_id'] = $term->scientific_field_id;
         $input['part_of_speech_id'] = $term->part_of_speech_id;
-        // Get all input from the request. Also prepare input values in case we need to create a new term.
+        // Also prepare input values in case we need to create a new term.
         $input = $this->prepareInputValues($input);
-         
-        // Check if the suggested term exists in language, field, part of speech.
+        
         if ($this->termExists($input)) {
+            // We will get the existing term first.
             $synonymTerm = Term::where('term', $input['term'])
                     ->where('language_id', $input['language_id'])
                     ->where('part_of_speech_id', $input['part_of_speech_id'])
                     ->where('scientific_field_id', $input['scientific_field_id'])
                     ->first();
-            
-            // Make sure that the suggestion is not the same term.
+            // Check if we got the same term.
             if ($term->id === $synonymTerm->id) {
                 return back()->with([
-                    'alert' => 'This is the same term...',
-                    'alert_class' => 'alert alert-warning'
+                            'alert' => 'This is the same term...',
+                            'alert_class' => 'alert alert-warning'
                 ]);
             }
-            
-            // Make sure that they have different concepts.
-            if ($term->concept_id === $synonymTerm->concept_id) {
-                return back()->with([
-                    'alert' => 'This is already a synonym...',
-                    'alert_class' => 'alert alert-warning'
-                ]);
-            }
-            
-            // Check if the merge suggestion already exist
-            $mergeSuggestion = MergeSuggestion::where('term_id', $synonymTerm->id)
-                    ->where('concept_id', $term->concept_id)
+            // Try to get a synonym.
+            $synonym = Synonym::where('term_id', $term->id)
+                    ->where('synonym_id', $synonymTerm->id)
                     ->with('status')
                     ->first();
-            // Suggest the merge if it doesn't exist.
-            if (is_null($mergeSuggestion)) {
-                Auth::user()->mergeSuggestions()
-                        ->create(['term_id' => $synonymTerm->id, 'concept_id' => $term->concept_id]);
+            if ( ! is_null($synonym)) {
                 return back()->with([
-                            'alert' => 'The term already exists and we have made a merge suggestion...',
-                            'alert_class' => 'alert alert-success'
+                            'alert' => 'This was already ' . strtolower($synonym->status->status) . '...',
+                            'alert_class' => 'alert alert-warning'
                 ]);
             }
-
-            // The merge suggestion already exists so output the status of the suggestion.
-            return back()->with([
-                        'alert' => 'This was already ' . strtolower($mergeSuggestion->status->status) . '...',
-                        'alert_class' => 'alert alert-warning'
-            ]);
             
-        }
-        
-        // The term doesn't exist, we can create it with the same concept_id
-        // trough relationship.
-        $term->concept->terms()->create($input);
+            // Synonym doesn't exist, so create it in both ways.
+            $this->createSynonym($term, $synonymTerm);
+            
+            // Synonym was suggested
+            return back()->with([
+                    'alert' => 'Existing term suggested as synonym...',
+                    'alert_class' => 'alert alert-success'
+                ]);
+            
+        } // End if term exists
 
+        // The term doesn't exist, so we will create a new one and create
+        // a translation with it.
+        $newTerm = $term->concept->terms()->create($input);
+        
+        $this->createSynonym($term, $newTerm);
         return back()->with([
-                    'alert' => 'New term suggested as synoynm...',
+                    'alert' => 'New term suggested as synonym...',
                     'alert_class' => 'alert alert-success'
         ]);
-        
     }
     /**
      * Vote for synonym up or down.
@@ -174,50 +166,65 @@ class ConceptsController extends Controller
      */
     public function voteForSynonym(Requests\SynonymVoteRequest $request, $slug)
     {
-        $input = $request->all();    
+        $input = $request->all();
         
         // Try to get the term and synonym from slugs.
         $term = Term::where('slug', $slug)->firstOrFail();
-        // Get the synonym, but make sure that it has the same concept and language
-        // and different ID.
-        $synonym = Term::where('slug', $input['synonym_slug'])
-                ->where('concept_id', $term->concept_id)
+        // Get the synonym, but make sure that it has the same PoS and SF and 
+        // language, but different id from the $term.
+        $synonymTerm = Term::where('slug', $input['synonym_slug'])
+                ->where('part_of_speech_id', $term->part_of_speech_id)
+                ->where('scientific_field_id', $term->scientific_field_id)
                 ->where('language_id', $term->language_id)
-                ->whereNotIn('id', [$term->id])
+                ->where('id', '<>', $term->id)
                 ->firstOrFail();
-        
-        // Prepare is_positive value.
-        $isPositive = isset($input['is_positive']) ? 1 : -1;
-        
-        // Prepare vote based on user role and its weight,
-        // and make it positive or negative based on up or down type of vote.
-        $vote = Auth::user()->role->vote_weight * $isPositive;
-        
-        // Make sure that the user didn't already vote.
-        $exists = SynonymVote::where('term_id', $term->id)
-                ->where('synonym_id', $synonym->id)
-                ->where('user_id', Auth::id())
-                ->exists();
-        
-        if($exists){
+        // Get the synonym so I can check if the user already voted
+        $synonym1 = Synonym::where('term_id', $term->id)
+                ->where('synonym_id', $synonymTerm->id)
+                ->with(['votes' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                }])
+                ->firstOrFail();
+        // Get the synonym in the oposite way
+        $synonym2 = Synonym::where('term_id', $synonymTerm->id)
+                ->where('synonym_id', $term->id)
+                ->with(['votes' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                }])
+                ->firstOrFail();
+        // If user voted, return
+        if (! $synonym1->votes->isEmpty()){
             return back()->with([
                     'alert' => 'You have already voted for this synonym...',
                     'alert_class' => 'alert alert-warning'
                 ]);
         }
+        // Prepare is_positive value.
+        $isPositive = isset($input['is_positive']) ? true : false;
+        
+        // Prepare vote based on user role and its weight,
+        // and make it positive or negative based on up or down type of vote.
+        if ($isPositive) {
+            $vote = Auth::user()->role->vote_weight;
+        } 
+        else {
+            $vote = Auth::user()->role->vote_weight * (-1);
+        }
         // Vote in both ways.
         SynonymVote::create([
-            'term_id' => $term->id,
-            'synonym_id' => $synonym->id,
+            'synonym_id' => $synonym1->id,
             'user_id' => Auth::id(),
-            'vote' => $vote
+            'is_positive' => $isPositive
         ]);
         SynonymVote::create([
-            'term_id' => $synonym->id,
-            'synonym_id' => $term->id,
+            'synonym_id' => $synonym2->id,
             'user_id' => Auth::id(),
-            'vote' => $vote
+            'is_positive' => $isPositive
         ]);
+        // Add vote to vote_sum on both synonyms.
+        $synonym1->increment('votes_sum', $vote);
+        $synonym2->increment('votes_sum', $vote);
+        
         return back()->with([
                     'alert' => 'Vote stored!',
                     'alert_class' => 'alert alert-success'
@@ -312,6 +319,20 @@ class ConceptsController extends Controller
         Translation::create([
                 'term_id' => $translationTerm->id,
                 'translation_id' => $term->id,
+                'user_id' => Auth::id()
+            ]);
+    }
+    
+    protected function createSynonym($term, $synonymTerm)
+    {
+        Synonym::create([
+                'term_id' => $term->id,
+                'synonym_id' => $synonymTerm->id,
+                'user_id' => Auth::id()
+            ]);
+        Synonym::create([
+                'term_id' => $synonymTerm->id,
+                'synonym_id' => $term->id,
                 'user_id' => Auth::id()
             ]);
     }

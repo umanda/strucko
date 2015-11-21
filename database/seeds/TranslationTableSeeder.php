@@ -16,8 +16,9 @@ class TranslationTableSeeder extends Seeder
     public function run()
     {
         $startItem = 0;
-        $endItem = 200;
-        
+        $endItem = 1000;
+        $counter = 0;
+        $startTime = time();
         // Get concepts
         $concepts = Concept::skip($startItem)->take($endItem)->get();
         
@@ -46,6 +47,10 @@ class TranslationTableSeeder extends Seeder
                         'user_id' => $translation->user_id
                     ]);
                 }
+            }
+            
+            if((++$counter)%100 == 0) {
+                echo $counter . ' ' . round(abs(time() - $startTime) / 60,2). " minutes\n";
             }
         }
     }

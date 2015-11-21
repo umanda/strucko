@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
         'merge_suggestions',
         'term_votes',
         'definition_votes',
-        'definitions',
         'terms',
         'concepts',
         'scientific_branches',
@@ -59,7 +58,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ScientificBranchTableSeeder::class);
         $this->call(ConceptTableSeeder::class);        
         $this->call(TermTableSeeder::class);
-        $this->call(DefinitionTableSeeder::class);
         
         Model::reguard();
     }

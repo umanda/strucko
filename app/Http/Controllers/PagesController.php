@@ -61,22 +61,11 @@ class PagesController extends Controller
     
     public function getTest(Request $request)
     {
-        $term = Term::where('id', 1)->with('user')->first();
-        dd($term->relationLoaded('votes'));
-//        DB::connection()->enableQueryLog();
-//        $total = DB::table('terms')->select('terms.user_id', DB::raw('COUNT(term) + def_sum as total')  )
-//                ->leftJoin(DB::raw('(SELECT def.user_id, COUNT(def.definition) as def_sum'
-//                    . ' FROM definitions AS def'
-//                    . ' WHERE def.user_id = ? AND def.status_id < 1000'
-//                    . ' GROUP BY def.user_id) as def'), 'terms.user_id', '=', 'def.user_id')
-//                ->setBindings([3])
-//                ->where('terms.status_id','<', 1000)
-//                ->where('terms.user_id', 3)
-//                ->groupBy('terms.user_id')
-//                ->value('total');
-//        $query = DB::getQueryLog();
-//        DB::connection()->disableQueryLog();
-//        //var_dump($query);
-//       var_dump((int)$total < 10);
+        \App\Definition::chunk(5, function ($definitions) {
+            foreach ($definitions as $definition) {
+                $definition->id;
+            }
+            
+        });
     }
 }

@@ -2,7 +2,7 @@
 
 @section('meta-description', 'Welcome to Strucko - the Expert Dictionary')
 
-@section('title', 'Strucko - the Expert Dictionary')
+@section('title', 'The Expert Dictionary')
 
 @section('content')
 <div class="row">

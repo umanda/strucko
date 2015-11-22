@@ -49,7 +49,7 @@
         </div> <!-- /container -->
 
 
-        <script src="/js/all.js"></script>
+        <script type="text/javascript" src="/js/all.js"></script>
         
     </body>
 </html>

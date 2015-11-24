@@ -32,6 +32,7 @@ class CreateDefinitionRequest extends Request
         return [
             'definition' => 'required',
             'concept_id' => 'required|integer|min:1',
+            'term_id' => 'required|integer|min:1',
             'language_id' => 'required|alpha|min:1|max:3',
             'link' => 'url',
         ];

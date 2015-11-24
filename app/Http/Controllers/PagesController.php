@@ -58,14 +58,13 @@ class PagesController extends Controller
     {                
         return view('pages.terms_of_use');
     }
-    
+        
     public function getTest(Request $request)
     {
-        \App\Definition::chunk(5, function ($definitions) {
-            foreach ($definitions as $definition) {
-                $definition->id;
-            }
-            
-        });
+        $term =Term::where('id', 414)
+                ->with('definitions')
+                ->get();
+        dd($term);
+        
     }
 }

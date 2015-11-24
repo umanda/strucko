@@ -244,12 +244,10 @@ class TermsController extends Controller
                     'status', 'user'
             ]);
                     
-        // Load definitions in the appropriate language.
+        // Load definitions
         // Only load votes for current user.
-        $languageId = $term->language_id;
-        $term->load(['concept.definitions' => function ($query) use ($languageId) {
+        $term->load(['definitions' => function ($query) {
             $definitionFilters = [];
-            $definitionFilters['language_id'] = $languageId;
             Auth::check() ? '' : $definitionFilters['status_id'] = 1000;
                         
             $query->greaterThanRejected()
@@ -278,8 +276,7 @@ class TermsController extends Controller
                                     $query->where('language_id', $termShowFilters['translate_to']);
                                 })
                                 ->with('translation', 'translation.language', 'translation.status')
-                                ->orderBy('votes_sum', 'DESC')
-                                ->get();
+                                ->orderBy('votes_sum', 'DESC');
                     },
                     'votes' => function ($query) {
                         $query->where('user_id', Auth::id());

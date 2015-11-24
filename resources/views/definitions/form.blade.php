@@ -36,5 +36,8 @@
 <input type="hidden" name="concept_id" 
        value="{{ isset($term) ? $term->concept_id : old('concept_id') }}">
 
-<input type="hidden" name="language_id" 
+<input type="hidden" name="term_id" 
+       value="{{ isset($term) ? $term->id : old('term_id') }}">
+
+<input type="hidden" name="language_id"
        value="{{ isset($term) ? $term->language_id : old('language_id') }}">

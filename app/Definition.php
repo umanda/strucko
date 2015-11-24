@@ -10,6 +10,7 @@ class Definition extends Model
         'definition',
         'concept_id',
         'language_id',
+        'term_id',
         'source',
         'link',
     ];

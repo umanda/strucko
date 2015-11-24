@@ -65,8 +65,8 @@ translations and synonyms.
                 </tr>
             </thead>
             <tbody>
-                @unless($term->concept->definitions->isEmpty())
-                    @foreach ($term->concept->definitions as $definition)
+                @unless($term->definitions->isEmpty())
+                    @foreach ($term->definitions as $definition)
                         <tr>
                             <td class="vertical-center-cell">
                                 <span lang="{{ $definition->language->part1 }}">{{ $definition->definition }}</span>

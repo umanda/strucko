@@ -88,6 +88,13 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::resource('scientific-areas', 'ScientificAreasController');
 Route::resource('scientific-areas.scientific-fields', 'ScientificFieldsController');
 
-
-
+// Languages
 Route::resource('languages', 'LanguagesController');
+
+// Sitemaps
+get('sitemaps', [
+    'as' => 'sitemaps.index', 'uses' => 'SitemapsController@index'
+    ]);
+get('sitemaps/terms1', [
+    'as' => 'sitemaps.terms1', 'uses' => 'SitemapsController@terms1'
+    ]);

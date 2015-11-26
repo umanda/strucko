@@ -29,7 +29,14 @@ class ConceptsController extends Controller
         // Check spam threshold.
         $this->middleware('spam', ['only' => ['addTranslation', 'addSynonym']]);
     }
-
+    
+    /**
+     * Suggest new translation.
+     * 
+     * @param \App\Http\Requests\EditTranslationRequest $request
+     * @param type $slug
+     * @return type
+     */
     public function addTranslation(Requests\EditTranslationRequest $request, $slug)
     {
         $input = $request->all();
@@ -95,7 +102,14 @@ class ConceptsController extends Controller
                     'alert_class' => 'alert alert-success'
         ]);
     }
-
+    
+    /**
+     * Suggest new synonym.
+     * 
+     * @param \App\Http\Requests\EditTermRequest $request
+     * @param type $slug
+     * @return type
+     */
     public function addSynonym(Requests\EditTermRequest $request, $slug)
     {
         $input = $request->all();
@@ -303,12 +317,24 @@ class ConceptsController extends Controller
                 ]);
     }
     
-
-    public function detachTerm()
+    public function approveTranslation($id)
     {
-        
+        $translation = Translation::findOrFail($id);
+        Translation::where('term_id', $translation->id)
+                ->orWhere('translation_id', $translation->id)
+                ->update(['status_id', 1000]);
+        return back()->with([
+                    'alert' => 'Translation approved!',
+                    'alert_class' => 'alert alert-success'
+                ]);
     }
 
+    /**
+     * Persist the translation in the translatios table.
+     * 
+     * @param type $term
+     * @param type $translationTerm
+     */
     protected function createTranslation($term, $translationTerm)
     {
         Translation::create([
@@ -323,6 +349,12 @@ class ConceptsController extends Controller
             ]);
     }
     
+    /**
+     * Persist synonym in the synonyms table.
+     * 
+     * @param type $term
+     * @param type $synonymTerm
+     */
     protected function createSynonym($term, $synonymTerm)
     {
         Synonym::create([

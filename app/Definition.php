@@ -41,6 +41,16 @@ class Definition extends Model
     }
     
     /**
+     * Definition belongs to term.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function term()
+    {
+        return $this->belongsTo('App\Term');
+    }
+    
+    /**
      * Definition belongs to concept.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

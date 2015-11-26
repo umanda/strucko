@@ -19,6 +19,8 @@ use App\Http\Controllers\Traits\ManagesTerms;
 use App\Repositories\TermShowFilterRepository;
 use DB;
 use App\Translation;
+use App\Synonym;
+use App\Definition;
 
 class TermsController extends Controller
 {
@@ -394,7 +396,7 @@ class TermsController extends Controller
     }
 
     /**
-     * Set the status of the term to rejected.
+     * Reject term, translations and synonyms.
      * 
      * @param string $slug Unique slug of the term
      * @return \Illuminate\Http\RedirectResponse Go back
@@ -402,11 +404,20 @@ class TermsController extends Controller
     public function rejectTerm($slug)
     {
         $term = Term::where('slug', $slug)->firstOrFail();
-
         $term->status_id = 250;
-
         $term->save();
-
+        // Reject all translations with that term.
+        Translation::where('term_id', $term->id)
+                ->orWhere('translation_id', $term->id)
+                ->update(['status_id' => 250]);
+        // Reject all synonyms with that term.
+        Synonym::where('term_id', $term->id)
+                ->orWhere('synonym_id', $term->id)
+                ->update(['status_id' => 250]);
+        // Delete its definitions.
+        Definition::where('term_id', $term->id)
+                ->delete();
+        
         return back()->with([
                     'alert' => 'Term rejected...',
                     'alert_class' => 'alert alert-success'

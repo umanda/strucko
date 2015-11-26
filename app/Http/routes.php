@@ -58,13 +58,12 @@ post('definitions/{id}/status/reject', 'DefinitionsController@reject');
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');
 get('suggestions/terms', 'SuggestionsController@terms');
-get('suggestions/merges', 'SuggestionsController@merges');
-get('suggestions/merges/{id}', 'MergeSuggestionsController@show');
-post('suggestions/merges/{id}/vote/up', 'MergeSuggestionsController@voteUp');
-post('suggestions/merges/{id}/vote/down', 'MergeSuggestionsController@voteDown');
-post('suggestions/merges/{id}/approveMerge', 'MergeSuggestionsController@voteDown');
-
 get('suggestions/definitions', 'SuggestionsController@definitions');
+get('suggestions/translations', 'SuggestionsController@translations');
+
+// Translations
+post('translations/{id}/status/approve', 'ConceptsController@approveTranslation');
+post('translations/{id}/status/reject', 'ConceptsController@rejectTranslation');
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -92,9 +91,9 @@ Route::resource('scientific-areas.scientific-fields', 'ScientificFieldsControlle
 Route::resource('languages', 'LanguagesController');
 
 // Sitemaps
-get('sitemaps', [
-    'as' => 'sitemaps.index', 'uses' => 'SitemapsController@index'
-    ]);
-get('sitemaps/terms1', [
-    'as' => 'sitemaps.terms1', 'uses' => 'SitemapsController@terms1'
-    ]);
+//get('sitemaps', [
+//    'as' => 'sitemaps.index', 'uses' => 'SitemapsController@index'
+//    ]);
+//get('sitemaps/terms1', [
+//    'as' => 'sitemaps.terms1', 'uses' => 'SitemapsController@terms1'
+//    ]);

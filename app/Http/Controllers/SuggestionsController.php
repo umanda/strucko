@@ -11,8 +11,9 @@ use App\Language;
 use App\Http\Controllers\Traits\ManagesTerms;
 use App\Concept;
 use Auth;
-use App\MergeSuggestion;
+use App\Translation;
 use App\Definition;
+use App\Status;
 
 class SuggestionsController extends Controller
 {
@@ -39,15 +40,17 @@ class SuggestionsController extends Controller
      */
     public function terms(SuggestionsFilterRepository $filters)
     {
-        $termFilters = $filters->allFilters();
+        $termFilters = $filters->termFilters();
 
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
+        $statuses = Status::active()->orderBy('id')->lists('status', 'id')->toArray();
+        
+        //dd([ '' => 'Choose status'] + $statuses);
         
         // Get the suggested terms, and load votes for current user.
-        $terms = Term::suggested()
-                ->where($termFilters)
+        $terms = Term::where($termFilters)
                 ->with(['votes' => function($query) {
                     $query->where('user_id', Auth::id());
                 },
@@ -57,98 +60,61 @@ class SuggestionsController extends Controller
                 ->orderBy('votes_sum', 'DESC')
                 ->paginate();
         
-        return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields'));
-    }
-
-    /**
-     * Get all merge suggestions
-     * TODO Refactor this
-     * @param SuggestionsFilterRepository $filters
-     * @return type
-     */
-    public function merges(SuggestionsFilterRepository $filters)
-    {
-        $termFilters = $filters->allFilters();
-
-        // Prepare languages and fields for filtering
-        $languages = Language::active()->orderBy('ref_name')->get();
-        $scientificFields = $this->prepareScientificFields();
-        
-//        $suggestedTerms = Term::whereHas('mergeSuggestions', function ($query) {
-//                    $query->where('status_id', 500);
-//                })
-//                ->where($termFilters)
-//                ->with('language', 'concept', 'concept.terms', 'concept.terms.language', 'mergeSuggestions.concept.terms', 'mergeSuggestions.concept.terms.language')
-//                ->get();
-
-        $mergeSuggestions = MergeSuggestion::where('status_id', 500)
-                ->whereHas('term', function ($query) use ($termFilters) {
-                        $query->greaterThanRejected()
-                                ->where($termFilters)
-                                ->orderBy('votes_sum');
-                })
-                ->with(['term' => function ($query) use ($termFilters) {
-                        $query->greaterThanRejected()
-                                ->where($termFilters)
-                                ->orderBy('votes_sum');
-                    },
-                    'concept',
-                    'concept.terms' => function ($query) use ($termFilters) {
-                        $query->where($termFilters);
-                    },
-                    'user',
-                    ])
-                ->orderBy('votes_sum', 'DESC')
-                ->paginate();
-            
-        return view('suggestions.merges', compact('termFilters', 'languages', 'scientificFields', 'mergeSuggestions'));
+        return view('suggestions.terms', compact('terms', 'termFilters', 'languages', 'scientificFields', 'statuses'));
     }
 
     public function definitions(SuggestionsFilterRepository $filters)
     {
-        $termFilters = $filters->allFilters();
+        $definitionFilters = $filters->definitionFilters();
+        $termFilters = $filters->termFilters();
+        
         // Prepare languages and fields for filtering
         $languages = Language::active()->orderBy('ref_name')->get();
         $scientificFields = $this->prepareScientificFields();
-
-        if (isset($termFilters['language_id'])) {
-            $definitions = Definition::suggested()
-                    ->where('language_id', $termFilters['language_id'])
-                    ->whereHas('concept.terms', function($query) use ($termFilters) {
-                        $query->greaterThanRejected()
-                                ->where($termFilters);
-                    })
-                    ->with(['concept.terms' => function($query) use($termFilters) {
-                        $query->greaterThanRejected()
-                                ->where($termFilters)
-                                ->orderBy('votes_sum', 'DESC');
-                        },
-                        'concept',
-                        'concept.terms.status'
-                        ])
-                    ->orderBy('votes_sum', 'DESC')
-                    ->paginate();
+        $statuses = Status::active()->orderBy('id')->lists('status', 'id')->toArray();
+        
+        $definitions = Definition::where($definitionFilters)
+                ->whereHas('term', function($query) use ($termFilters) {
+                    $localTermFilters = [];
+                    isset($termFilters['scientific_field_id']) ? $localTermFilters['scientific_field_id'] = $termFilters['scientific_field_id'] : '';
                     
-        }
-//        $concepts = Concept::whereHas('terms', function($query) use ($termFilters) {
-//                        $query->greaterThanRejected()
-//                                ->where($termFilters);
-//                    })
-//                ->whereHas('definitions', function ($query) use ($termFilters) {
-//                    $query->suggested();
-//                })
-//                ->with(['terms' => function ($query) use ($termFilters) {
-//                    $query->greaterThanRejected()
-//                          ->where($termFilters)
-//                          ->orderBy('votes_sum');
-//                }, 
-//                'definitions',
-//                'terms.status',
-//                'terms.language'
-//                ])
-//                ->paginate();
+                    $query->where($localTermFilters);
+                })
+                ->with(['term', 'term.status'])
+                ->orderBy('votes_sum', 'DESC')
+                ->paginate();
 
-        return view('suggestions.definitions', compact('termFilters', 'languages', 'scientificFields', 'definitions'));
+        return view('suggestions.definitions', compact('termFilters', 'languages', 'scientificFields', 'definitions', 'statuses'));
+    }
+    
+    public function translations(SuggestionsFilterRepository $filters)
+    {
+        $allFilters = $filters->translationFilters();
+        
+        // Prepare languages and fields for filtering
+        $languages = Language::active()->orderBy('ref_name')->get();
+        $scientificFields = $this->prepareScientificFields();
+        $statuses = Status::active()->orderBy('id')->lists('status', 'id')->toArray();
+        
+        $translationFilters = [];
+        isset($allFilters['status_id']) ? $translationFilters['status_id'] = $allFilters['status_id'] : '';
+        
+        $translations = Translation::where($translationFilters)
+                ->whereHas('term', function ($query) use ($allFilters) {
+                    $localTermFilters = [];
+                    isset($allFilters['language_id']) ? $localTermFilters['language_id'] = $allFilters['language_id'] : '';
+                    isset($allFilters['scientific_field_id']) ? $localTermFilters['scientific_field_id'] = $allFilters['scientific_field_id'] : '';
+                    $query->where($localTermFilters);
+                })
+                ->whereHas('translation', function ($query) use ($allFilters) {
+                    $localTranslateToFilters = [];
+                    isset($allFilters['translate_to']) ? $localTranslateToFilters['translate_to'] = $localTranslateToFilters['translate_to'] : '';
+                    $query->where($localTranslateToFilters);
+                })
+                ->with(['term', 'translation', 'user', 'status'])
+                ->paginate();
+                
+        return view('suggestions.translations', compact('allFilters', 'languages', 'scientificFields', 'statuses', 'translations'));
     }
 
 }

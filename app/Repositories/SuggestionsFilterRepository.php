@@ -27,6 +27,14 @@ class SuggestionsFilterRepository
      */
     protected $allFilters = [];
     
+    protected $termFilters = [];
+    
+    protected $definitionFilters = [];
+    
+    protected $translationFilters = [];
+    
+    protected $synonymFilters = [];
+    
     /**
      * Names of all filters which can be used in queries.
      * 
@@ -35,8 +43,54 @@ class SuggestionsFilterRepository
     protected $allFilterKeys = [
         'language_id',
         'scientific_field_id',
+        'translate_to',
+        'status_id'
     ];
     
+    /**
+     * Term filters.
+     * 
+     * @var array
+     */
+    protected $termFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'status_id'
+    ];
+    
+    /**
+     * Definition filters.
+     * 
+     * @var array
+     */
+    protected $definitionFilterKeys = [
+        'language_id',
+        'status_id',
+    ];
+    
+    /**
+     * Translation filters.
+     * 
+     * @var array
+     */
+    protected $translationFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'translate_to',
+        'status_id'
+    ];
+    
+    /**
+     * Synonym filters.
+     * 
+     * @var array
+     */
+    protected $synonymFilterKeys = [
+        'language_id',
+        'scientific_field_id',
+        'status_id'
+    ];
+
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -53,6 +107,24 @@ class SuggestionsFilterRepository
         // set defaults.
         $this->prepareAllFilters($this->request);
         return $this->allFilters;
+    }
+    
+    public function termFilters()
+    {
+        $this->prepareTermFilters($this->request);
+        return $this->termFilters;
+    }
+    
+    public function definitionFilters()
+    {
+        $this->prepareDefinitionFilters($this->request);
+        return $this->definitionFilters;
+    }
+    
+    public function translationFilters()
+    {
+        $this->prepareTranslationFilters($this->request);
+        return $this->translationFilters;
     }
     
     /**
@@ -85,5 +157,50 @@ class SuggestionsFilterRepository
         // Also put the values in the session.
         $request->session()->put('suggestionsFilter', $this->allFilters);
         
+    }
+    
+    /**
+     * Prepare filters from query parameters in request. Also put it in session.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function prepareTermFilters($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->termFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->termFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
+    }
+    
+    /**
+     * Prepare definition filters.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function prepareDefinitionFilters($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->definitionFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->definitionFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
+    }
+    
+    protected function prepareTranslationFilters($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->translationFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->translationFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
     }
 }

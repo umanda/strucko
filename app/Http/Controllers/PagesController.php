@@ -61,9 +61,9 @@ class PagesController extends Controller
         
     public function getTest(Request $request)
     {
-        $term =Term::where('id', 414)
-                ->with('definitions')
-                ->get();
+        $term = \App\Translation::where('term_id', 414)
+                ->orWhere('translation_id', 414)
+                ->update(['status_id' => 250]);
         dd($term);
         
     }

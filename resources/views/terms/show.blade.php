@@ -40,18 +40,7 @@
 </div>
 
 <hr>
-{{--
-If term is not yet approved, we will show the note for voting on definitions,
-translations and synonyms.
---}}
-@if ($term->status_id < 1000)
-<p class="text-info">
-    <strong>Note:</strong> you can vote for the term 
-    <i lang="{{ $term->language->part1 }}">{{ $term->term }}</i> (if you haven't); 
-    however, since this therm is not yet approved, you can't vote for its 
-    definitions, translations and synonyms.
-</p>
-@endif
+
 <!-- Definitions -->
 <div class="row">
     <div class="col-xs-12">

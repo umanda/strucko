@@ -9,7 +9,7 @@
 <div class="row">
     @include('layouts.filter')
     @if (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
-    <h2 class="text-right">
+    <h2 class="text-right" style="padding-right: 10px">
         {{ $language }}, 
         {{ $scientificField }}            
         {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}

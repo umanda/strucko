@@ -7,17 +7,43 @@
 @section('content')
 
 <div class="row">
-    @include('layouts.filter')
-    @if (isset($allFilters['language_id']) && isset($allFilters['scientific_field_id']))
-    <h2 class="text-right" style="padding-right: 10px">
-        {{ $language }}, 
-        {{ $scientificField }}            
-        {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}
-        {{ isset($allFilters['translate_to']) ? '- translated to ' . $translateToLanguage : '' }}
-        {{ isset($allFilters['search']) ? '- results for ' . $search  : '' }}
-    </h2>
-    @endif
-    <hr>
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                @include('layouts.filter')
+            </div>
+        </div>
+        @if (isset($allFilters['language_id'])
+        && isset($allFilters['scientific_field_id']))
+        <div class="row">
+            <div class="col-xs-2 text-center vertical-center">
+                @if (isset($allFilters['translate_to']))
+                <a href="{{ action('TermsController@index', [
+                    'language_id' => $allFilters['translate_to'],
+                    'scientific_field_id' => $allFilters['scientific_field_id'],
+                    'translate_to' => $allFilters['language_id']
+                    ]) }}" class="btn btn-lg lang-switcher" title="Switch languages">
+                    <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
+                </a>
+                @endif
+            </div>
+            <div class="col-xs-10 vertical-center">
+                <h2 class="text-right" style="padding-right: 10px">
+                    {{ $language }}, 
+                    {{ $scientificField }}            
+                    {{ isset($allFilters['menu_letter']) ? '- ' . $menuLetter : '' }}
+                    {{ isset($allFilters['translate_to']) ? '- translated to ' . $translateToLanguage : '' }}
+                    {{ isset($allFilters['search']) ? '- results for ' . $search  : '' }}
+                </h2>
+            </div>
+        </div>
+        @endif
+        <div class="row">
+            <div class="col-xs-12">
+                
+            </div>
+        </div>
+    </div>
 </div>
 @if(isset($menuLetters) && ! ($menuLetters->isEmpty()))
 <div class="row">

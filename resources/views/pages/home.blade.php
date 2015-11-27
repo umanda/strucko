@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Welcome to Strucko - the Expert Dictionary')
+@section('meta-description', 'Welcome to Strucko - the Expert Dictionary. We provide definitions and translations
+in various languages and scientific fields. Also, you can contribute.')
 
 @section('title', 'The Expert Dictionary')
 
@@ -13,7 +14,9 @@
                 @foreach($categories as $category)
                     <div class="col-xs-6 col-md-3 text-center">
                         <h3>
-                            <a href="{{action('TermsController@index', ['language_id' => $category->language_id, 'scientific_field_id' => $category->scientific_field_id])}}" 
+                            <a href="{{ action('TermsController@index', ['language_id' => $category->language_id,
+                                    'scientific_field_id' => $category->scientific_field_id, 
+                                    'translate_to' => Session::get('allFilters.translate_to')])}}" 
                                class="thumbnail">
                                 {{ $category->language->ref_name }},
                                 <br> {{ $category->scientificField->scientific_field }}

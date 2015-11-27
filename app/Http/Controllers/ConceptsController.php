@@ -320,11 +320,67 @@ class ConceptsController extends Controller
     public function approveTranslation($id)
     {
         $translation = Translation::findOrFail($id);
-        Translation::where('term_id', $translation->id)
-                ->orWhere('translation_id', $translation->id)
-                ->update(['status_id', 1000]);
+        
+        $firstFilter = ['term_id' => $translation->term_id, 'translation_id' => $translation->translation_id];
+        $oppositeFilter = ['term_id' => $translation->translation_id, 'translation_id' => $translation->term_id];
+        
+        Translation::where($firstFilter)
+                ->orWhere($oppositeFilter)
+                ->update(['status_id' => 1000]);
+        
         return back()->with([
                     'alert' => 'Translation approved!',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+    
+    public function rejectTranslation($id)
+    {
+        $translation = Translation::findOrFail($id);
+        
+        $firstFilter = ['term_id' => $translation->term_id, 'translation_id' => $translation->translation_id];
+        $oppositeFilter = ['term_id' => $translation->translation_id, 'translation_id' => $translation->term_id];
+        
+        Translation::where($firstFilter)
+                ->orWhere($oppositeFilter)
+                ->update(['status_id' => 250]);
+        
+        return back()->with([
+                    'alert' => 'Translation rejected!',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+    
+    public function approveSynonym($id)
+    {
+        $synonym = Synonym::findOrFail($id);
+        
+        $firstFilter = ['term_id' => $synonym->term_id, 'synonym_id' => $synonym->synonym_id];
+        $oppositeFilter = ['term_id' => $synonym->synonym_id, 'synonym_id' => $synonym->term_id];
+        
+        Synonym::where($firstFilter)
+                ->orWhere($oppositeFilter)
+                ->update(['status_id' => 1000]);
+        
+        return back()->with([
+                    'alert' => 'Synonym approved!',
+                    'alert_class' => 'alert alert-success'
+                ]);
+    }
+    
+    public function rejectSynonym($id)
+    {
+        $synonym = Synonym::findOrFail($id);
+        
+        $firstFilter = ['term_id' => $synonym->term_id, 'synonym_id' => $synonym->synonym_id];
+        $oppositeFilter = ['term_id' => $synonym->synonym_id, 'synonym_id' => $synonym->term_id];
+        
+        Synonym::where($firstFilter)
+                ->orWhere($oppositeFilter)
+                ->update(['status_id' => 250]);
+        
+        return back()->with([
+                    'alert' => 'Synonym rejected!',
                     'alert_class' => 'alert alert-success'
                 ]);
     }

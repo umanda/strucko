@@ -66,6 +66,7 @@
                                 @else
                                 {{--No definitions for selected language and field--}}
                                 <td colspan="3"><span class="text-info">No definitons</span></td>
+                                <td></td><td></td><td></td>
 
                                 @endif
                             </tbody>

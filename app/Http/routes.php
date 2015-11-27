@@ -60,10 +60,15 @@ get('suggestions', 'SuggestionsController@index');
 get('suggestions/terms', 'SuggestionsController@terms');
 get('suggestions/definitions', 'SuggestionsController@definitions');
 get('suggestions/translations', 'SuggestionsController@translations');
+get('suggestions/synonyms', 'SuggestionsController@synonyms');
 
 // Translations
 post('translations/{id}/status/approve', 'ConceptsController@approveTranslation');
 post('translations/{id}/status/reject', 'ConceptsController@rejectTranslation');
+
+// Synonyms
+post('synonyms/{id}/status/approve', 'ConceptsController@approveSynonym');
+post('synonyms/{id}/status/reject', 'ConceptsController@rejectSynonym');
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');

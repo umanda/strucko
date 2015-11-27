@@ -127,6 +127,12 @@ class SuggestionsFilterRepository
         return $this->translationFilters;
     }
     
+    public function synonymFilters()
+    {
+        $this->prepareSynonymFilters($this->request);
+        return $this->synonymFilters;
+    }
+    
     /**
      * Check if the language and scientific field is set in query parameter.
      * 
@@ -200,6 +206,17 @@ class SuggestionsFilterRepository
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
                 $this->translationFilters[$filterKey] = $request->get($filterKey);
+            }
+        }
+    }
+    
+    protected function prepareSynonymFilters($request)
+    {        
+        // Set filters from $filterKeys.
+        foreach ($this->synonymFilterKeys as $filterKey) {
+            // If the request has filter key, set filter to that value.
+            if($request->has($filterKey)) {
+                $this->synonymFilters[$filterKey] = $request->get($filterKey);
             }
         }
     }

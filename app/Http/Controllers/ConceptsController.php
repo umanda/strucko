@@ -328,6 +328,11 @@ class ConceptsController extends Controller
                 ->orWhere($oppositeFilter)
                 ->update(['status_id' => 1000]);
         
+        // Also make sure that terms are approved.
+        Term::where('id', $translation->term_id)
+                ->orWhere('id', $translation->translation_id)
+                ->update(['status_id' => 1000]);
+        
         return back()->with([
                     'alert' => 'Translation approved!',
                     'alert_class' => 'alert alert-success'
@@ -360,6 +365,11 @@ class ConceptsController extends Controller
         
         Synonym::where($firstFilter)
                 ->orWhere($oppositeFilter)
+                ->update(['status_id' => 1000]);
+        
+        // Also make sure that terms are approved.
+        Term::where('id', $synonym->term_id)
+                ->orWhere('id', $synonym->synonym_id)
                 ->update(['status_id' => 1000]);
         
         return back()->with([

@@ -14,10 +14,17 @@ in various languages and scientific fields. Also, you can contribute.')
                 @foreach($categories as $category)
                     <div class="col-xs-6 col-md-3 text-center">
                         <h3>
-                            <a href="{{ action('TermsController@index', ['language_id' => $category->language_id,
+                            {{-- Show link with translate_to, if not the same as the language_id --}}
+                            @if ($category->language_id != Session::get('allFilters.translate_to'))
+                                <a href="{{ action('TermsController@index', ['language_id' => $category->language_id,
                                     'scientific_field_id' => $category->scientific_field_id, 
                                     'translate_to' => Session::get('allFilters.translate_to')])}}" 
-                               class="thumbnail">
+                                    accesskey=""class="thumbnail">
+                            @else
+                                <a href="{{ action('TermsController@index', ['language_id' => $category->language_id,
+                                    'scientific_field_id' => $category->scientific_field_id,])}}" 
+                                    accesskey=""class="thumbnail">
+                            @endif
                                 {{ $category->language->ref_name }},
                                 <br> {{ $category->scientificField->scientific_field }}
                                 <br> <small>{{ $category->count }} term(s)</small>

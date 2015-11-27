@@ -103,6 +103,23 @@
                     <th class="col-xs-1"></th>
                 </tr>
             </thead>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="4">
+                    {{-- If the translate_to is set, show link to terms in translated language --}}
+                    @if(Session::has('termShowFilters'))
+                        @unless(null == Session::get('termShowFilters.translate_to'))
+                        <a class="btn-link"
+                           href="{{ action('TermsController@index', [
+                               'language_id' => Session::get('termShowFilters.translate_to'),
+                               'scientific_field_id' => $term->scientific_field_id,
+                               'translate_to' => $term->language_id,
+                           ])}}">All terms in selected language</a>
+                        @endunless
+                    @endif
+                    </td>
+                </tr>
+            </tfoot>
             <tbody>
                 {{-- First check if the translate_to is set and show appropriate message --}}
                 @if(Session::has('termShowFilters'))

@@ -196,7 +196,8 @@ trait ManagesTerms
         // If user is not logged in, only approved terms will be searched.
         Auth::check() ? '' :  $activeFilters['status_id'] = 1000;
         
-        $letters = Term::where($activeFilters)
+        $letters = Term::greaterThanRejected()
+                ->where($activeFilters)
                 ->groupBy('menu_letter')
                 ->lists('menu_letter')
                 ->toArray();

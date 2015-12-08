@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Term;
 use DB;
 use Auth;
+use Cache;
 
 class PagesController extends Controller
 {
@@ -21,17 +22,27 @@ class PagesController extends Controller
     public function getHome()
     {
         $categoryFilters = [];
-        Auth::check() ? '' : $categoryFilters['status_id'] = 1000;
+        $categoryFilters['status_id'] = 1000;
         
-        $categories = Term::where($categoryFilters)
+        $categories = Cache::remember('categories', 1440, function () use ($categoryFilters) {
+            return Term::where($categoryFilters)
                 ->select(DB::raw('count(*) as count'), 'language_id', 'scientific_field_id')
                 ->groupBy('language_id', 'scientific_field_id')
                 ->orderBy('count', 'DESC')
                 ->take(8)
                 ->with('language', 'scientificField')
                 ->get();
-                
-        return view('pages.home', compact('categories'));
+        });
+        
+        $latestTerms = Cache::remember('latestTerms', 1440, function () {
+            return Term::approved()
+                    ->orderBy('created_at', 'DESC')
+                    ->take(10)
+                    ->with('language', 'scientificField')
+                    ->get();
+        });
+        
+        return view('pages.home', compact('categories', 'latestTerms'));
     }
     
     public function getPrivacyPolicy()

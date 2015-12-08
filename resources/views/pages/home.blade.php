@@ -27,14 +27,32 @@ in various languages and scientific fields. Also, you can contribute.')
                             @endif
                                 {{ $category->language->ref_name }},
                                 <br> {{ $category->scientificField->scientific_field }}
-                                <br> <small>{{ $category->count }} term(s)</small>
+                                <br> <small>{{ $category->count }} terms</small>
                             </a>
                         </h3>
                   </div>
                 @endforeach
             </div>
         </article>
-        
+        <article>
+            <h2>Latest terms</h2>
+                <ul>
+                    @foreach($latestTerms as $latestTerm)
+                        @if($latestTerm->language_id != Session::get('allFilters.translate_to'))
+                        <li><a href="{{ action('TermsController@show', [
+                            'slug' => $latestTerm->slug,
+                            'translate_to' => Session::get('allFilters.translate_to')
+                        ]) }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
+                                {{ $latestTerm->scientificField->scientific_field }})</a></li>
+                        @else
+                        <li><a href="{{ action('TermsController@show', [
+                            'slug' => $latestTerm->slug
+                        ]) }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
+                                {{ $latestTerm->scientificField->scientific_field }})</a></li>
+                        @endif
+                    @endforeach
+                </ul>
+        </article>
     </div>
 </div>
 <div class="row">

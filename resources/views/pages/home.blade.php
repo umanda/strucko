@@ -43,12 +43,12 @@ in various languages and scientific fields. Also, you can contribute.')
                         <li><a href="{{ action('TermsController@show', [
                             'slug' => $latestTerm->slug,
                             'translate_to' => Session::get('allFilters.translate_to')])}}"
-                            >{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
+                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
                                 {{ $latestTerm->scientificField->scientific_field }})</a></li>
                         @else
                         <li><a href="{{ action('TermsController@show', [
-                            'slug' => $latestTerm->slug
-                        ]) }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
+                            'slug' => $latestTerm->slug])}}"
+                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
                                 {{ $latestTerm->scientificField->scientific_field }})</a></li>
                         @endif
                     @endforeach

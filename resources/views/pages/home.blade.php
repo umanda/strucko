@@ -37,12 +37,13 @@ in various languages and scientific fields. Also, you can contribute.')
         <article>
             <h2>Latest terms</h2>
                 <ul>
+                    
                     @foreach($latestTerms as $latestTerm)
-                        @if($latestTerm->language_id != Session::get('allFilters.translate_to'))
+                        @if( null != Session::get('allFilters.translate_to') && $latestTerm->language_id != Session::get('allFilters.translate_to'))
                         <li><a href="{{ action('TermsController@show', [
                             'slug' => $latestTerm->slug,
-                            'translate_to' => Session::get('allFilters.translate_to')
-                        ]) }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
+                            'translate_to' => Session::get('allFilters.translate_to')])}}"
+                            >{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
                                 {{ $latestTerm->scientificField->scientific_field }})</a></li>
                         @else
                         <li><a href="{{ action('TermsController@show', [

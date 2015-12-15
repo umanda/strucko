@@ -56,3 +56,15 @@ function flash($message)
 {
     sesssion()->flash('message', $message);
 }
+/**
+ * Get urldecoded() items in provided array.
+ * 
+ * @param array $items
+ * @return array
+ */
+function getUrlDecodedArray(array $items) {
+    
+    return array_map(function ($item) {
+            return urldecode($item);
+        }, $items);
+}

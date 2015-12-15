@@ -43,13 +43,13 @@ in various languages and scientific fields. Also, you can contribute.')
                         <li><a href="{{ action('TermsController@show', [
                             'slug' => $latestTerm->slug,
                             'translate_to' => Session::get('allFilters.translate_to')])}}"
-                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
-                                {{ $latestTerm->scientificField->scientific_field }})</a></li>
+                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }}</a> ({{ $latestTerm->language->ref_name }}, 
+                                {{ $latestTerm->scientificField->scientific_field }})</li>
                         @else
                         <li><a href="{{ action('TermsController@show', [
                             'slug' => $latestTerm->slug])}}"
-                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }} ({{ $latestTerm->language->ref_name }}, 
-                                {{ $latestTerm->scientificField->scientific_field }})</a></li>
+                            lang="{{ $latestTerm->language->part1 }}">{{ $latestTerm->term }}</a> ({{ $latestTerm->language->ref_name }}, 
+                                {{ $latestTerm->scientificField->scientific_field }})</li>
                         @endif
                     @endforeach
                 </ul>

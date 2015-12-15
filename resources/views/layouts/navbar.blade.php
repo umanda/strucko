@@ -13,7 +13,7 @@
             <ul class="nav navbar-nav">
                 <li class="{{ set_active('terms') }}">
                     @if(Session::has('allFilters'))
-                    <a href="{{ action('TermsController@index', Session::get('allFilters') ) }}">Terms</a>
+                    <a href="{{ action('TermsController@index', getUrlDecodedArray(Session::get('allFilters'))) }}">Terms</a>
                     @else
                     <a href="{{ action('TermsController@index') }}">Terms</a>
                     @endif

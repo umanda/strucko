@@ -10,7 +10,7 @@
             <div class="form-group">
                     <label class="sr-only" for="search">Search for term</label>
                     <input type="text" class="form-control" name="search" id="search" placeholder="Or search here..."
-                           value="{{ isset($allFilters['search']) ? $allFilters['search'] : old('search') }}">      
+                           value="{{ isset($allFilters['search']) ? urldecode($allFilters['search']) : old('search') }}">      
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-default form-control">Search</button>

@@ -57,7 +57,9 @@ class TermsController extends Controller
     public function index(TermsFilterRepository $filters)
     {
         $this->filters = $filters;
-        $allFilters = $this->filters->allFilters();
+        // Get all filters and apply urldecode() on them. 
+        $allFilters = getUrlDecodedArray($this->filters->allFilters());
+        
         $termFilters = $this->filters->termFilters();
         $menuLetterFilters = $this->filters->menuLetterFilters();
 

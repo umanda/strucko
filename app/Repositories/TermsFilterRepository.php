@@ -213,7 +213,7 @@ class TermsFilterRepository
         foreach ($this->allFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->allFilters[$filterKey] = $request->get($filterKey);
+                $this->allFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
         

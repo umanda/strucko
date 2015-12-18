@@ -19,21 +19,22 @@ class UserTableSeeder extends Seeder
         
         // Create admin user - needed for seeding.
         User::create([
-            'name' => 'Strucko Admin',
-            'email' => 'admin@strucko.com',
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
             'password' => bcrypt(str_random()),
             'verified' => true,
             'role_id' => 1000
         ]);
         
-        // Create demo user - for testing.
+        /** Create demo user - for testing.
         User::create([
-            'name' => 'Strucko Demo',
-            'email' => 'demo@strucko.com',
+            'name' => 'Demo',
+            'email' => 'demo@example.com',
             'password' => bcrypt(str_random()),
             'verified' => true,
             'role_id' => 500
         ]);
+        */
         
         
         

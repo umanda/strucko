@@ -1,23 +1,31 @@
-## Expert Dictionary
+## Strucko - Open, free and community driven expert dictionary
 
-The Expert Dictionary (currently in development), will contain
-technical terms and words in different languages, together with their
-definitions and other details. 
+The idea behind Strucko is to create open, free and community driven expert dictionary. 
+Anyone can register and contribute to the dictionary by suggesting new terms, 
+translations and definitions for existing terms. 
+While suggestions are visible to registered (and logged in) users, the 
+user with administrator role can approve suggestions, which makes them publicly 
+visible.
 
-## Official Documentation
+Terms can be entered in different languages, and added to different scientific fields.
+The user chooses the language, scientific field and part of speech for the term.
+Administrator checks the suggestion, and if everything is OK, he approves the term.
 
-Documentation not yet available (currently in development).
+## Official Live Strucko Web App
+
+Official Strucko web app is available here:  <http://strucko.com/>
 
 ## Contributing
 
-Thank you for considering contributing to the Expert Dictionary project! Please 
-send an e-mail to cicanvi@gmail.com and tell us about your ideas.
+Thank you for considering contributing to the Expert Dictionary project!
+Consider using "Issues" and/or "Pull requests" feature on GitHub or 
+send an e-mail to admin@strucko.com and tell us about your ideas.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Expert Dictionary, please send an e-mail
-to cicanvi@gmail.com and tell us about the problem.
+If you discover a security vulnerability within Strucko, please use "Issues" and/or "Pull requests" 
+feature on GitHub, or send an e-mail to admin@strucko.com and tell us about the problem.
 
-### License
+## License
 
-The Expert Dictionary is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Strucko The Expert Dictionary is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

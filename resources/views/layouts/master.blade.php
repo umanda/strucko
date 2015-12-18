@@ -8,7 +8,7 @@
                 
         <meta name="author" content="">
 
-        <title>Strucko - @yield('title')</title>
+        <title>@yield('title') - Strucko </title>
 
         <link rel="stylesheet" href="/css/app.css">
 
@@ -19,10 +19,12 @@
         @if(getenv('APP_ENV')=='production')
             @include('layouts.analytics')
         @endif
-      
+        
+        {{-- Currently disabled
         @if(getenv('APP_ENV')=='production')
-        @include('layouts.antiblock')
+            @include('layouts.antiblock')
         @endif
+        --}}
         <div class="container">
             <div class="row">
                 @include('layouts.header')

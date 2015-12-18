@@ -123,6 +123,7 @@ class TermsController extends Controller
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
+                    // First check that languages are not the same.
                     if ($allFilters['translate_to'] == $allFilters['language_id']) {
                         abort(403, 'Term language and translation language should not be the same...');
                     }
@@ -277,7 +278,10 @@ class TermsController extends Controller
         
         // If the translate_to is set, get the translations.
         if ($filters->isSetTranslateTo()) {
-            
+            // Make sure that term language and translate_to are not the same.
+            if ($termShowFilters['translate_to'] == $term->language_id) {
+                        abort(403, 'Term language and translation language should not be the same...');
+            }
             $term->load(['translations' => function ($query) use ($termShowFilters) {
                         // Prepare filters
                         $translateFilters = [];

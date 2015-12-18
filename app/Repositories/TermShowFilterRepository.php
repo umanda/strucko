@@ -83,7 +83,8 @@ class TermShowFilterRepository
         // Also put the values in the session.
         $request->session()->put('termShowFilters', $this->allFilters);
         // Update the allFilters session key with the translate_to value.
-        if($request->session()->has('allFilters.translate_to')) {
+        
+        if(array_key_exists('translate_to', $this->allFilters)) {
             $request->session()->put('allFilters.translate_to', $this->allFilters['translate_to']);
         }
     }

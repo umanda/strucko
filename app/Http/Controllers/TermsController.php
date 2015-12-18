@@ -83,21 +83,27 @@ class TermsController extends Controller
                 
                 // If the translate_to is set, get translations.
                 if ($this->filters->isSetTranslateTo()) {
-                    $terms->load(['translations' => function ($query) use ($allFilters) {
-                        $translateFilters = [];
-                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
-                          
-                        $query->greaterThanRejected()
-                                ->where($translateFilters)
-                                ->whereHas('translation', function ($query) use ($allFilters){
-                                    $query->where('language_id', $allFilters['translate_to']);
-                                })
-                                ->with('translation', 'translation.language', 'translation.status')
-                                ->orderBy('status_id', 'DESC')
-                                ->orderBy('votes_sum', 'DESC')
-                                ->get();
-                    },
-                    ]);
+                    // First check that languages are not the same.
+                    // dd($allFilters['translate_to'] != $allFilters['language_id']);
+                    if ($allFilters['translate_to'] == $allFilters['language_id']) {
+                        abort(403, 'Term language and translation language should not be the same...');
+                    }
+                        $terms->load(['translations' => function ($query) use ($allFilters) {
+                            $translateFilters = [];
+                            Auth::check() ? '' : $translateFilters['status_id'] = 1000;
+
+                            $query->greaterThanRejected()
+                                    ->where($translateFilters)
+                                    ->whereHas('translation', function ($query) use ($allFilters){
+                                        $query->where('language_id', $allFilters['translate_to']);
+                                    })
+                                    ->with('translation', 'translation.language', 'translation.status')
+                                    ->orderBy('status_id', 'DESC')
+                                    ->orderBy('votes_sum', 'DESC')
+                                    ->get();
+                        },
+                        ]);
+                    
                 }
             }
 
@@ -117,6 +123,9 @@ class TermsController extends Controller
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
+                    if ($allFilters['translate_to'] == $allFilters['language_id']) {
+                        abort(403, 'Term language and translation language should not be the same...');
+                    }
                     $terms->load(['translations' => function ($query) use ($allFilters) {
                         $translateFilters = [];
                         Auth::check() ? '' : $translateFilters['status_id'] = 1000;

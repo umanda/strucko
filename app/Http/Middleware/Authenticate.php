@@ -38,6 +38,9 @@ class Authenticate
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
+                if (session()->has('locale')){
+                    return redirect()->guest('auth/login' . '?locale=' . session()->get('locale.locale'));
+                }
                 return redirect()->guest('auth/login');
             }
         }

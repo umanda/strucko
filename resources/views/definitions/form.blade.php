@@ -1,35 +1,39 @@
 
 {!! csrf_field() !!}
+{!! getLocaleInputField() !!}
 
 <div class="form-group">
-    <label for="definition">Definition</label>
+    <label for="definition">
+        {{ trans('terms.suggestions.definition') }}
+        ({{ trans('languages.' . str_replace(' ', '_', $term->language->ref_name)) }})
+    </label>
     <textarea id="definition" name="definition" 
-              placeholder="Definition {{ isset($term) ? 'for ' . $term->term . ' in ' . $term->language->ref_name . ' language': '' }}"
+              placeholder="{{ trans('terms.suggestions.definition') }}"
               aria-describedby="definitionHelp" rows="3" class="form-control">{{ old('definition') }}</textarea>
     <span id="definitionHelp" class="help-block">
-        The definition must be in the same language as the term.
+        {{ trans('terms.suggestions.definitionhelp') }}
     </span>
 </div>
 
 <div class="form-group">
-    <label for="source">Source of the definition (if quoting)</label>
-    <textarea id="source" name="source" placeholder="Source of the definition"
+    <label for="source">
+        {{ trans('terms.suggestions.definitionsource') }}
+    </label>
+    <textarea id="source" name="source" 
+              placeholder="{{ trans('terms.suggestions.definitionsourceplaceholder') }}"
               aria-describedby="sourceHelp" rows="2"
               class="form-control">{{ old('source') }}</textarea>
     <span id="sourceHelp" class="help-block">
-        You can name the source of the definition here. 
-        Be sure to respect the copyright of the source. 
-        Do not copy definitions from sources with all rights reserved.
-        If you don't specify the source, we will assume that you are 
-        the author of the definition.
+        {{ trans('terms.suggestions.definitionsourcehelp') }}
     </span>
 </div>
 <div class="form-group">
-    <label for="link">Link to source (if available)</label>
-    <input type="url" id="link" name="link" placeholder="Link to soruce "
+    <label for="link">{{ trans('terms.suggestions.linktosource') }}</label>
+    <input type="url" id="link" name="link" 
+           placeholder="{{ trans('terms.suggestions.linktosourceplaceholder') }}"
            aria-describedby="linkHelp" class="form-control" value="{{ old('link') }}">
     <span id="linkHelp" class="help-block">
-        If the source is available online, provide the link here.
+        {{ trans('terms.suggestions.linktosourcehelp') }}
     </span>
 </div>
 

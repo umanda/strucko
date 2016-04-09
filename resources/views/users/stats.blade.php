@@ -1,34 +1,39 @@
 @extends('layouts.master')
 
-@section('meta-description', 'User home page - the Expert Dictionary')
+@section('meta-description', trans('users.index.description'))
 
-@section('title', 'User home page - the Expert Dictionary')
+@section('title', trans('users.index.title'))
 
 @section('content')
-    <h2>Your stats</h2>
+    <h2>{{ trans('users.index.header') }}</h2>
     <p>
-        Hello {{ Request::user()->name }}, 
+        {{ trans('users.index.hello') }} {{ Request::user()->name }}, 
     </p>
     <p>
-        Your current role is <i>{{ Request::user()->role->role }}</i> and you can 
-        suggest up to {{ Request::user()->role->spam_threshold }} terms and
-        definitions. When your suggestions get approved, you can make new 
-        ones. We may upgrade roles for users with many approved
-        suggestions.
+        {!! trans('users.index.role', [
+            'role' => Request::user()->role->role,
+            'spam_threshold' => Request::user()->role->spam_threshold
+                ]) !!}
     </p>
     <p>
-        Approved terms: {{ $stats['terms']['approved'] }} 
+        {{ trans('users.index.termsapproved', [
+                    'termsapproved' => $stats['terms']['approved'] ])  }}
         <br>
-        Approved definitions: {{ $stats['definitions']['approved'] }}
+        {{ trans('users.index.definitionsapproved', [
+                    'definitionsapproved' => $stats['definitions']['approved'] ]) }}
     </p>
     <p>
-        Suggested terms: {{ $stats['terms']['suggested'] }} 
+        {{ trans('users.index.termssuggested', [
+                    'termssuggested' => $stats['terms']['suggested'] ]) }}
         <br>
-        Suggested definitions: {{ $stats['definitions']['suggested'] }}
+        {{ trans('users.index.definitionssuggested', [
+                    'definitionssuggested' => $stats['definitions']['suggested'] ]) }}
     </p>
     <p>
-        Rejected terms: {{ $stats['terms']['rejected'] }} 
+        {{ trans('users.index.termsrejected', [
+                    'termsrejected' => $stats['terms']['rejected'] ]) }}
         <br>
-        Rejected definitions: {{ $stats['definitions']['rejected'] }}
+        {{ trans('users.index.definitionsrejected', [
+                    'definitionsrejected' => $stats['definitions']['rejected'] ]) }}
     </p>
 @endsection

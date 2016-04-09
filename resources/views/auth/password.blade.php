@@ -1,23 +1,25 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Reset your password form')
+@section('meta-description', trans('pages.password.description'))
 
-@section('title', 'Reset your password')
+@section('title', trans('pages.password.title'))
 
 @section('content')
 <form method="POST" action="{{ action('Auth\PasswordController@postEmail') }}">
     
     {!! csrf_field() !!}
     
+    {!! getLocaleInputField() !!}
+    
     <div class="form-group">
-        <label for="email">Email:</label>
+        <label for="email">{{ trans('pages.password.email') }}:</label>
         <input type="email" id="email" name="email" maxlength="255" required="required"
-               placeholder="Email" class="form-control"
+               placeholder="{{ trans('pages.password.email') }}" class="form-control"
                value="{{ old('email') }}">
     </div>
     
     <button type="submit" class="btn btn-primary">
-	Send Password Reset Link
+	{{ trans('pages.password.send') }}
     </button>
     
 </form>

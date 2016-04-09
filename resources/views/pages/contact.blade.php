@@ -1,18 +1,14 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Contact us - Strucko - the Expert Dictionary')
+@section('meta-description', trans('pages.contact.description'))
 
-@section('title', 'Contact us - Strucko - the Expert Dictionary')
+@section('title', trans('pages.contact.title'))
 
 @section('content')
-    <h2>Contact us</h2>
-    <p>
-        For all your suggestions or questions, you can send email to:
-    </p>
-    <br>
-    <p class="text-center text-info">
-        admin [at] strucko.com
-    </p>
+    <h2>{{ trans('pages.contact.header') }}</h2>
+    
+    {!! trans('pages.contact.content') !!}
+    
 @endsection
 
 

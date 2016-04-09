@@ -1,5 +1,5 @@
 {!! csrf_field() !!}
-
+{!! getLocaleInputField() !!}
 <div class="form-group">
     <label for="ref_name">Language name:</label>
     <input type="text" id="ref_name" name="ref_name" maxlength="255" required="required"

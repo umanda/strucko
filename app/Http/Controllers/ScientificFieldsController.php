@@ -60,7 +60,7 @@ class ScientificFieldsController extends Controller
         $field = ScientificField::create($input);
         return redirect(action('ScientificAreasController@show', $field->scientific_area_id))
             ->with([
-                    'alert' => 'Field created...',
+                    'alert' => trans('alerts.fieldcreated'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -113,7 +113,7 @@ class ScientificFieldsController extends Controller
         
         return redirect(action('ScientificAreasController@show', $input['scientific_area_id']))
             ->with([
-                    'alert' => 'Field edited...',
+                    'alert' => trans('alerts.fieldedited'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -129,7 +129,7 @@ class ScientificFieldsController extends Controller
         ScientificField::destroy($scientific_field_id);
         return redirect(action('ScientificAreasController@show', $scientific_area_id))
                 ->with([
-                    'alert' => 'Field deleted...',
+                    'alert' => trans('alerts.fielddeleted'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

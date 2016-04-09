@@ -55,7 +55,7 @@ class ConceptsController extends Controller
         // Make sure that languages are not the same
         if ($term->language_id == $input['language_id']) {
             return back()->with([
-                        'alert' => 'Translated term can not be in the same language',
+                        'alert' => trans('alerts.samelanguage'),
                         'alert_class' => 'alert alert-warning'
             ]);
         }
@@ -76,7 +76,8 @@ class ConceptsController extends Controller
                     ->first();
             if ( ! is_null($translation)) {
                 return back()->with([
-                            'alert' => 'This was already ' . strtolower($translation->status->status) . '...',
+                            'alert' => trans('alerts.wasalready') 
+                            . strtolower(trans('statuses.' . str_replace(' ', '_', $translation->status->status))) . '...',
                             'alert_class' => 'alert alert-warning'
                 ]);
             }
@@ -86,19 +87,19 @@ class ConceptsController extends Controller
             
             // Translation was suggested
             return back()->with([
-                    'alert' => 'Existing term suggested as translation...',
+                    'alert' => trans('alerts.existingterm'),
                     'alert_class' => 'alert alert-success'
                 ]);
             
         } // End if term exists
-
+        
         // The term doesn't exist, so we will create a new one and create
         // a translation with it.
         $newTerm = $term->concept->terms()->create($input);
         
         $this->createTranslation($term, $newTerm);
         return back()->with([
-                    'alert' => 'New term suggested as translation...',
+                    'alert' => trans('alerts.newterm'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -136,7 +137,7 @@ class ConceptsController extends Controller
             // Check if we got the same term.
             if ($term->id === $synonymTerm->id) {
                 return back()->with([
-                            'alert' => 'This is the same term...',
+                            'alert' => trans('alerts.sameterm'),
                             'alert_class' => 'alert alert-warning'
                 ]);
             }
@@ -147,7 +148,8 @@ class ConceptsController extends Controller
                     ->first();
             if ( ! is_null($synonym)) {
                 return back()->with([
-                            'alert' => 'This was already ' . strtolower($synonym->status->status) . '...',
+                            'alert' => trans('alerts.wasalready') 
+                            . strtolower(trans('statuses.' . str_replace(' ', '_', $synonym->status->status))) . '...',
                             'alert_class' => 'alert alert-warning'
                 ]);
             }
@@ -157,7 +159,7 @@ class ConceptsController extends Controller
             
             // Synonym was suggested
             return back()->with([
-                    'alert' => 'Existing term suggested as synonym...',
+                    'alert' => trans('alerts.existingtermsyn'),
                     'alert_class' => 'alert alert-success'
                 ]);
             
@@ -169,7 +171,7 @@ class ConceptsController extends Controller
         
         $this->createSynonym($term, $newTerm);
         return back()->with([
-                    'alert' => 'New term suggested as synonym...',
+                    'alert' => trans('alerts.newtermsyn'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -209,7 +211,7 @@ class ConceptsController extends Controller
         // If user voted, return
         if (! $synonym1->votes->isEmpty()){
             return back()->with([
-                    'alert' => 'You have already voted for this synonym...',
+                    'alert' => trans('alerts.alreadyvotedsyn'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }
@@ -240,7 +242,7 @@ class ConceptsController extends Controller
         $synonym2->increment('votes_sum', $vote);
         
         return back()->with([
-                    'alert' => 'Vote stored!',
+                    'alert' => trans('alerts.votestored'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -280,7 +282,7 @@ class ConceptsController extends Controller
         // If user voted, return
         if (! $translation1->votes->isEmpty()){
             return back()->with([
-                    'alert' => 'You have already voted for this translation...',
+                    'alert' => trans('alerts.alreadyvotedtrans'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }
@@ -312,7 +314,7 @@ class ConceptsController extends Controller
         $translation2->increment('votes_sum', $vote);
         
         return back()->with([
-                    'alert' => 'Vote stored!',
+                    'alert' => trans('alerts.votestored'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -334,7 +336,7 @@ class ConceptsController extends Controller
                 ->update(['status_id' => 1000]);
         
         return back()->with([
-                    'alert' => 'Translation approved!',
+                    'alert' => trans('alerts.transapproved'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -351,7 +353,7 @@ class ConceptsController extends Controller
                 ->update(['status_id' => 250]);
         
         return back()->with([
-                    'alert' => 'Translation rejected!',
+                    'alert' => trans('alerts.transrejected'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -373,7 +375,7 @@ class ConceptsController extends Controller
                 ->update(['status_id' => 1000]);
         
         return back()->with([
-                    'alert' => 'Synonym approved!',
+                    'alert' => trans('alerts.synapproved'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -390,7 +392,7 @@ class ConceptsController extends Controller
                 ->update(['status_id' => 250]);
         
         return back()->with([
-                    'alert' => 'Synonym rejected!',
+                    'alert' => trans('alerts.synarejected'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

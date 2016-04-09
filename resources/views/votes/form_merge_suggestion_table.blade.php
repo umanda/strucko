@@ -7,6 +7,7 @@
         <td class="text-center vertical-center-cell">
             <form action="{{ action('MergeSuggestionsController@voteUp', [$mergeSuggestion->id]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <button type="submit" class="btn btn-link vote-positive" aria-label="Left Align">
                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 </button>
@@ -18,6 +19,7 @@
         <td class="text-center vertical-center-cell">
             <form action="{{ action('MergeSuggestionsController@voteDown', [$mergeSuggestion->id]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <button type="submit" class="btn btn-link vote-negative" aria-label="Left Align">
                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                 </button>

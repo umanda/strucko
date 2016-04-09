@@ -90,7 +90,7 @@ class TermsFilterRepository
     ];
     
     /**
-     * Names of filters which can be used for creating links for menu letters
+     * Names of filters which can be used for search
      * 
      * @var array
      */

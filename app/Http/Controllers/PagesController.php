@@ -21,9 +21,11 @@ class PagesController extends Controller
     
     public function getHome()
     {
-        $categoryFilters = [];
-        $categoryFilters['status_id'] = 1000;
+        /* Not used for single scientific field.
         
+        $categoryFilters = [];
+        $categoryFilters['status_id'] = 1000; 
+         
         $categories = Cache::remember('categories', 1440, function () use ($categoryFilters) {
             return Term::where($categoryFilters)
                 ->select(DB::raw('count(*) as count'), 'language_id', 'scientific_field_id')
@@ -34,6 +36,9 @@ class PagesController extends Controller
                 ->get();
         });
         
+        */
+        
+        // Get latest terms and cache them.
         $latestTerms = Cache::remember('latestTerms', 1440, function () {
             return Term::approved()
                     ->orderBy('created_at', 'DESC')
@@ -42,7 +47,7 @@ class PagesController extends Controller
                     ->get();
         });
         
-        return view('pages.home', compact('categories', 'latestTerms'));
+        return view('pages.home', compact('latestTerms'));
     }
     
     public function getPrivacyPolicy()
@@ -69,13 +74,19 @@ class PagesController extends Controller
     {                
         return view('pages.terms_of_use');
     }
+    
+    public function getContact()
+    {                
+        return view('pages.contact');
+    }
         
     public function getTest(Request $request)
     {
-        $term = \App\Translation::where('term_id', 414)
-                ->orWhere('translation_id', 414)
-                ->update(['status_id' => 250]);
-        dd($term);
+        $request->query();
+        echo $url = app('url')->to('test', false);
+        echo $url = \Request::url();
+        generateHreflangURIs();
+        //dd($request->query());
         
     }
 }

@@ -1,51 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns1:sitemapindex xmlns:ns1="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/50000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
+		<ns1:loc>http://strucko.com/sitemaps/english.xml</ns1:loc>
+		<ns1:lastmod>2016-04-09</ns1:lastmod>
 	</ns1:sitemap>
 	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/100000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/150000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/200000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/250000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/300000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/350000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/400000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/450000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/500000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/550000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
-	</ns1:sitemap>
-	<ns1:sitemap>
-		<ns1:loc>http://strucko.com/sitemaps/600000.xml</ns1:loc>
-		<ns1:lastmod>2015-12-07</ns1:lastmod>
+		<ns1:loc>http://strucko.com/sitemaps/croatian.xml</ns1:loc>
+		<ns1:lastmod>2016-04-09</ns1:lastmod>
 	</ns1:sitemap>
 </ns1:sitemapindex>

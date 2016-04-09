@@ -39,7 +39,7 @@ class DefinitionVotesController extends Controller
 
         if ($exists) {
             return back()->with([
-                        'alert' => 'You have already voted for this definition...',
+                        'alert' => trans('alerts.alreadyvoteddef'),
                         'alert_class' => 'alert alert-warning'
             ]);
         }
@@ -55,7 +55,7 @@ class DefinitionVotesController extends Controller
         $definition->increment('votes_sum', $voteWeight);
 
         return back()->with([
-                    'alert' => 'Voted up!',
+                    'alert' => trans('alerts.votedup'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -82,7 +82,7 @@ class DefinitionVotesController extends Controller
 
         if ($exists) {
             return back()->with([
-                        'alert' => 'You have already voted for this definition...',
+                        'alert' => trans('alerts.alreadyvoteddef'),
                         'alert_class' => 'alert alert-warning'
             ]);
         }
@@ -98,7 +98,7 @@ class DefinitionVotesController extends Controller
         $definition->decrement('votes_sum', $voteWeight);
 
         return back()->with([
-                    'alert' => 'Voted down!',
+                    'alert' => trans('alerts.voteddown'),
                     'alert_class' => 'alert alert-success'
         ]);
     }

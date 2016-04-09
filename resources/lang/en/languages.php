@@ -1,0 +1,70 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Name of languages Lines
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    
+    'English' => 'English',
+    'dativ.English' => 'English',
+    'Croatian' => 'Croatian',
+    'dativ.Croatian' => 'Croatian',
+    'Afrikaans' => 'Afrikaans',
+    'Basque' => 'Basque',
+    'Belarusian' => 'Belarusian',
+    'Bosnian' => 'Bosnian',
+    'Bulgarian' => 'Bulgarian',
+    'Catalan' => 'Catalan',
+    'Czech' => 'Czech',
+    'Danish' => 'Danish',
+    'Dutch' => 'Dutch',
+    'Filipino' => 'Filipino',
+    'Finnish' => 'Finnish',
+    'French' => 'French',
+    'Galician' => 'Galician',
+    'German' => 'German',
+    'Greek' => 'Greek',
+    'Hausa' => 'Hausa',
+    'Hungarian' => 'Hungarian',
+    'Icelandic' => 'Icelandic',
+    'Igbo' => 'Igbo',
+    'Indonesian' => 'Indonesian',
+    'Irish' => 'Irish',
+    'Italian' => 'Italian',
+    'Kazakh' => 'Kazakh',
+    'Kinyarwanda' => 'Kinyarwanda',
+    'Kirghiz' => 'Kirghiz',
+    'Lithuanian' => 'Lithuanian',
+    'Macedonian' => 'Macedonian',
+    'Maltese' => 'Maltese',
+    'Maori' => 'Maori',
+    'Norwegian_Bokmål' => 'Norwegian Bokmål',
+    'Norwegian_Nynorsk' => 'Norwegian Nynorsk',
+    'Pedi' => 'Pedi',
+    'Polish' => 'Polish',
+    'Portuguese' => 'Portuguese',
+    'Romanian' => 'Romanian',
+    'Russian' => 'Russian',
+    'Scottish_Gaelic' => 'Scottish Gaelic',
+    'Serbian' => 'Serbian',
+    'Slovak' => 'Slovak',
+    'Slovenian' => 'Slovenian',
+    'Spanish' => 'Spanish',
+    'Swedish' => 'Swedish',
+    'Tajik' => 'Tajik',
+    'Tatar' => 'Tatar',
+    'Tswana' => 'Tswana',
+    'Turkish' => 'Turkish',
+    'Turkmen' => 'Turkmen',
+    'Ukrainian' => 'Ukrainian',
+    'Vietnamese' => 'Vietnamese',
+    'Welsh' => 'Welsh',
+    'Wolof' => 'Wolof',
+    'Xhosa' => 'Xhosa',
+    'Zulu' => 'Zulu',
+];

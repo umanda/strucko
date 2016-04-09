@@ -1,9 +1,8 @@
 
 <div class="col-md-6 hidden-xs">
     <div class="page-header text-center">
-        <h1>Strucko <small>The Expert Dictionary</small></h1>
-        <p>many languages, many scientific fields</p>
-        <p>driven by community</p>
+        <h1>{{ trans('header.logo') }} <small>{{ trans('header.tagline') }}</small></h1>
+        <p>{{ trans('header.belowtagline') }}</p>
     </div>
 </div>
 <div class="col-md-6">

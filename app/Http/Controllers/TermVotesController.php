@@ -42,7 +42,7 @@ class TermVotesController extends Controller
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this term...',
+                    'alert' => trans('alerts.alreadyvotedterm'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -58,7 +58,7 @@ class TermVotesController extends Controller
         $term->increment('votes_sum', $voteWeight);
         
         return back()->with([
-                    'alert' => 'Voted up!',
+                    'alert' => trans('alerts.votedup'),
                     'alert_class' => 'alert alert-success'
                 ]);
         
@@ -88,7 +88,7 @@ class TermVotesController extends Controller
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this term...',
+                    'alert' => trans('alerts.alreadyvotedterm'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -104,7 +104,7 @@ class TermVotesController extends Controller
         $term->decrement('votes_sum', $voteWeight);
         
         return back()->with([
-                    'alert' => 'Voted down!',
+                    'alert' => trans('alerts.voteddown'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

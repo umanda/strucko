@@ -72,20 +72,21 @@ class TermShowFilterRepository
      */
     protected function prepareAllFilters($request)
     {        
-        // Set filters from $filterKeys.
+        // Set filters from $allFilterKeys.
         foreach ($this->allFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->allFilters[$filterKey] = $request->get($filterKey);
+                $this->allFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
         
         // Also put the values in the session.
         $request->session()->put('termShowFilters', $this->allFilters);
-        // Update the allFilters session key with the translate_to value.
         
+        /* This causes wrong /terms link generation.
         if(array_key_exists('translate_to', $this->allFilters)) {
             $request->session()->put('allFilters.translate_to', $this->allFilters['translate_to']);
         }
+        */
     }
 }

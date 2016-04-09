@@ -57,7 +57,7 @@ class ScientificAreasController extends Controller
         $area = ScientificArea::create($input);
         return redirect(action('ScientificAreasController@show', $area->id))
             ->with([
-                    'alert' => 'Area created...',
+                    'alert' => trans('alerts.areacreated'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -102,7 +102,7 @@ class ScientificAreasController extends Controller
         ScientificArea::find($id)->update($input);
         return redirect(action('ScientificAreasController@show', $id))
             ->with([
-                    'alert' => 'Area edited...',
+                    'alert' => trans('alerts.areaedited'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -118,7 +118,7 @@ class ScientificAreasController extends Controller
         ScientificArea::destroy($id);
         return redirect(action('ScientificAreasController@index'))
                 ->with([
-                    'alert' => 'Area deleted...',
+                    'alert' => trans('alerts.areadeleted'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

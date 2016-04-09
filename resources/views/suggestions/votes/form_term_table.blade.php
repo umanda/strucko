@@ -7,8 +7,9 @@
     {{-- If the user didnt vote, show the form. --}}
     @if($workingTerm->votes->isEmpty())
         <td class="text-center vertical-center-cell">
-            <form action="{{ action('TermVotesController@voteUp', [$workingTerm->slug]) }}" method="POST">
+            <form action="{{ resolveUrlAsAction('TermVotesController@voteUp', [$workingTerm->slug]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <button type="submit" class="btn btn-link vote-positive" aria-label="Left Align">
                     <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 </button>
@@ -18,8 +19,9 @@
             <span>{{ $workingTerm->votes_sum }}</span>
         </td>
         <td class="text-center vertical-center-cell">
-            <form action="{{ action('TermVotesController@voteDown', [$workingTerm->slug]) }}" method="POST">
+            <form action="{{ resolveUrlAsAction('TermVotesController@voteDown', [$workingTerm->slug]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <button type="submit" class="btn btn-link vote-negative" aria-label="Left Align">
                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                 </button>

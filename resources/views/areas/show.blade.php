@@ -7,7 +7,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <a class="btn btn-default" href="{{ action('ScientificAreasController@index')}}">Back to all areas</a>
+        <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificAreasController@index')}}">Back to all areas</a>
     </div>
 </div>
 <div class="col-md-4">
@@ -23,8 +23,9 @@
     @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
         <form method="POST" action="{{ action('ScientificAreasController@destroy', $area->id) }}">
             {!! csrf_field() !!}
+            {!! getLocaleInputField() !!}
             <input type="hidden" name="_method" value="DELETE">
-            <a class="btn btn-default" href="{{ action('ScientificAreasController@edit', [$area->id]) }}">Edit area</a>
+            <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificAreasController@edit', [$area->id]) }}">Edit area</a>
             <button type="submit" class="btn btn-danger">Delete area</button>
         </form>
     @endif
@@ -35,7 +36,7 @@
 <div class="col-md-4">
     <h3>Fields in this area:</h3>
     @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
-    <a class="btn btn-default" href="{{ action('ScientificFieldsController@create', $area->id) }}">Create new field</a>
+    <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificFieldsController@create', $area->id) }}">Create new field</a>
     @endif
     @foreach ($area->scientificFields->sortBy('mark') as $field)
     

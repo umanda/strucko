@@ -1,7 +1,7 @@
 {
     "name": "cicnavi/strucko",
     "description": "Open, free and community driven expert dictionary.",
-    "keywords": ["strucko", "expert", "dictionary", "open"],
+    "keywords": ["strucko", "stručko", "IT", "dictionary", "open"],
     "license": "MIT",
     "type": "project",
     "require": {

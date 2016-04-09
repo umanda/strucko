@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('meta-description', 'About ' . {{ $language->ref_name }})
+@section('meta-description', 'About ' . $language->ref_name)
 
 @section('title', $language->ref_name . ' - description')
 
@@ -29,8 +29,9 @@
     @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
         <form method="POST" action="{{ action('LanguagesController@destroy', $language->id) }}">
             {!! csrf_field() !!}
+            {!! getLocaleInputField() !!}
             <input type="hidden" name="_method" value="DELETE">
-            <a class="btn btn-default" href="{{ action('LanguagesController@edit', $language->id) }}">Edit language</a>
+            <a class="btn btn-default" href="{{ resolveUrlAsAction('LanguagesController@edit', $language->id) }}">Edit language</a>
             <button type="submit" class="btn btn-danger">Delete language</button>
         </form>
     @endif

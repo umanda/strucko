@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ App::getLocale() }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="@yield('meta-description')">
-                
-        <meta name="author" content="">
-
-        <title>@yield('title') - Strucko </title>
-
+        <meta name="keywords" content="@yield('meta-keywords')">
+        
+        {!! generateHreflangURIs() !!}
+        
+        <title>@yield('title') - {{ trans('header.logo') }}</title>
+        
         <link rel="stylesheet" href="/css/app.css">
 
         @include('layouts.cookie_consent')
+        
     </head>
     <body>
         

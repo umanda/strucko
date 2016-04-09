@@ -20,8 +20,9 @@
     @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
     <form method="POST" action="{{ action('ScientificFieldsController@destroy', [$field->scientific_area_id, $field->id]) }}">
         {!! csrf_field() !!}
+        {!! getLocaleInputField() !!}
         <input type="hidden" name="_method" value="DELETE">
-        <a class="btn btn-default" href="{{ action('ScientificFieldsController@edit', [$field->scientific_area_id, $field->id]) }}">Edit field</a>
+        <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificFieldsController@edit', [$field->scientific_area_id, $field->id]) }}">Edit field</a>
         <button type="submit" class="btn btn-danger">Delete field</button>
     </form>
     @endif

@@ -98,7 +98,7 @@ class LanguagesController extends Controller
         
         return redirect(url('languages', $input['id']))
                 ->with([
-                    'alert' => 'Language edited...',
+                    'alert' => trans('alerts.langedited'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

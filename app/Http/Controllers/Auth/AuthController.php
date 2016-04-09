@@ -32,15 +32,30 @@ class AuthController extends Controller
      * @var string
      */
     public $redirectPath = '/';
+    /**
+     * Redirect a user to this specific URI after logout.
+     * 
+     * @var string
+     */
+    public $redirectAfterLogout = '/';
+    /**
+     * Redirect a user to this specific URI after unsuccessful login.
+     * 
+     * @var string
+     */
+    public $loginPath = '/auth/login';
 
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest', ['except' => 'getLogout']);
+        
+        // Prepare redirect paths (because of locale query parameter)
+        $this->prepareRedirectPaths($request);
     }
 
     /**
@@ -95,11 +110,13 @@ class AuthController extends Controller
         // but we'll use Model events for this to learn how that works. Check the 
         // boot() method on User model.
         
+        $locale = \App::getLocale();
+        
         // Send mail to the user
-        $mailer->sendEmailConfirmationTo($user);
+        $mailer->sendEmailConfirmationTo($user, $locale);
         // Flash the message
-        return redirect('auth/login')->with([
-                    'alert' => 'Check your mailbox and verify your email before you log in.',
+        return redirect($this->loginPath)->with([
+                    'alert' => trans('alerts.checkmail'),
                     'alert_class' => 'alert alert-warning'
         ]);
 
@@ -117,8 +134,8 @@ class AuthController extends Controller
         $user->token = null;
         $user->save();
         
-        return redirect('auth/login')->with([
-                    'alert' => 'Email verified! You may log in.',
+        return redirect(resolveUrlAsUrl('auth/login'))->with([
+                    'alert' => trans('alerts.verified'),
                     'alert_class' => 'alert alert-warning'
         ]);
     }
@@ -139,11 +156,11 @@ class AuthController extends Controller
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         $throttles = $this->isUsingThrottlesLoginsTrait();
-
+        
         if ($throttles && $this->hasTooManyLoginAttempts($request)) {
             return $this->sendLockoutResponse($request);
         }
-
+              
         $credentials = $this->getCredentials($request);
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
@@ -156,7 +173,7 @@ class AuthController extends Controller
         if ($throttles) {
             $this->incrementLoginAttempts($request);
         }
-
+        
         return redirect($this->loginPath())
             ->withInput($request->only($this->loginUsername(), 'remember'))
             ->withErrors([
@@ -174,5 +191,20 @@ class AuthController extends Controller
     {
         return $request->only($this->loginUsername(), 'password')
             + ['verified' => true, 'banned' => false];
+    }
+    
+    /**
+     * Prepare paths that will be used for redirecting users when logging in, 
+     * logging out, and unsecessful login. This is necessary because of the 
+     * locale query parameter in URL.
+     * 
+     * @param Request $request
+     */
+    protected function prepareRedirectPaths(Request $request) {
+        if ($request->has('locale')) {
+            $this->loginPath = '/auth/login?locale=' . $request->get('locale');
+            $this->redirectAfterLogout = '/?locale=' . $request->get('locale');
+            $this->redirectPath = '/?locale=' . $request->get('locale');
+        }
     }
 }

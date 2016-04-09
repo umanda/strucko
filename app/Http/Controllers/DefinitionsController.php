@@ -39,7 +39,7 @@ class DefinitionsController extends Controller
         
         // Return back with alerts in session.
         return back()->with([
-            'alert' => 'Definition suggested...',
+            'alert' => trans('alerts.defsuggested'),
             'alert_class' => 'alert alert-success'
         ]);
         
@@ -60,7 +60,7 @@ class DefinitionsController extends Controller
         $definition->save();
 
         return back()->with([
-                    'alert' => 'Definition approved...',
+                    'alert' => trans('alerts.defapproved'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -80,7 +80,7 @@ class DefinitionsController extends Controller
         $definition->save();
 
         return back()->with([
-                    'alert' => 'Definition rejected...',
+                    'alert' => trans('alerts.defrejected'),
                     'alert_class' => 'alert alert-success'
         ]);
     }

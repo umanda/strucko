@@ -5,6 +5,7 @@
         <td class="text-center vertical-center-cell">
             <form action="{{ action('ConceptsController@voteForTranslation', [$term->slug]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <input type="hidden" name="translation_slug" value="{{ $translation->translation->slug }}">
                 <input type="hidden" name="is_positive" value="1">
                 <button type="submit" class="btn btn-link vote-positive" aria-label="Left Align">
@@ -18,6 +19,7 @@
         <td class="text-center vertical-center-cell">
             <form action="{{ action('ConceptsController@voteForTranslation', [$term->slug]) }}" method="POST">
                 {!! csrf_field() !!}
+                {!! getLocaleInputField() !!}
                 <input type="hidden" name="translation_slug" value="{{ $translation->translation->slug }}">
                 <button type="submit" class="btn btn-link vote-negative" aria-label="Left Align">
                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>

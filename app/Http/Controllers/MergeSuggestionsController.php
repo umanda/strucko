@@ -55,7 +55,7 @@ class MergeSuggestionsController extends Controller
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this suggestion...',
+                    'alert' => trans('alerts.suggestionvoted'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -71,7 +71,7 @@ class MergeSuggestionsController extends Controller
         $mergeSuggestion->increment('votes_sum', $voteWeight);
         
         return back()->with([
-                    'alert' => 'Voted up!',
+                    'alert' => trans('alerts.votedup'),
                     'alert_class' => 'alert alert-success'
                 ]);
         
@@ -99,7 +99,7 @@ class MergeSuggestionsController extends Controller
         
         if ($exists) {
             return back()->with([
-                    'alert' => 'You have already voted for this suggestion...',
+                    'alert' => trans('alerts.suggestionvoted'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }                
@@ -115,7 +115,7 @@ class MergeSuggestionsController extends Controller
         $mergeSuggestion->decrement('votes_sum', $voteWeight);
         
         return back()->with([
-                    'alert' => 'Voted down!',
+                    'alert' => trans('alerts.voteddown'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }

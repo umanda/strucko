@@ -1,0 +1,70 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Name of languages Lines
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    
+    'English' => 'Engleski',
+    'dativ.English' => 'Engleskom',
+    'Croatian' => 'Hrvatski',
+    'dativ.Croatian' => 'Hrvatskom',
+    'Afrikaans' => 'Afrikaans',
+    'Basque' => 'Baskijski',
+    'Belarusian' => 'Bjeloruski',
+    'Bosnian' => 'Bosanski',
+    'Bulgarian' => 'Bugarski',
+    'Catalan' => 'Katalonski',
+    'Czech' => 'Češki',
+    'Danish' => 'Danski',
+    'Dutch' => 'Nizozemski',
+    'Filipino' => 'Filipinski',
+    'Finnish' => 'Finski',
+    'French' => 'Francuski',
+    'Galician' => 'Galicijski',
+    'German' => 'Njemački',
+    'Greek' => 'Grčki',
+    'Hausa' => 'Hausa',
+    'Hungarian' => 'Mađarski',
+    'Icelandic' => 'Islandski',
+    'Igbo' => 'Igbo',
+    'Indonesian' => 'Indonezijski',
+    'Irish' => 'Irski',
+    'Italian' => 'Talijanski',
+    'Kazakh' => 'Kazahstanski',
+    'Kinyarwanda' => 'Kinyarwanda',
+    'Kirghiz' => 'Kirgiški',
+    'Lithuanian' => 'Litavski',
+    'Macedonian' => 'Makedonski',
+    'Maltese' => 'Malteški',
+    'Maori' => 'Maorski',
+    'Norwegian_Bokmål' => 'Norveški književni',
+    'Norwegian_Nynorsk' => 'Novo-norveški',
+    'Pedi' => 'Pedi',
+    'Polish' => 'Poljski',
+    'Portuguese' => 'Portugalski',
+    'Romanian' => 'Rumunjski',
+    'Russian' => 'Ruski',
+    'Scottish_Gaelic' => 'Škotski galski',
+    'Serbian' => 'Srbski',
+    'Slovak' => 'Slovački',
+    'Slovenian' => 'Slovenski',
+    'Spanish' => 'Španjolski',
+    'Swedish' => 'Švedski',
+    'Tajik' => 'Tadžički',
+    'Tatar' => 'Tatarski',
+    'Tswana' => 'Tswana',
+    'Turkish' => 'Turski',
+    'Turkmen' => 'Turkmenski',
+    'Ukrainian' => 'Ukrajinski',
+    'Vietnamese' => 'Vijetnamski',
+    'Welsh' => 'Velški',
+    'Wolof' => 'Wolof',
+    'Xhosa' => 'Xhosa',
+    'Zulu' => 'Zulu',
+];

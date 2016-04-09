@@ -1,5 +1,5 @@
 {!! csrf_field() !!}
-
+{!! getLocaleInputField() !!}
 <div class="form-group">
     <label for="term">Scientific area:</label>
     <input type="text" id="scientific_area" name="scientific_area" maxlength="255" required="required"

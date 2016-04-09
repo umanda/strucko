@@ -156,7 +156,7 @@ class SuggestionsFilterRepository
         foreach ($this->allFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->allFilters[$filterKey] = $request->get($filterKey);
+                $this->allFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
         
@@ -177,7 +177,7 @@ class SuggestionsFilterRepository
         foreach ($this->termFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->termFilters[$filterKey] = $request->get($filterKey);
+                $this->termFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
     }
@@ -194,7 +194,7 @@ class SuggestionsFilterRepository
         foreach ($this->definitionFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->definitionFilters[$filterKey] = $request->get($filterKey);
+                $this->definitionFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
     }
@@ -205,7 +205,7 @@ class SuggestionsFilterRepository
         foreach ($this->translationFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->translationFilters[$filterKey] = $request->get($filterKey);
+                $this->translationFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
     }
@@ -216,7 +216,7 @@ class SuggestionsFilterRepository
         foreach ($this->synonymFilterKeys as $filterKey) {
             // If the request has filter key, set filter to that value.
             if($request->has($filterKey)) {
-                $this->synonymFilters[$filterKey] = $request->get($filterKey);
+                $this->synonymFilters[$filterKey] = urlencode($request->get($filterKey));
             }
         }
     }

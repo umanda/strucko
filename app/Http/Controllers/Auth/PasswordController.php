@@ -39,9 +39,12 @@ class PasswordController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest');
+        
+        // Prepare redirect paths (because of locale query parameter)
+        $this->prepareRedirectPaths($request);
     }
     
     /**
@@ -61,7 +64,7 @@ class PasswordController extends Controller
         // Return if the user does not exits.
         if (is_null($user)) {
             return back()->with([
-                    'alert' => 'Email not found...',
+                    'alert' => trans('alerts.emailnotfound'),
                     'alert_class' => 'alert alert-warning'
                 ]);
         }
@@ -72,11 +75,26 @@ class PasswordController extends Controller
         // Create new token for user
         DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token, 'created_at' => Carbon::now()]);
         
+        $locale = \App::getLocale();
+        
         // Send email with token reset link.
-        $mailer->sendEmailResetLinkTo($user, $token);
+        $mailer->sendEmailResetLinkTo($user, $token, $locale);
         return back()->with([
-                    'alert' => 'Password reset link sent. Check your mailbox.',
+                    'alert' => trans('alerts.resetlinksent'),
                     'alert_class' => 'alert alert-success'
                 ]);
+    }
+    
+    /**
+     * Prepare paths that will be used for redirecting users when they reset
+     * their password.
+     * 
+     * @param Request $request
+     */
+    protected function prepareRedirectPaths(Request $request) {
+        if ($request->has('locale')) {
+            $this->redirectPath = '/?locale=' . $request->get('locale');
+            $this->redirectTo = '/?locale=' . $request->get('locale');
+        }
     }
 }

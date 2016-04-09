@@ -19,11 +19,8 @@ Route::get('/terms-of-use', 'PagesController@getTermsOfUse');
 Route::get('/disclaimer', 'PagesController@getDisclaimer');
 Route::get('/about', 'PagesController@getAbout');
 Route::get('/test', 'PagesController@getTest');
+get('contact', 'PagesController@getContact');
 get('users', 'UsersController@getStats');
-
-get('contact', function () {
-   return view('pages.contact');
-});
 
 // Terms routes.
 get('terms', 'TermsController@index');

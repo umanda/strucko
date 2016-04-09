@@ -7,11 +7,12 @@
                     class="
                     @if (isset($allFilters['menu_letter']))
                         @if ($menuLetter == $allFilters['menu_letter'])
-                        {{ 'active' }}
+                            {{ 'active' }}
                         @endif
                     @endif
                     ">
-                    <a href="{{ action('TermsController@index', array_merge($menuLetterFilters, ['menu_letter' => $menuLetter])) 
+                    <a href="{{ resolveUrlAsAction('TermsController@index', 
+                                array_merge($menuLetterFilters, ['menu_letter' => $menuLetter])) 
                        }}">
                         {{ urldecode($menuLetter) }}
                     </a>

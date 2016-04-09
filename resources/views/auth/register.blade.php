@@ -1,43 +1,47 @@
 @extends('layouts.master')
 
-@section('meta-description', 'Register on Strucko - The Expert Dictionary')
+@section('meta-description', trans('pages.register.description'))
 
-@section('title', 'Registration form')
+@section('title', trans('pages.register.title'))
 
 @section('content')
 <form method="POST" action="{{ action('Auth\AuthController@postRegister') }}">
 
     {!! csrf_field() !!}
+    
+    {!! getLocaleInputField() !!}
 
     <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">{{ trans('pages.register.name') }}:</label>
         <input type="text" id="name" name="name" maxlength="255" required="required"
-               placeholder="Name" class="form-control"
+               placeholder="{{ trans('pages.register.name') }}" class="form-control"
                value="{{ old('name') }}">
     </div>
     
     <div class="form-group">
-        <label for="email">Email:</label>
+        <label for="email">{{ trans('pages.register.email') }}:</label>
         <input type="email" id="email" name="email" maxlength="255" required="required"
-               placeholder="Email" class="form-control"
+               placeholder="{{ trans('pages.register.email') }}" class="form-control"
                value="{{ old('email') }}">
     </div>
         
     <div class="form-group">
-        <label for="password">Password:</label>
+        <label for="password">{{ trans('pages.register.password') }}:</label>
         <input type="password" id="password" name="password" required="required"
-               placeholder="Password" class="form-control">
+               placeholder="{{ trans('pages.register.password') }}" class="form-control">
     </div>
     
     <div class="form-group">
-        <label for="password_confirmation">Confirm Password:</label>
+        <label for="password_confirmation">{{ trans('pages.register.passwordconfirm') }}:</label>
         <input type="password" id="password_confirmation" name="password_confirmation" 
-               required="required" placeholder="Confirm Password" class="form-control">
+               required="required" placeholder="{{ trans('pages.register.passwordconfirm') }}" class="form-control">
     </div>
     
     <div class="form-group">
         <button type="submit" id="submit" name="submit" 
-                class="btn btn-primary">Register</button>
+                class="btn btn-primary">
+            {{ trans('pages.register.register') }}
+        </button>
     </div>
 
 </form>

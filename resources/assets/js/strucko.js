@@ -9,15 +9,20 @@ $(document).ready(function () {
     // Take care of the alert
     $('div.alert').not('.alert-warning').delay(3000).slideUp(300);
 
-    // Make these elements select2
+    /*
     $('#language_id, #scientific_field_id, #translate_to, #part_of_speech_id, #translate_to_2').select2({
         width: "100%"
     });
-
+    */
     // Set appropriate translate_to to disabled if language_id exits on the page
     if ($('#translate_to').length && $('#language_id').length) {
-        setTranslateTo();
+        setTranslateTo2();
     }
+    
+    $('#language_id').change(function (e) {
+        setTranslateTo2();
+    });
+    
 });
 
 /**
@@ -65,5 +70,25 @@ function setTranslateTo() {
         // Update data storage for the selected language_id
         $(this).data('previous', $(this).val());
     });
-}
-;
+};
+
+/**
+ * Set the appropriate translate_to input to appropriate value, depending on the 
+ * selected language_id. Implemented because we shouldn't be able to select to
+ * translate to the same language. Also set the translate_to to the
+ * old language_id if the new language_id is the same as the current translate_to.
+ * 
+ * @returns {undefined}
+ */
+function setTranslateTo2() {
+    // Get the current value of the selected language
+    var languageId = $('#language_id').val();
+   
+   if (languageId === 'eng') {
+       $('#translate_to').val('hrv');
+   }
+   else {
+       $('#translate_to').val('eng');
+   }
+
+};

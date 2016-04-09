@@ -58,7 +58,7 @@ class ScientificBranchesController extends Controller
         $branch = ScientificBranch::create($input);
         return redirect(action('ScientificBranchesController@show', [$areaId, $fieldId, $branch->id]))
             ->with([
-                    'alert' => 'Branch created...',
+                    'alert' => trans('alerts.branchcreated'),
                     'alert_class' => 'alert alert-success'
                 ]);
     }
@@ -111,7 +111,7 @@ class ScientificBranchesController extends Controller
         
         return redirect(action('ScientificBranchesController@show', [$areaId, $fieldId, $branchId]))
             ->with([
-                    'alert' => 'Branch edited...',
+                    'alert' => trans('alerts.branchedited'),
                     'alert_class' => 'alert alert-success'
                 ]);;
     }

@@ -209,9 +209,11 @@ class TermsController extends Controller
         // Persist the new Term using the relationship
         $concept->terms()->create($input);
 
+        // Prepare return URL considering the locale.
+        $returnUrl = resolveUrlAsUrl('terms/' . $input['slug']);
         // Redirect with alerts in session.
-        return redirect('terms/' . $input['slug'])->with([
-                    'alert' => 'Term suggested...',
+        return redirect($returnUrl)->with([
+                    'alert' => trans('alerts.termexists'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -229,12 +231,6 @@ class TermsController extends Controller
         // Prepare all filters from request
         $termShowFilters = $filters->allFilters();
 
-        // Get languages for translation options in suggest translation section.
-        $languages = Language::active()
-                ->without($term->language_id)
-                ->orderBy('ref_name')
-                ->get();
-        
         // Load synonyms
         $term->load(['synonyms' => function ($query) use ($term) {
                     $synonymFilters = [];
@@ -276,37 +272,52 @@ class TermsController extends Controller
                     ->orderBy('votes_sum', 'DESC');
         }]);
         
-        // If the translate_to is set, get the translations.
+        // Resolve translate_to language.
+        // If the translate_to is set, make sure it is not the same as the term language.
         if ($filters->isSetTranslateTo()) {
             // Make sure that term language and translate_to are not the same.
             if ($termShowFilters['translate_to'] == $term->language_id) {
                         abort(403, 'Term language and translation language should not be the same...');
             }
-            $term->load(['translations' => function ($query) use ($termShowFilters) {
-                        // Prepare filters
-                        $translateFilters = [];
-                        Auth::check() ? '' : $translateFilters['status_id'] = 1000;
-                          
-                        $query->greaterThanRejected()
-                                ->where($translateFilters)
-                                ->whereHas('translation', function ($query) use ($termShowFilters){
-                                    $query->where('language_id', $termShowFilters['translate_to']);
-                                })
-                                ->with('translation', 'translation.language', 'translation.status')
-                                ->orderBy('votes_sum', 'DESC');
-                    },
-                    'votes' => function ($query) {
-                        $query->where('user_id', Auth::id());
-                    },
-                    'status', 'user'
-                    ]);
+        }
+        else {
+            // translate_to is not set, prepare the default translation.
+            // If term is in English, translate to Croatian. Othervise translate
+            // to English.
+            if ($term->language_id == 'eng') {
+                $termShowFilters['translate_to'] = 'hrv';
+            }
+            else {
+                $termShowFilters['translate_to'] = 'eng';
+            }
         }
         
-        // Prepare meta data.
-        $translateToLanguage = isset($termShowFilters['translate_to']) ? Language::active()->findOrFail($termShowFilters['translate_to'])->ref_name : '';
-        $showMeta = $this->prepareShowMeta($filters, $term, $translateToLanguage);
+        // Load translations
+        $term->load(['translations' => function ($query) use ($termShowFilters) {
+                    // Prepare filters
+                    $translateFilters = [];
+                    Auth::check() ? '' : $translateFilters['status_id'] = 1000;
 
-        return view('terms.show', compact('term', 'languages', 'showMeta'));
+                    $query->greaterThanRejected()
+                            ->where($translateFilters)
+                            ->whereHas('translation', function ($query) use ($termShowFilters){
+                                $query->where('language_id', $termShowFilters['translate_to']);
+                            })
+                            ->with('translation', 'translation.language', 'translation.status')
+                            ->orderBy('votes_sum', 'DESC');
+                },
+                'votes' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                },
+                'status', 'user'
+                ]);
+        
+        // Prepare meta data.
+        $translateToLanguage['ref_name'] = Language::active()->findOrFail($termShowFilters['translate_to'])->ref_name;
+        $translateToLanguage['id'] = $termShowFilters['translate_to'];
+        $showMeta = $this->prepareShowMeta($filters, $term, $translateToLanguage['ref_name']);
+
+        return view('terms.show', compact('term', 'showMeta', 'translateToLanguage'));
     }
 
     /**
@@ -361,9 +372,9 @@ class TermsController extends Controller
         // Update the term.
         $term->update($input);
 
-        return redirect(action('TermsController@show', ['slug' => $input['slug']]))
+        return redirect(resolveUrlAsAction('TermsController@show', ['slug' => $input['slug']]))
                         ->with([
-                            'alert' => 'Term updated...',
+                            'alert' => trans('alerts.termupdated'),
                             'alert_class' => 'alert alert-success'
         ]);
     }
@@ -385,7 +396,7 @@ class TermsController extends Controller
         $term->save();
 
         return back()->with([
-                    'alert' => 'Status updated...',
+                    'alert' => trans('alerts.statusupdated'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -405,7 +416,7 @@ class TermsController extends Controller
         $term->save();
 
         return back()->with([
-                    'alert' => 'Term approved...',
+                    'alert' => trans('alerts.termapproved'),
                     'alert_class' => 'alert alert-success'
         ]);
     }
@@ -434,7 +445,7 @@ class TermsController extends Controller
                 ->delete();
         
         return back()->with([
-                    'alert' => 'Term rejected...',
+                    'alert' => trans('alerts.termrejected'),
                     'alert_class' => 'alert alert-success'
         ]);
     }

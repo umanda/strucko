@@ -39,21 +39,21 @@ class AppMailer {
         });
     }
     
-    public function sendEmailConfirmationTo(User $user)
+    public function sendEmailConfirmationTo(User $user, $locale = 'en')
     {
         $this->to = $user->email;
         $this->view = 'emails.confirm';
-        $this->data = compact('user');
-        $this->subject = 'Verify your email';
+        $this->data = compact('user', 'locale');
+        $this->subject = trans('emails.confirm.email.subject');
         $this->deliver();
     }
     
-    public function sendEmailResetLinkTo (User $user, $token)
+    public function sendEmailResetLinkTo (User $user, $token, $locale = 'en')
     {
         $this->to = $user->email;
         $this->view = 'emails.password2';
-        $this->data = compact('user', 'token');
-        $this->subject = 'Password reset link';
+        $this->data = compact('user', 'token', 'locale');
+        $this->subject = trans('emails.reset.email.subject');;
         $this->deliver();
     }
 }

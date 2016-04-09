@@ -82,8 +82,10 @@ function resolveUrlAsAction($controller, array $parameters = []) {
     $parameters += \Session::get('locale');
     // UrlDecode the pearameters (we have coded them in the repository)
     $decodedParameters = getUrlDecodedArray($parameters);
-    // Remove null, 0, '', or false items from the array.
-    $filteredParameters = array_filter($decodedParameters);
+    // If you want a quick way to remove NULL, FALSE and Empty Strings (""), 
+    // but leave values of 0 (zero), you can use the standard 
+    // php function strlen as the callback function:
+    $filteredParameters = array_filter($decodedParameters, 'strlen');
     
     if (! empty($filteredParameters)) {
         return action($controller, $filteredParameters);

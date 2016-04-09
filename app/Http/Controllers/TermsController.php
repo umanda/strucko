@@ -213,7 +213,7 @@ class TermsController extends Controller
         $returnUrl = resolveUrlAsUrl('terms/' . $input['slug']);
         // Redirect with alerts in session.
         return redirect($returnUrl)->with([
-                    'alert' => trans('alerts.termexists'),
+                    'alert' => trans('alerts.termsuggested'),
                     'alert_class' => 'alert alert-success'
         ]);
     }

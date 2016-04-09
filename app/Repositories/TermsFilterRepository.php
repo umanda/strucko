@@ -62,7 +62,8 @@ class TermsFilterRepository
         'menu_letter',
         'search',
         'page',
-        'translate_to'
+        'translate_to',
+        'locale',
     ];
     
     /**

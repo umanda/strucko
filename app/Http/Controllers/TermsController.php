@@ -119,7 +119,7 @@ class TermsController extends Controller
                         ->where($searchFilters)
                         ->with('partOfSpeech', 'language', 'status')
                         ->orderBy('term')
-                        ->paginate();
+                        ->paginate(2);
                 
                 // If the translate_to is set, get approved translations.
                 if ($this->filters->isSetTranslateTo()) {
@@ -304,6 +304,7 @@ class TermsController extends Controller
                                 $query->where('language_id', $termShowFilters['translate_to']);
                             })
                             ->with('translation', 'translation.language', 'translation.status')
+                            ->orderBy('status_id', 'DESC')
                             ->orderBy('votes_sum', 'DESC');
                 },
                 'votes' => function ($query) {

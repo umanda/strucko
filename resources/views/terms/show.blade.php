@@ -55,7 +55,10 @@
         <table class="table table-condensed">
             <thead>
                 <tr>
-                    <th class="col-xs-9">{{ trans('terms.show.definitions') }}</th>
+                    <th class="col-xs-9">
+                        {{ trans('terms.show.definitions') }}
+                        ({{ trans('languages.' . str_replace(' ', '_', $term->language->ref_name)) }})
+                    </th>
                     <th class="col-xs-1"></th>
                     <th class="col-xs-1 text-center">{{ trans('terms.show.votes') }}</th>
                     <th class="col-xs-1"></th>

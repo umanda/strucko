@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12 hidden-xs">
         @if(getenv('APP_ENV')=='production')
         @include('ads.adsense_right')
         @else

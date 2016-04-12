@@ -70,6 +70,19 @@ function getUrlDecodedArray(array $items) {
 }
 
 /**
+ * Get urlencoded() items in provided array.
+ * 
+ * @param array $items
+ * @return array
+ */
+function getUrlEncodedArray(array $items) {
+    
+    return array_map(function ($item) {
+            return urlencode($item);
+        }, $items);
+}
+
+/**
  * Prepare URL using the action helper method from Laravel.
  * Also append the locale parameter for localization purposes.
  * 

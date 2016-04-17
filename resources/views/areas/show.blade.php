@@ -36,7 +36,7 @@
 <div class="col-md-4">
     <h3>Fields in this area:</h3>
     @if ( Auth::check() && ! (Auth::user()->role_id < 1000) )
-    <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificFieldsController@create', $area->id) }}">Create new field</a>
+    <a class="btn btn-default" href="{{ resolveUrlAsAction('ScientificFieldsController@create', [$area->id]) }}">Create new field</a>
     @endif
     @foreach ($area->scientificFields->sortBy('mark') as $field)
     

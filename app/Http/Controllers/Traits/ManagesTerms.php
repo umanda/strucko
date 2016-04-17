@@ -229,102 +229,60 @@ trait ManagesTerms
         $meta = [];
                 
         if(isset($allFilters['language_id']) && isset($allFilters['scientific_field_id'])) {
+            
+            $meta['description'] = trans('meta.terms.description1', 
+                    [
+                        'language' => trans('languages.' . str_replace(' ', '_', $language)),
+                        'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
+                    ]);
+            $meta['title'] = trans('meta.terms.title1', 
+                    [
+                        'language' => trans('languages.' . str_replace(' ', '_', $language)),
+                        'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
+                    ]);
+            
             if(isset($allFilters['menu_letter'])) {
-                if(isset($allFilters['translate_to'])) {
-                    $meta['description'] = trans('meta.terms.description1', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'menuLetter' => $menuLetter,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title1', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'menuLetter' => $menuLetter,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
-                                
-                            ]);
-                }
-                else {
-                    $meta['description'] = trans('meta.terms.description2', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'menuLetter' => $menuLetter,                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title2', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'menuLetter' => $menuLetter,
-                            ]);
-                }
+                $meta['description'] .= trans('meta.terms.description2', 
+                        [
+                            'menuLetter' => $menuLetter,                                
+                        ]);
+                $meta['title'] .= trans('meta.terms.title2', 
+                        [
+                            'menuLetter' => $menuLetter,
+                        ]);
             }
-            elseif (isset($allFilters['search'])) {
-                if(isset($allFilters['translate_to'])) {
-                    $meta['description'] = trans('meta.terms.description3', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'search' => $search,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title3', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'search' => $search,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
-                            ]);
-                }
-                else {
-                    $meta['description'] = trans('meta.terms.description4', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'search' => $search,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title4', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'search' => $search,
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
-                            ]);
-                }
+            
+            if (isset($allFilters['search'])) {
+                $meta['description'] .= trans('meta.terms.description3', 
+                        [
+                            'search' => $search,                                
+                        ]);
+                $meta['title'] .= trans('meta.terms.title3', 
+                        [
+                            'search' => $search,
+                        ]);
             }
-            else {
-                if(isset($allFilters['translate_to'])) {
-                    $meta['description'] = trans('meta.terms.description5', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title5', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
-                            ]);
-                }
-                else {
-                    $meta['description'] = trans('meta.terms.description6', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
-                            ]);
-                    $meta['title'] = trans('meta.terms.title6', 
-                            [
-                                'language' => trans('languages.' . str_replace(' ', '_', $language)),
-                                'scientificField' => trans('scientificfields.' . str_replace(' ', '_', $scientificField)),
-                                'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
-                            ]);
-                }
+            
+            if(isset($allFilters['translate_to'])) {
+                $meta['description'] .= trans('meta.terms.description4', 
+                        [
+                            'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),                                
+                        ]);
+                $meta['title'] .= trans('meta.terms.title4', 
+                        [
+                            'translateToLanguage' => trans('languages.' . str_replace(' ', '_', $translateToLanguage)),
+                        ]);
+            }
+            
+            if(isset($allFilters['page']) && is_numeric($allFilters['page'])) {
+                $meta['description'] .= trans('meta.terms.description5', 
+                        [
+                            'page' => $allFilters['page'],                                
+                        ]);
+                $meta['title'] .= trans('meta.terms.title5', 
+                        [
+                            'page' => $allFilters['page'],
+                        ]);
             }
         }
         else {
@@ -338,17 +296,32 @@ trait ManagesTerms
     protected function prepareShowMeta($filters, $term, $translateToLanguage)
     {
         $meta = [];
-        
-        $meta['description'] = 'Definitions and translations for ' . $term->term 
-                . ' in ' . $term->language->ref_name
-                . ' language, in ' . $term->scientificField->scientific_field . ' field.';
-        $meta['title'] = $term->term . ' | ' . $term->language->ref_name
-                . ' | ' . $term->scientificField->scientific_field;
+        $translatedLanguage = trans('languages.' . str_replace(' ', '_', $term->language->ref_name));
+        $translatedScientificField = trans('scientificfields.' . str_replace(' ', '_', $term->scientificField->scientific_field));
+        $translatedTranslateToLanguage = trans('languages.' . str_replace(' ', '_', $translateToLanguage));
+        $meta['description'] = trans('meta.terms.show.description1', 
+                [
+                    'term' => $term->term,
+                    'language' => $translatedLanguage,
+                    'scientific_field' => $translatedScientificField,
+                ]);
+        $meta['title'] = trans('meta.terms.show.title1', 
+                [
+                    'term' => $term->term,
+                    'language' => $translatedLanguage,
+                    'scientific_field' => $translatedScientificField,
+                ]);
         
         if($filters->isSetTranslateTo())
         {
-            $meta['description'] .= ' Translated to ' . $translateToLanguage . ' language.';
-            $meta['title'] .= ' | ' . $translateToLanguage;
+            $meta['description'] .= trans('meta.terms.show.description2', 
+                [
+                    'translateToLanguage' => $translatedTranslateToLanguage,
+                ]);
+            $meta['title'] .= trans('meta.terms.show.title2', 
+                [
+                    'translateToLanguage' => $translatedTranslateToLanguage,
+                ]);
         }
         
         return $meta;

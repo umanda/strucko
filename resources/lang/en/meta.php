@@ -13,35 +13,24 @@ return [
     'terms.title0' => 'Select language',
     
     'terms.description1' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'starting with letter: :menuLetter, '
-        . 'translated to language: :translateToLanguage.',
-    'terms.title1' => ':language | :scientificField | :menuLetter | :translateToLanguage',
+        . 'in scientific field: :scientificField, ',
+    'terms.title1' => ':language | :scientificField ',
     
-    'terms.description2' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'starting with letter: :menuLetter.',
-    'terms.title2' => ':language | :scientificField | :menuLetter',
+    'terms.description2' => 'starting with letter: :menuLetter, ',
+    'terms.title2' => '| :menuLetter ',
     
-    'terms.description3' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'searching for: :search, '
-        . 'translated to language: :translateToLanguage.',
-    'terms.title3' => ':language | :scientificField | :search | :translateToLanguage',
+    'terms.description3' => 'searching for: :search, ',
+    'terms.title3' => '| :search ',
     
-    'terms.description4' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'searching for: :search.',
-    'terms.title4' => ':language | :scientificField | :search',
+    'terms.description4' => 'translated to language: :translateToLanguage. ',
+    'terms.title4' => '| :translateToLanguage ',
     
-    'terms.description5' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'translated to language: :translateToLanguage. '
-        . 'Select letter or search for term.',
-    'terms.title5' => ':language | :scientificField | :translateToLanguage',
+    'terms.description5' => 'Page :page.',
+    'terms.title5' => '| Page :page',
     
-    'terms.description6' => 'Terms in language: :language, '
-        . 'in scientific field: :scientificField, '
-        . 'Select letter or search for term.',
-    'terms.title6' => ':language | :scientificField',
+    'terms.show.description1' => 'Definitions and translations for :term' 
+                . ' in :language language, in :scientific_field field. ',
+    'terms.show.title1' => ':term | :language | :scientific_field ',
+    'terms.show.description2' => 'Translated to :translateToLanguage language.',
+    'terms.show.title2' => '| :translateToLanguage',
 ];

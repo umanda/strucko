@@ -92,7 +92,7 @@
                                     <em>{{ $definition->user->name }}</em>
                                 </small>
                                 <br>
-                                @if (Auth::user()->role_id == 1000 || $definition->user_id == Auth::id())
+                                @if (Auth::check() && Auth::user()->role_id == 1000 || $definition->user_id == Auth::id())
                                 <a href="{{ resolveUrlAsAction('DefinitionsController@edit', ['id' => $definition->id])}}"
                                    class="">edit</a>
                                 @endif

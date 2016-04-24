@@ -20,7 +20,10 @@ Route::get('/disclaimer', 'PagesController@getDisclaimer');
 Route::get('/about', 'PagesController@getAbout');
 Route::get('/test', 'PagesController@getTest');
 get('contact', 'PagesController@getContact');
-get('users', 'UsersController@getStats');
+
+// Users
+get('users/stats', 'UsersController@getStats');
+get('users', 'UsersController@getIndex');
 
 // Terms routes.
 get('terms', 'TermsController@index');

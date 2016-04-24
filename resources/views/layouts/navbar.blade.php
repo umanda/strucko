@@ -66,7 +66,7 @@
                 <li><a href="{{ setLocaleInUrl() }}">{{ trans('navbar.english') }}</a></li>
                 <li><a href="{{ setLocaleInUrl('hr') }}">{{ trans('navbar.croatian') }}</a></li>  
                 @if (Auth::check())
-                    <li><a href="{{ resolveUrlAsUrl('/users') }}">{{ Auth::user()->name }}</a></li>
+                    <li><a href="{{ resolveUrlAsAction('UsersController@getStats') }}">{{ Auth::user()->name }}</a></li>
                     <li><a href="{{ resolveUrlAsUrl('/auth/logout') }}">{{ trans('navbar.logout') }}</a></li>
                 @else
                     <li class="{{ set_active('auth/login') }}">

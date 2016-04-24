@@ -1,39 +1,39 @@
 @extends('layouts.master')
 
-@section('meta-description', trans('users.index.description'))
+@section('meta-description', trans('users.stats.description'))
 
-@section('title', trans('users.index.title'))
+@section('title', trans('users.stats.title'))
 
 @section('content')
-    <h2>{{ trans('users.index.header') }}</h2>
+    <h2>{{ trans('users.stats.header') }}</h2>
     <p>
-        {{ trans('users.index.hello') }} {{ Request::user()->name }}, 
+        {{ trans('users.stats.hello') }} {{ Request::user()->name }}, 
     </p>
     <p>
-        {!! trans('users.index.role', [
+        {!! trans('users.stats.role', [
             'role' => Request::user()->role->role,
             'spam_threshold' => Request::user()->role->spam_threshold
                 ]) !!}
     </p>
     <p>
-        {{ trans('users.index.termsapproved', [
+        {{ trans('users.stats.termsapproved', [
                     'termsapproved' => $stats['terms']['approved'] ])  }}
         <br>
-        {{ trans('users.index.definitionsapproved', [
+        {{ trans('users.stats.definitionsapproved', [
                     'definitionsapproved' => $stats['definitions']['approved'] ]) }}
     </p>
     <p>
-        {{ trans('users.index.termssuggested', [
+        {{ trans('users.stats.termssuggested', [
                     'termssuggested' => $stats['terms']['suggested'] ]) }}
         <br>
-        {{ trans('users.index.definitionssuggested', [
+        {{ trans('users.stats.definitionssuggested', [
                     'definitionssuggested' => $stats['definitions']['suggested'] ]) }}
     </p>
     <p>
-        {{ trans('users.index.termsrejected', [
+        {{ trans('users.stats.termsrejected', [
                     'termsrejected' => $stats['terms']['rejected'] ]) }}
         <br>
-        {{ trans('users.index.definitionsrejected', [
+        {{ trans('users.stats.definitionsrejected', [
                     'definitionsrejected' => $stats['definitions']['rejected'] ]) }}
     </p>
 @endsection

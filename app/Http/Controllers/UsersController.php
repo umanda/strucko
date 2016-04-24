@@ -16,6 +16,18 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:1000', ['only' => [
+            'getIndex',
+            ]]);
+    }
+    
+    public function getIndex(Request $request)
+    {
+        $users = User::latest()
+                ->with('role')
+                ->get();
+        
+        return view('users.index', compact('users'));
     }
     
     /**

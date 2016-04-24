@@ -9,21 +9,25 @@ return [
     |
     |
     */
+    'index.description' => 'List of users registered on Strucko.', 
+    'index.title' => 'List of users', 
+    'index.header' => 'List of users:', 
     
-    'index.description' => 'User home page - the Expert Dictionary',
-    'index.title' => 'User home page',
-    'index.header' => 'Your Stats',
-    'index.hello' => 'Hello',
-    'index.role' => 'Your current role is :role.'
+    'stats.description' => 'User home page - the Expert Dictionary',
+    'stats.title' => 'User home page',
+    'stats.header' => 'Your Stats',
+    'stats.hello' => 'Hello',
+    'stats.role' => 'Your current role is :role.'
         . '<br>You can suggest up to :spam_threshold terms and definitions.'
         . '<br>When your suggestions get approved, you can make new 
         ones.'
         . '<br>We may upgrade roles for users with many approved
         suggestions.',
-    'index.termsapproved' => 'Approved terms: :termsapproved',
-    'index.definitionsapproved' => 'Approved definitions: :definitionsapproved',
-    'index.termssuggested' => 'Suggested terms: :termssuggested',
-    'index.definitionssuggested' => 'Suggested definitions: :definitionssuggested',
-    'index.termsrejected' => 'Rejected terms: :termsrejected',
-    'index.definitionsrejected' => 'Rejected definitions: :definitionsrejected',
+    'stats.termsapproved' => 'Approved terms: :termsapproved',
+    'stats.definitionsapproved' => 'Approved definitions: :definitionsapproved',
+    'stats.termssuggested' => 'Suggested terms: :termssuggested',
+    'stats.definitionssuggested' => 'Suggested definitions: :definitionssuggested',
+    'stats.termsrejected' => 'Rejected terms: :termsrejected',
+    'stats.definitionsrejected' => 'Rejected definitions: :definitionsrejected',
+    
 ];

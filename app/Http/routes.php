@@ -46,11 +46,13 @@ patch('terms/{slugUnique}/status', [
 post('terms', 'TermsController@store');
 
 // Definition routes.
+get('definitions/{id}/edit', 'DefinitionsController@edit');
 post('definitions', 'DefinitionsController@store');
 post('definitions/{id}/vote/up', 'DefinitionVotesController@voteUp');
 post('definitions/{id}/vote/down', 'DefinitionVotesController@voteDown');
 post('definitions/{id}/status/approve', 'DefinitionsController@approve');
 post('definitions/{id}/status/reject', 'DefinitionsController@reject');
+patch('definitions/{id}', 'DefinitionsController@update');
 
 // Sugesstions
 get('suggestions', 'SuggestionsController@index');

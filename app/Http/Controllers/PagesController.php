@@ -88,5 +88,7 @@ class PagesController extends Controller
         generateHreflangURIs();
         //dd($request->query());
         
+        dd(\Status::all());
+        
     }
 }

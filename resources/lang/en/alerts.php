@@ -40,6 +40,7 @@ return [
     'defsuggested' => 'Definition suggested...',
     'defapproved' => 'Definition approved...',
     'defrejected' => 'Definition rejected...',
+    'defupdated' => 'Definition updated...',
     'langedited' => 'Language edited...',
     'suggestionvoted' => 'You have already voted for this suggestion...',
     'areacreated' => 'Area created...',

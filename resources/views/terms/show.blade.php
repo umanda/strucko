@@ -91,11 +91,19 @@
                                     {{ trans('terms.show.addedby') }}
                                     <em>{{ $definition->user->name }}</em>
                                 </small>
+                                <br>
+                                @if (Auth::user()->role_id == 1000 || $definition->user_id == Auth::id())
+                                <a href="{{ resolveUrlAsAction('DefinitionsController@edit', ['id' => $definition->id])}}"
+                                   class="">edit</a>
+                                @endif
                             </td>
                             {{-- Votes for definition --}}
                             @include('votes.form_definition_table')
                         </tr>
                     @endforeach
+                    {{-- I have to null $definition variable, so it does not
+                    appear in 'Suggest definition' form--}}
+                    {{ $definition = null }}
                 @else
                     <tr><td><span class="text-warning">
                                     {{ trans('terms.show.nodefinitions') }}

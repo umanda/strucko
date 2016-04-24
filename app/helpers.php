@@ -165,6 +165,12 @@ function prepareFullUrlWithQueryString($url, $queryString)
     return $url;
 }
 
+/**
+ * Used to generate hreflang meta used by Google do indicate 
+ * different URL versions for different locale, for the same resource.
+ * 
+ * @return string
+ */
 function generateHreflangURIs()
 {
     // Define valid locales to generate URLs for.

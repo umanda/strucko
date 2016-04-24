@@ -9,7 +9,7 @@
     </label>
     <textarea id="definition" name="definition" 
               placeholder="{{ trans('terms.suggestions.definition') }}"
-              aria-describedby="definitionHelp" rows="3" class="form-control">{{ old('definition') }}</textarea>
+              aria-describedby="definitionHelp" rows="4" class="form-control">{{ isset($definition) ? $definition->definition : old('definition') }}</textarea>
     <span id="definitionHelp" class="help-block">
         {{ trans('terms.suggestions.definitionhelp') }}
     </span>
@@ -22,7 +22,7 @@
     <textarea id="source" name="source" 
               placeholder="{{ trans('terms.suggestions.definitionsourceplaceholder') }}"
               aria-describedby="sourceHelp" rows="2"
-              class="form-control">{{ old('source') }}</textarea>
+              class="form-control">{{ isset($definition) ? $definition->source : old('source') }}</textarea>
     <span id="sourceHelp" class="help-block">
         {{ trans('terms.suggestions.definitionsourcehelp') }}
     </span>
@@ -31,7 +31,8 @@
     <label for="link">{{ trans('terms.suggestions.linktosource') }}</label>
     <input type="url" id="link" name="link" 
            placeholder="{{ trans('terms.suggestions.linktosourceplaceholder') }}"
-           aria-describedby="linkHelp" class="form-control" value="{{ old('link') }}">
+           aria-describedby="linkHelp" class="form-control" 
+           value="{{ isset($definition) ? $definition->link : old('link') }}">
     <span id="linkHelp" class="help-block">
         {{ trans('terms.suggestions.linktosourcehelp') }}
     </span>

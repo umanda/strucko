@@ -41,6 +41,7 @@ return [
     'defsuggested' => 'Definicija predložena...',
     'defapproved' => 'Definicija odobrena...',
     'defrejected' => 'Definicija odbijena...',
+    'defupdated' => 'Definicija ažurirana...',
     'langedited' => 'Jezik ažuriran...',
     'suggestionvoted' => 'Već ste glasali za ovaj prijedlog...',
     'areacreated' => 'Područje kreirano...',

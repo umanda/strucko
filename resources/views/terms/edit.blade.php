@@ -5,7 +5,7 @@
 @section('title', trans('terms.edit.title'))
 
 @section('content')
-<h2>{{ trans('terms.edit.header') }} <em>{!! $term->term !!}</em></h2>
+<h2>{{ trans('terms.edit.header') }} <em>{{ $term->term }}</em></h2>
 <form class="form-inline" method="POST" action="{{ action('TermsController@updateStatus', ['slug' => $term->slug]) }}">
     <input type="hidden" name="_method" value="PATCH">
     {!! csrf_field() !!}

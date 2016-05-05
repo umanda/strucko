@@ -2,10 +2,10 @@
 <ns1:sitemapindex xmlns:ns1="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<ns1:sitemap>
 		<ns1:loc>http://strucko.com/sitemaps/english.xml</ns1:loc>
-		<ns1:lastmod>2016-04-09</ns1:lastmod>
+		<ns1:lastmod>2016-05-05</ns1:lastmod>
 	</ns1:sitemap>
 	<ns1:sitemap>
 		<ns1:loc>http://strucko.com/sitemaps/croatian.xml</ns1:loc>
-		<ns1:lastmod>2016-04-09</ns1:lastmod>
+		<ns1:lastmod>2016-05-05</ns1:lastmod>
 	</ns1:sitemap>
 </ns1:sitemapindex>

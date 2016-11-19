@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-xs-12">
         <article>
-            <h2>{{trans('home.header1')}}</h2>
+            <h2 id="home_header_1">{{trans('home.header1')}}, searching for: @{{ home_header_1 }}</h2>
             <div class="row">
                 @include('layouts.filter_home')
             </div>

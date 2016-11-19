@@ -3,7 +3,10 @@
         <div class="form-group">
             <label for="language_id" class="col-sm-2 control-label">{{ trans('home.form.term') }}</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="search" id="search" placeholder="{{ trans('home.form.term.placeholder') }}"
+                <input type="text" class="form-control"
+                       v-on:input="changeHomeHeader1"
+                       name="search" id="search" 
+                       placeholder="{{ trans('home.form.term.placeholder') }}"
                        value="{{ isset($allFilters['search']) ? urldecode($allFilters['search']) : old('search') }}">      
             </div>
         </div>

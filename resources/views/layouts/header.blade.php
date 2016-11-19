@@ -1,7 +1,8 @@
 
 <div class="col-md-6 hidden-xs">
     <div class="page-header text-center">
-        <h1>{{ trans('header.logo') }} <small>{{ trans('header.tagline') }}</small></h1>
+        <h1>@{{ title }} <small>@{{ subtitle }}</small></h1>
+        {{-- <h1>{{ trans('header.logo') }} <small>{{ trans('header.tagline') }}</small></h1> --}}
         <p>{{ trans('header.belowtagline') }}</p>
     </div>
 </div>

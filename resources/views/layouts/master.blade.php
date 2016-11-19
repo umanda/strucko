@@ -27,7 +27,7 @@
             @include('layouts.antiblock')
         @endif
         --}}
-        <div class="container">
+        <div id="app" class="container">
             <div class="row">
                 @include('layouts.header')
             </div>
@@ -54,6 +54,8 @@
 
 
         <script type="text/javascript" src="/js/all.js"></script>
-        
+        {{-- TODO mivanci install Vue locally. --}}
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script type="text/javascript" src="/js/vue-custom.js"></script>
     </body>
 </html>
